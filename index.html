@@ -31,6 +31,8 @@
             --accent: #ff3b30;
             --accent-glow: rgba(255, 59, 48, 0.5);
             
+            --holiday-color: #ff9500;
+            
             --blur: blur(30px);
             --shadow: 0 10px 40px -10px rgba(0,0,0,0.15);
             
@@ -48,6 +50,7 @@
             -webkit-tap-highlight-color: transparent;
             /* Important: Make body transparent so fixed backgrounds show through */
             background: transparent;
+            user-select: none;
         }
 
         /* --- DYNAMIC BACKGROUNDS --- */
@@ -60,7 +63,7 @@
         }
         .bg-mesh.active { opacity: 1; }
 
-        /* LIGHT MODE GRADIENTS - Made slightly deeper for contrast with white Snow/Lights */
+        /* LIGHT MODE GRADIENTS */
         #bg-snow {
             /* Deeper blue at top to see white snow */
             background: radial-gradient(at 30% 0%, #dbeafe 0%, transparent 60%), 
@@ -146,10 +149,18 @@
             width: 42px; height: 42px; border-radius: 50%; border: none; background: transparent;
             font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: all 0.2s;
+            position: relative;
         }
         .dock-btn.active { background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transform: scale(1.05); }
         .dark-mode .dock-btn.active { background: rgba(255,255,255,0.2); }
         .dock-btn:active { transform: scale(0.95); }
+
+        .coin-badge {
+            position: absolute; top: -5px; right: -5px;
+            background: #FFD700; color: #000; font-size: 10px; font-weight: 800;
+            padding: 2px 5px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            min-width: 15px;
+        }
 
         /* --- LAYOUT --- */
         .app-layout {
@@ -157,6 +168,12 @@
             padding: calc(90px + var(--safe-top)) 20px 100px;
             position: relative; z-index: 10;
         }
+        
+        /* Views */
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active-view { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         header { text-align: center; margin-bottom: 30px; }
         h1 {
@@ -197,10 +214,16 @@
 
         #plane-wrapper {
             position: absolute; top: 0; left: 0; width: 40px; height: 40px;
-            will-change: transform; pointer-events: none;
+            will-change: transform; pointer-events: auto; /* Enable click */
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer;
         }
-        .plane-emoji { font-size: 38px; line-height: 1; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); transform: rotate(90deg); }
+        .plane-emoji { font-size: 38px; line-height: 1; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); transform: rotate(90deg); transition: transform 0.5s; }
+
+        @keyframes barrelRoll {
+            0% { transform: rotate(90deg); }
+            100% { transform: rotate(450deg); }
+        }
 
         .pct-pill {
             position: absolute; top: -30px;
@@ -225,7 +248,16 @@
         .dark-mode .dates-meta { color: var(--text-sub-dark); opacity: 0.8; }
 
         /* CALENDAR GRID */
-        .month-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .month-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        
+        .week-header {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 8px;
+        }
+        .week-day {
+            text-align: center; font-size: 11px; font-weight: 800; color: var(--text-sub-light); opacity: 0.5;
+        }
+        .dark-mode .week-day { color: var(--text-sub-dark); }
+
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
         
         .day-item {
@@ -243,9 +275,14 @@
             background: transparent; border: 2px solid var(--accent); color: var(--accent);
             box-shadow: 0 0 20px var(--accent-glow); z-index: 2; transform: scale(1.1);
         }
+
+        .day-item.holiday {
+            border: 1px solid var(--holiday-color);
+            color: var(--holiday-color);
+        }
         
         .day-item.opened {
-            background: var(--accent); color: #fff;
+            background: var(--accent); color: #fff; border-color: var(--accent);
             box-shadow: 0 5px 15px var(--accent-glow);
         }
         
@@ -258,6 +295,20 @@
         .mini-heart {
             position: absolute; bottom: 3px; right: 3px; font-size: 9px;
             color: rgba(255,255,255,0.9);
+            animation: heartBeat 1.5s infinite;
+        }
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .holiday-icon {
+            position: absolute; top: -6px; right: -6px; font-size: 12px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            z-index: 3;
         }
 
         /* --- MODAL --- */
@@ -301,6 +352,166 @@
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .toast-pill.visible { transform: translate(-50%, 0); }
+
+        /* --- PET GAME STYLES --- */
+        .pet-stage {
+            height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: visible;
+            border-radius: 24px;
+            transition: all 0.5s;
+        }
+        
+        .house-bg {
+            position: absolute; top:0; left:0; width:100%; height:100%; 
+            z-index: 0; opacity: 0.3; font-size: 150px; 
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none; transition: all 0.5s;
+        }
+
+        .pet-blob {
+            width: 140px; height: 130px; background: #fff;
+            border-radius: 50% 50% 45% 45%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            position: relative; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex; align-items: center; justify-content: center;
+            animation: breathe 3s infinite ease-in-out;
+            cursor: pointer;
+            z-index: 2;
+        }
+        .pet-blob.sleeping { animation: breathe 6s infinite ease-in-out; opacity: 0.9; }
+        .pet-blob.dirty { filter: sepia(0.6) brightness(0.9); }
+        .pet-blob.walking { animation: walk 4s infinite linear; }
+        .pet-blob:active { transform: scale(0.9) translateY(5px); }
+        .dark-mode .pet-blob { background: #f0f0f5; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        
+        .pet-face { font-size: 50px; position: relative; z-index: 2; pointer-events: none; }
+        .pet-acc { position: absolute; font-size: 50px; z-index: 3; pointer-events: none; }
+        .pet-zzz { 
+            position: absolute; top: -30px; right: -10px; font-size: 24px; font-weight: 800; 
+            color: var(--text-sub-light); opacity: 0; 
+        }
+        .sleeping .pet-zzz { opacity: 1; animation: floatZ 2s infinite; }
+
+        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03) translateY(-3px); } }
+        @keyframes walk { 
+            0% { transform: translateX(0) scale(1) rotate(0); }
+            25% { transform: translateX(30px) scale(0.95) rotate(5deg); }
+            50% { transform: translateX(0) scale(1) rotate(0); }
+            75% { transform: translateX(-30px) scale(0.95) rotate(-5deg); }
+            100% { transform: translateX(0) scale(1) rotate(0); }
+        }
+        @keyframes floatZ { 0% { transform: translate(0,0); opacity:0; } 50% { opacity:1; } 100% { transform: translate(10px, -20px); opacity:0; } }
+
+        /* Floating Click Text */
+        .click-float {
+            position: absolute; font-weight: 800; font-size: 20px; color: #FFD700;
+            pointer-events: none; z-index: 100;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: floatUp 0.8s ease-out forwards;
+        }
+        @keyframes floatUp { to { transform: translateY(-50px); opacity: 0; } }
+        
+        .stat-bars { width: 100%; margin-top: 20px; display: flex; gap: 8px; justify-content: center; z-index: 5; position: relative; }
+        .stat-col { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+        .stat-icon { font-size: 14px; }
+        .stat-num { font-size: 9px; font-weight: 800; opacity: 0.6; font-family: 'SF Mono', monospace; margin-top: 2px; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 10px; overflow: hidden; }
+        .dark-mode .progress-bar { background: rgba(255,255,255,0.1); }
+        .progress-fill { height: 100%; transition: width 0.5s; }
+
+        .game-info {
+            display: flex; justify-content: space-between; width: 100%; margin-bottom: 5px;
+            font-size: 11px; font-weight: 700; color: var(--text-sub-light);
+        }
+        .streak-fire { color: #FF9500; }
+
+        .pet-thought {
+            background: rgba(255,255,255,0.8); padding: 10px 15px; border-radius: 15px;
+            position: absolute; top: 10px; font-size: 12px; font-weight: 700; color: #000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); opacity: 0; transform: translateY(10px);
+            transition: all 0.3s; pointer-events: none; white-space: nowrap; z-index: 10;
+        }
+        .pet-thought.show { opacity: 1; transform: translateY(-10px); }
+
+        .exp-container {
+            width: 100%; margin-top: 5px; margin-bottom: 10px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .exp-bar {
+            width: 80%; height: 4px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden;
+        }
+        .exp-fill {
+            height: 100%; background: linear-gradient(90deg, #32ade6, #007aff); width: 0%; transition: width 0.3s;
+        }
+        .lvl-text {
+            font-size: 10px; font-weight: 800; color: var(--text-sub-light); margin-top: 3px;
+        }
+
+        .buffs-row {
+            display: flex; gap: 5px; justify-content: center; margin-bottom: 5px; min-height: 20px;
+        }
+        .buff-icon {
+            font-size: 12px; background: rgba(255,255,255,0.5); padding: 2px 6px; border-radius: 10px;
+            border: 1px solid var(--accent); color: var(--accent); font-weight: 700;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .shop-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2500;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center; padding: 20px;
+        }
+        .shop-modal.active { display: flex; }
+        
+        .shop-tabs { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .shop-tab { 
+            padding: 5px 10px; border-radius: 10px; background: rgba(0,0,0,0.05); 
+            font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer;
+        }
+        .shop-tab.active { background: var(--accent); color: #fff; }
+
+        .shop-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+            max-height: 300px; overflow-y: auto;
+        }
+        .shop-item {
+            background: rgba(0,0,0,0.05); padding: 10px; border-radius: 15px;
+            display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer;
+            border: 2px solid transparent; text-align: center;
+        }
+        .dark-mode .shop-item { background: rgba(255,255,255,0.1); color: #fff; }
+        .shop-item.owned { border-color: var(--accent); opacity: 0.7; }
+        .shop-item.selected { background: var(--accent); color: #fff; }
+        .shop-price { font-size: 11px; font-weight: 800; color: var(--holiday-color); }
+        .shop-desc { font-size: 9px; opacity: 0.7; line-height: 1.1; margin-bottom: 4px; }
+
+        /* --- FLAPPY GAME --- */
+        #view-flappy {
+            position: fixed; top:0; left:0; width:100%; height:100%; z-index: 2000;
+            background: rgba(0,0,0,0.9); display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+        #view-flappy.active { display: flex; }
+        #flappy-canvas { border: 2px solid #fff; border-radius: 10px; background: #87CEEB; }
+
+        /* --- DEATH --- */
+        .dead-filter { filter: grayscale(100%) contrast(1.2); }
+        .death-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.7); z-index: 50; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 24px; color: #fff;
+        }
+        
+        .sleep-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,10,0.6); z-index: 40; pointer-events: none;
+            display: none; border-radius: 24px;
+            align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 800;
+        }
+        .sleep-overlay.active { display: flex; }
+
     </style>
 </head>
 <body>
@@ -312,6 +523,11 @@
     <canvas id="canvas-fx"></canvas>
 
     <div class="control-dock">
+        <button class="dock-btn" onclick="setView('calendar')" id="btn-view-cal">📅</button>
+        <button class="dock-btn" onclick="setView('pet')" id="btn-view-pet">🏠
+            <span class="coin-badge" id="coin-display">0</span>
+        </button>
+        <div style="width:1px; background:rgba(127,127,127,0.3); height:24px; align-self:center; margin:0 4px;"></div>
         <button class="dock-btn" onclick="setMode('snow')" id="btn-snow">❄️</button>
         <button class="dock-btn" onclick="setMode('spring')" id="btn-spring">🌸</button>
         <button class="dock-btn" onclick="setMode('rain')" id="btn-rain">🌧️</button>
@@ -326,43 +542,136 @@
 
     <div class="app-layout">
         <header>
-            <h1>Моя любимая Биба</h1>
+            <h1 id="header-title">Моя любимая Биба</h1>
             <div class="subtitle">Буба считает дни до встречи</div>
         </header>
 
-        <div class="glass-panel">
-            <div class="flight-header">
-                <div>
-                    <div class="city-code">UFA</div>
-                    <div class="city-name">Уфа</div>
+        <!-- VIEW: CALENDAR -->
+        <div id="view-calendar" class="view-section active-view">
+            <div class="glass-panel">
+                <div class="flight-header">
+                    <div>
+                        <div class="city-code">UFA</div>
+                        <div class="city-name">Уфа</div>
+                    </div>
+                    <div>
+                        <div class="city-code">MOW</div>
+                        <div class="city-name">Москва</div>
+                    </div>
                 </div>
-                <div>
-                    <div class="city-code">MOW</div>
-                    <div class="city-name">Москва</div>
+
+                <div id="flight-viz">
+                    <svg width="100%" height="100%" style="overflow:visible;">
+                        <path id="path-bg" class="track-path" d="" />
+                        <path id="path-active" class="active-path" d="" />
+                    </svg>
+                    <div id="plane-wrapper" onclick="doBarrelRoll()">
+                        <div class="pct-pill" id="rt-percent">0.00000%</div>
+                        <div class="plane-emoji" id="plane-icon">✈️</div>
+                    </div>
+                </div>
+
+                <div class="countdown" id="timer">...</div>
+                <div class="timer-caption">осталось до нашего отпуска</div>
+                
+                <div class="dates-meta">
+                    <span>11 Янв</span>
+                    <span>12 Мая</span>
                 </div>
             </div>
 
-            <div id="flight-viz">
-                <svg width="100%" height="100%" style="overflow:visible;">
-                    <path id="path-bg" class="track-path" d="" />
-                    <path id="path-active" class="active-path" d="" />
-                </svg>
-                <div id="plane-wrapper">
-                    <div class="pct-pill" id="rt-percent">0.00000%</div>
-                    <div class="plane-emoji">✈️</div>
-                </div>
-            </div>
-
-            <div class="countdown" id="timer">...</div>
-            <div class="timer-caption">осталось до нашего отпуска</div>
-            
-            <div class="dates-meta">
-                <span>11 Янв</span>
-                <span>12 Мая</span>
-            </div>
+            <div id="calendar-root"></div>
         </div>
 
-        <div id="calendar-root"></div>
+        <!-- VIEW: PET -->
+        <div id="view-pet" class="view-section">
+            <div class="glass-panel" style="min-height: 500px;">
+                <div class="month-title">
+                    💖 Твой Любимка
+                </div>
+
+                <!-- EXP BAR -->
+                <div class="exp-container">
+                    <div class="exp-bar"><div class="exp-fill" id="exp-fill"></div></div>
+                    <div class="lvl-text" id="lvl-text">Уровень 1</div>
+                </div>
+
+                <div class="game-info">
+                    <span>Клик: <span id="stat-click">1</span> 💰</span>
+                    <span>Авто: <span id="stat-auto">0</span> 💰/сек</span>
+                </div>
+                <div class="game-info">
+                     <span>Стрик: <span class="streak-fire" id="stat-streak">0</span> 🔥</span>
+                     <span>Баланс: <span style="color:#FFD700" id="stat-balance">0</span> 💰</span>
+                </div>
+                
+                <div class="pet-stage" id="pet-stage">
+                    <div class="house-bg" id="house-bg"></div>
+                    <div class="pet-thought" id="pet-thought">Привет!</div>
+                    <div class="buffs-row" id="buffs-row"></div>
+                    
+                    <div class="death-overlay" id="death-overlay">
+                        <div style="font-size:60px">👻</div>
+                        <div style="font-weight:800; margin:10px 0;">Любимка покинул нас...</div>
+                        <div style="font-size:12px; margin-bottom:20px; opacity:0.8">Ты не заходила больше 3 дней</div>
+                        <button class="action-btn" style="background:#fff; color:#000;" onclick="resurrectPet()">Воскресить (Сброс стрика)</button>
+                    </div>
+
+                    <div class="sleep-overlay" id="sleep-overlay">Тсс! Питомец спит 😴</div>
+
+                    <div class="pet-blob" id="pet-blob" onclick="petClick(event)">
+                        <div class="pet-zzz">Zzz...</div>
+                        <div class="pet-acc" id="pet-acc-wear"></div>
+                        <div class="pet-face" id="pet-face">😺</div>
+                    </div>
+
+                    <div class="stat-bars">
+                        <div class="stat-col">
+                            <span class="stat-icon">🍔</span>
+                            <div class="progress-bar"><div class="progress-fill" id="bar-hunger" style="background:#ff9500; width:50%"></div></div>
+                            <div class="stat-num" id="txt-hunger">50/100</div>
+                        </div>
+                        <div class="stat-col">
+                            <span class="stat-icon">❤️</span>
+                            <div class="progress-bar"><div class="progress-fill" id="bar-love" style="background:#ff2d55; width:50%"></div></div>
+                            <div class="stat-num" id="txt-love">50/100</div>
+                        </div>
+                        <div class="stat-col">
+                            <span class="stat-icon">⚡</span>
+                            <div class="progress-bar"><div class="progress-fill" id="bar-energy" style="background:#32ade6; width:50%"></div></div>
+                            <div class="stat-num" id="txt-energy">50/100</div>
+                        </div>
+                        <div class="stat-col">
+                            <span class="stat-icon">🛁</span>
+                            <div class="progress-bar"><div class="progress-fill" id="bar-hygiene" style="background:#5ac8fa; width:50%"></div></div>
+                            <div class="stat-num" id="txt-hygiene">50/100</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button class="action-btn" style="background:#5ac8fa; color:#fff; flex:1; padding:12px;" onclick="washPet()">🛁 Умыть</button>
+                    <button class="action-btn" style="background:#5856d6; color:#fff; flex:1; padding:12px;" id="btn-sleep" onclick="toggleSleep()">😴 Спать</button>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button class="action-btn" style="background:#FF9500; color:#fff; flex:1" onclick="startFlappy()">🎮 Играть</button>
+                    <button class="action-btn" style="background:var(--accent); color:#fff; flex:1" onclick="openShop()">🛍️ Магазин</button>
+                </div>
+                
+                <div style="text-align:center; font-size:11px; opacity:0.6; margin-top:10px;">
+                    В 22:00 пора спать! В 9, 13, 19 — время кушать!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flappy Mini Game -->
+    <div id="view-flappy">
+        <div style="color:#fff; font-weight:800; font-size:20px; margin-bottom:10px;">Flappy Heart</div>
+        <canvas id="flappy-canvas" width="320" height="480"></canvas>
+        <div style="color:#fff; font-size:14px; margin-top:10px;">Тапай чтобы лететь!</div>
+        <button class="action-btn" style="margin-top:20px; width:200px; background:#fff; color:#000;" onclick="closeFlappy()">Выход</button>
     </div>
 
     <!-- Notification -->
@@ -381,11 +690,41 @@
         </div>
     </div>
 
+    <!-- Shop Modal -->
+    <div class="shop-modal" id="shop-modal">
+        <div class="glass-panel" style="background: #fff; width: 100%; max-width: 350px;">
+            <div class="month-title">🛍️ Магазин <span style="margin-left:auto; font-size:14px;">💰 <span id="shop-coins">0</span></span></div>
+            
+            <div class="shop-tabs">
+                <div class="shop-tab active" onclick="switchShop('food')">🍔 Еда</div>
+                <div class="shop-tab" onclick="switchShop('wear')">👗 Одежда</div>
+                <div class="shop-tab" onclick="switchShop('house')">🏠 Домик</div>
+                <div class="shop-tab" onclick="switchShop('gadget')">🤖 Гаджеты</div>
+                <div class="shop-tab" onclick="switchShop('buff')">✨ Зелья</div>
+                <div class="shop-tab" onclick="switchShop('upgrade')">⚡ Навыки</div>
+            </div>
+
+            <div class="shop-grid" id="shop-list"></div>
+            <button class="action-btn" style="margin-top:20px;" onclick="closeShop()">Закрыть</button>
+        </div>
+    </div>
+
     <script>
         // === STRICT TEXT DATA ===
         const START = new Date(2026, 0, 11);
         const END = new Date(2026, 4, 12);
-        const KEY = 'love_cal_v2026';
+        const DATA_KEY = 'love_cal_v2026';
+        const SETTINGS_KEY = 'love_cal_settings_2026';
+        const PET_KEY = 'love_cal_pet_advanced_v3_2026';
+
+        const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+        const HOLIDAYS = {
+            '1-14': '💘', // Feb 14 (Month 1 in JS)
+            '1-23': '⭐', // Feb 23
+            '2-8': '🌷',  // Mar 8
+            '4-1': '🎈',  // May 1
+            '4-9': '🎖️'  // May 9
+        };
 
         const quotes = [
             {t: "Моя милая Биба, мы с тобой одной крови, ты и я. Ты — часть меня, которая сейчас далеко, но скоро мы станем одним целым.", s: "Твой Буба"},
@@ -509,11 +848,90 @@
         ];
 
         let state = {
-            opened: JSON.parse(localStorage.getItem(KEY)) || {},
-            mode: 'snow',
-            garland: false,
-            dark: false
+            opened: JSON.parse(localStorage.getItem(DATA_KEY)) || {},
+            settings: { mode: 'snow', garland: false, dark: false },
+            pet: JSON.parse(localStorage.getItem(PET_KEY)) || {
+                coins: 0,
+                clickPower: 1,
+                autoIncome: 0,
+                hunger: 80,
+                love: 80,
+                energy: 100,
+                hygiene: 100,
+                lastLogin: 0,
+                streak: 0,
+                wear: null,
+                house: null,
+                inventory: [],
+                upgrades: { click: 1, auto: 0 },
+                level: 1,
+                exp: 0,
+                maxExp: 100,
+                activeBuffs: [],
+                gadgets: { feeder: 0, sleeper: 0 }, // Timestamp when expires
+                isDead: false,
+                isSleeping: false,
+                lastSleepCheck: Date.now()
+            }
         };
+
+        // Migrations
+        if(state.pet.energy === undefined) state.pet.energy = 100;
+        if(state.pet.hygiene === undefined) state.pet.hygiene = 100;
+        if(state.pet.level === undefined) { 
+            state.pet.level = 1; state.pet.exp = 0; state.pet.maxExp = 100; state.pet.activeBuffs = []; 
+        }
+        if(state.pet.gadgets === undefined) state.pet.gadgets = { feeder: 0, sleeper: 0 };
+
+        // Shop Content
+        const SHOP = {
+            food: [
+                { id: 'candy', name: 'Конфетка', ico: '🍬', cost: 10, effect: 'h+10', desc: '+10 Сытости' },
+                { id: 'cookie', name: 'Печенька', ico: '🍪', cost: 25, effect: 'h+30', desc: '+30 Сытости' },
+                { id: 'burger', name: 'Бургер', ico: '🍔', cost: 50, effect: 'h+60', desc: '+60 Сытости' },
+                { id: 'coffee', name: 'Кофе', ico: '☕', cost: 40, effect: 'e+40', desc: '+40 Энергии' },
+                { id: 'pizza', name: 'Пицца', ico: '🍕', cost: 70, effect: 'h+80', desc: 'Сытно!' },
+                { id: 'sushi', name: 'Суши', ico: '🍣', cost: 120, effect: 'h+50 l+5', desc: 'Вкусно! +Любовь' },
+                { id: 'salad', name: 'Салат', ico: '🥗', cost: 60, effect: 'h+40 e+10', desc: 'Полезно' },
+                { id: 'dark_choco', name: 'Т. Шоколад', ico: '🍫', cost: 30, effect: 'bad', desc: 'Не люблю...' },
+                { id: 'kuraga', name: 'Курага', ico: '🍑', cost: 20, effect: 'bad', desc: 'Бее...' }
+            ],
+            wear: [
+                { id: 'bow', name: 'Бантик', ico: '🎀', cost: 200, desc: 'Милота +100' },
+                { id: 'glasses', name: 'Очки', ico: '🕶️', cost: 350, desc: 'Крутость' },
+                { id: 'crown', name: 'Корона', ico: '👑', cost: 1000, desc: 'Королева' },
+                { id: 'hat', name: 'Шляпка', ico: '👒', cost: 500, desc: 'Леди' },
+                { id: 'flower', name: 'Цветок', ico: '🌺', cost: 150, desc: 'Весна' }
+            ],
+            house: [
+                { id: 'box', name: 'Коробка', ico: '📦', cost: 0, desc: 'Уютно' },
+                { id: 'doghouse', name: 'Будка', ico: '🏠', cost: 1000, desc: 'Свой угол' },
+                { id: 'tent', name: 'Палатка', ico: '⛺', cost: 2500, desc: 'Поход' },
+                { id: 'cottage', name: 'Коттедж', ico: '🏡', cost: 5000, desc: 'Мечта' },
+                { id: 'castle', name: 'Замок', ico: '🏰', cost: 15000, desc: 'Принцесса' },
+                { id: 'island', name: 'Остров', ico: '🏝️', cost: 50000, desc: 'Наш отпуск' }
+            ],
+            upgrade: [
+                { id: 'click_up', name: 'Сила клика', ico: '💪', type:'u_click', desc: 'Больше монет за клик' },
+                { id: 'auto_up', name: 'Авто-доход', ico: '🤖', type:'u_auto', desc: 'Монетки капают сами' }
+            ],
+            buff: [
+                { id: 'sugar_rush', name: 'Сахарный рывок', ico: '🍭', cost: 50, type:'b_click', dur: 120, val: 2, desc: 'x2 Клик (2 мин)' },
+                { id: 'caffeine', name: 'Кофейный бум', ico: '☕', cost: 100, type:'b_auto', dur: 300, val: 2, desc: 'x2 Авто (5 мин)' },
+                { id: 'love_potion', name: 'Зелье любви', ico: '🧪', cost: 300, type:'b_all', dur: 600, val: 2, desc: 'x2 Все доходы (10 мин)' },
+                { id: 'lucky_charm', name: 'Зелье удачи', ico: '🍀', cost: 150, type:'b_luck', dur: 600, val: 2, desc: 'x2 Опыт Flappy (10 мин)' }
+            ],
+            gadget: [
+                { id: 'feeder', name: 'Авто-кормушка', ico: '🥣', cost: 2000, dur: 7, desc: 'Кормит 7 дней' },
+                { id: 'sleeper', name: 'Смарт-люлька', ico: '🛌', cost: 2000, dur: 7, desc: 'Укладывает 7 дней' }
+            ]
+        };
+
+        const THOUGHTS = [
+            "Ты лучшая!", "Хочу кушать...", "Где Буба?", "Скучаю...", 
+            "Какая ты красивая!", "Мур-мур!", "Хочу на ручки", "Люблю тебя!",
+            "Мы скоро увидимся!", "Ты моя мама?", "Копим на домик!", "Кчау!"
+        ];
 
         const DOM = {
             mount: document.getElementById('calendar-root'),
@@ -524,68 +942,571 @@
             pct: document.getElementById('rt-percent'),
             toast: document.getElementById('toast'),
             garland: document.getElementById('garland'),
-            body: document.body
+            body: document.body,
+            coinDisp: document.getElementById('coin-display')
         };
 
         function init() {
-            // Setup Garland (Micro LEDs)
+            const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+            if(saved) state.settings = { ...state.settings, ...saved };
+            applySettings();
+            checkDaily();
+            checkCircadianRhythm(true);
+            updatePetUI();
+
+            const welcomes = ["Привет, Биба! ❤️", "Скучал по тебе!", "Ты чудо! ✨", "Кликай питомца!"];
+            showToast(welcomes[Math.floor(Math.random()*welcomes.length)]);
+
             const colors = ['led-warm', 'led-cool', 'led-pink'];
             for(let i=0; i<8; i++) {
                 const seg = document.createElement('div'); seg.className = 'string-segment';
                 seg.style.animationDelay = `${i * 0.5}s`;
-                // Add tiny bulbs
                 for(let k=0; k<4; k++) {
                     const led = document.createElement('div');
                     led.className = `micro-led ${colors[(i+k)%3]}`;
-                    led.style.top = `${Math.sin(k)*5 + 10}px`; // Randomized height on wire
+                    led.style.top = `${Math.sin(k)*5 + 10}px`; 
                     led.style.animationDelay = `${Math.random()*2}s`;
                     seg.appendChild(led);
                 }
                 DOM.garland.appendChild(seg);
             }
-
-            const m = new Date().getMonth();
-            setMode((m <= 1 || m === 11) ? 'snow' : 'spring');
             
             renderCal();
-            
-            // Flight
             calcGraph();
             window.addEventListener('resize', calcGraph);
             requestAnimationFrame(flightLoop);
-            
-            setInterval(tick, 1000);
-            tick();
-            
+            setInterval(tick, 1000); tick();
             runParticles();
+            
+            setInterval(petLoop, 1000);
+            setInterval(petBehavior, 4000);
+            setInterval(() => checkCircadianRhythm(false), 60000); // Check every minute
         }
 
-        // === LOGIC ===
-        window.setMode = (m) => {
-            state.mode = m;
+        function applySettings() {
+            const s = state.settings;
             document.querySelectorAll('.bg-mesh').forEach(b => b.classList.remove('active'));
-            document.getElementById(`bg-${m}`).classList.add('active');
-            
+            document.getElementById(`bg-${s.mode}`).classList.add('active');
             document.querySelectorAll('.dock-btn').forEach(b=>b.classList.remove('active'));
-            document.getElementById(`btn-${m}`).classList.add('active');
+            document.getElementById(`btn-${s.mode}`).classList.add('active');
+            DOM.body.classList.toggle('dark-mode', s.dark);
+            document.getElementById('btn-dark').classList.toggle('active', s.dark);
+            DOM.garland.classList.toggle('active', s.garland);
+            document.getElementById('btn-garland').classList.toggle('active', s.garland);
+        }
+        function saveSettings() { localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings)); }
+        function savePet() { localStorage.setItem(PET_KEY, JSON.stringify(state.pet)); updatePetUI(); }
+
+        // === PET LOGIC ===
+        function checkDaily() {
+            if(state.pet.isDead) return;
+            const today = new Date().toDateString();
+            const now = Date.now();
+            if(state.pet.lastLogin && (now - new Date(state.pet.lastLogin).getTime() > 259200000)) {
+                state.pet.isDead = true; state.pet.deathDate = now; savePet(); return;
+            }
+            const yesterday = new Date(Date.now() - 86400000).toDateString();
+            if(state.pet.lastLogin !== today) {
+                if(state.pet.lastLogin === yesterday) state.pet.streak++;
+                else state.pet.streak = 1;
+                state.pet.lastLogin = today; 
+                state.pet.lastLoginTime = now; 
+                const bonus = state.pet.streak * 10;
+                state.pet.coins += bonus;
+                if(state.pet.streak >= 7) showToast(`Стрик 7 дней! Супер бонус +${bonus} 💰`);
+                else showToast(`День ${state.pet.streak}! Бонус +${bonus} 💰`);
+                savePet();
+            }
+        }
+        if(!state.pet.lastLoginTime) state.pet.lastLoginTime = Date.now();
+
+        function checkCircadianRhythm(isInit) {
+            if(state.pet.isDead) return;
+            const h = new Date().getHours();
+            const now = Date.now();
+            
+            // Check Auto Gadgets
+            const hasFeeder = state.pet.gadgets.feeder > now;
+            const hasSleeper = state.pet.gadgets.sleeper > now;
+
+            // Sleep: 22:00 - 08:00
+            const shouldSleep = (h >= 22 || h < 8);
+            
+            if(shouldSleep) {
+                if(hasSleeper && !state.pet.isSleeping) {
+                    state.pet.isSleeping = true;
+                    showToast("Смарт-люлька уложила питомца 🛌");
+                } else if (!state.pet.isSleeping && isInit) {
+                    showThought("Ты забыла меня уложить... 🥺");
+                    state.pet.love = Math.max(0, state.pet.love - 10);
+                }
+            } else {
+                if(hasSleeper && state.pet.isSleeping) {
+                     state.pet.isSleeping = false; // Auto wake up
+                }
+            }
+
+            // Hunger Spikes: 9, 13, 19
+            if((h === 9 || h === 13 || h === 19) && isInit) {
+                if(hasFeeder) {
+                    state.pet.hunger = Math.min(100, state.pet.hunger + 30);
+                    showToast("Авто-кормушка покормила! 🥣");
+                } else {
+                    state.pet.hunger = Math.max(0, state.pet.hunger - 20);
+                    showThought("Время кушать! Я голоден!");
+                }
+            }
+            savePet();
+        }
+
+        window.resurrectPet = () => {
+            state.pet.isDead = false;
+            state.pet.hunger = 50; state.pet.love = 50; state.pet.energy = 50; state.pet.hygiene = 100;
+            state.pet.streak = 0; state.pet.lastLoginTime = Date.now();
+            state.pet.isSleeping = false;
+            savePet(); updatePetUI(); showToast("С возвращением! ❤️");
+        }
+
+        window.toggleSleep = () => {
+            if(state.pet.isDead) return;
+            state.pet.isSleeping = !state.pet.isSleeping;
+            if(state.pet.isSleeping) showToast("Спокойной ночи! 😴");
+            else showToast("Доброе утро! ☀️");
+            savePet();
+        }
+
+        window.washPet = () => {
+            if(state.pet.isDead) return;
+            if(state.pet.isSleeping) { showToast("Не буди!"); return; }
+            state.pet.hygiene = 100;
+            showToast("Буль-буль! Чистый питомец 🧼");
+            addExp(5);
+            savePet();
+        }
+
+        function petLoop() {
+            if(state.pet.isDead) return;
+
+            // Auto Income
+            let mult = 1;
+            const now = Date.now();
+            state.pet.activeBuffs = state.pet.activeBuffs.filter(b => b.end > now);
+            state.pet.activeBuffs.forEach(b => { if(b.type === 'b_auto' || b.type === 'b_all') mult *= b.val; });
+
+            if(state.pet.autoIncome > 0 && !state.pet.isSleeping) {
+                state.pet.coins += (state.pet.autoIncome * mult);
+            }
+            
+            // Decays
+            if(!state.pet.isSleeping) {
+                if(state.pet.hunger > 0) state.pet.hunger -= 0.5;
+                if(state.pet.love > 0) state.pet.love -= 0.2;
+                if(state.pet.energy > 0) state.pet.energy -= 0.3;
+                if(state.pet.hygiene > 0) state.pet.hygiene -= 0.4;
+            } else {
+                // Sleeping recovers energy but drains hunger slightly
+                if(state.pet.energy < 100) state.pet.energy += 1;
+                if(state.pet.hunger > 0) state.pet.hunger -= 0.1;
+            }
+
+            // Sleep auto-wake if full energy and day time? No, manual control preferred unless gadget.
+            if(state.pet.energy <= 0 && !state.pet.isSleeping) {
+                state.pet.isSleeping = true; // Pass out
+                showToast("Упал без сил... 😴");
+            }
+            
+            savePet();
+        }
+
+        function addExp(amount) {
+            state.pet.exp += amount;
+            if(state.pet.exp >= state.pet.maxExp) {
+                state.pet.level++;
+                state.pet.exp -= state.pet.maxExp;
+                state.pet.maxExp = Math.floor(state.pet.maxExp * 1.5);
+                state.pet.energy = 100;
+                state.pet.coins += state.pet.level * 50;
+                showToast(`Уровень ${state.pet.level}! Энергия восстановлена! 🎉`);
+            }
+        }
+
+        function petBehavior() {
+            if(state.pet.isDead || state.pet.isSleeping) return;
+            const blob = document.getElementById('pet-blob');
+            const r = Math.random();
+            blob.classList.remove('walking');
+            
+            if(state.pet.hygiene < 40) showThought("Я грязный... 🛁");
+            else if(state.pet.hunger < 20) showThought("Хочу кушать!");
+            else if(r > 0.7 && state.pet.energy > 10) showThought();
+            else if (r < 0.3) blob.classList.add('walking');
+        }
+
+        function updatePetUI() {
+            DOM.coinDisp.innerText = Math.floor(state.pet.coins);
+            document.getElementById('shop-coins').innerText = Math.floor(state.pet.coins);
+            document.getElementById('stat-balance').innerText = Math.floor(state.pet.coins);
+            
+            document.getElementById('bar-hunger').style.width = state.pet.hunger + '%';
+            document.getElementById('txt-hunger').innerText = Math.floor(state.pet.hunger) + '/100';
+            document.getElementById('bar-love').style.width = state.pet.love + '%';
+            document.getElementById('txt-love').innerText = Math.floor(state.pet.love) + '/100';
+            document.getElementById('bar-energy').style.width = state.pet.energy + '%';
+            document.getElementById('txt-energy').innerText = Math.floor(state.pet.energy) + '/100';
+            document.getElementById('bar-hygiene').style.width = state.pet.hygiene + '%';
+            document.getElementById('txt-hygiene').innerText = Math.floor(state.pet.hygiene) + '/100';
+            
+            // EXP
+            const expPct = Math.min(100, (state.pet.exp / state.pet.maxExp) * 100);
+            document.getElementById('exp-fill').style.width = expPct + '%';
+            document.getElementById('lvl-text').innerText = `Уровень ${state.pet.level}`;
+
+            // Buffs & Gadgets
+            const buffsDiv = document.getElementById('buffs-row');
+            buffsDiv.innerHTML = '';
+            const now = Date.now();
+            
+            if(state.pet.gadgets.feeder > now) {
+                const el = document.createElement('div'); el.className = 'buff-icon'; el.innerText = '🥣'; buffsDiv.appendChild(el);
+            }
+            if(state.pet.gadgets.sleeper > now) {
+                const el = document.createElement('div'); el.className = 'buff-icon'; el.innerText = '🛌'; buffsDiv.appendChild(el);
+            }
+
+            state.pet.activeBuffs.forEach(b => {
+                const el = document.createElement('div');
+                el.className = 'buff-icon';
+                el.innerText = b.ico;
+                buffsDiv.appendChild(el);
+            });
+
+            // Stats
+            let cMult = 1; let aMult = 1;
+            state.pet.activeBuffs.forEach(b => { 
+                if(b.type==='b_click'||b.type==='b_all') cMult*=b.val; 
+                if(b.type==='b_auto'||b.type==='b_all') aMult*=b.val; 
+            });
+            document.getElementById('stat-click').innerText = (state.pet.clickPower * cMult).toFixed(1);
+            document.getElementById('stat-auto').innerText = (state.pet.autoIncome * aMult).toFixed(1);
+            document.getElementById('stat-streak').innerText = state.pet.streak;
+
+            const face = document.getElementById('pet-face');
+            const blob = document.getElementById('pet-blob');
+            const deathOverlay = document.getElementById('death-overlay');
+            const sleepOverlay = document.getElementById('sleep-overlay');
+
+            // Visual States
+            deathOverlay.style.display = 'none'; 
+            sleepOverlay.classList.remove('active');
+            blob.classList.remove('dead-filter', 'sleeping', 'dirty');
+
+            if(state.pet.isDead) {
+                deathOverlay.style.display = 'flex'; face.innerText = '💀'; blob.classList.add('dead-filter');
+            } else if (state.pet.isSleeping) {
+                sleepOverlay.classList.add('active');
+                face.innerText = '😴'; blob.classList.add('sleeping');
+                document.getElementById('btn-sleep').innerText = "☀️ Вставать";
+            } else {
+                document.getElementById('btn-sleep').innerText = "😴 Спать";
+                if(state.pet.hygiene < 50) blob.classList.add('dirty');
+                
+                if(state.pet.hygiene < 30) face.innerText = '🤢';
+                else if(state.pet.hunger < 30) face.innerText = '🥺';
+                else if(state.pet.love > 90) face.innerText = '😻';
+                else face.innerText = '😺';
+            }
+
+            document.getElementById('pet-acc-wear').innerText = state.pet.wear ? state.pet.wear.ico : '';
+            const bg = document.getElementById('house-bg');
+            if(state.pet.house && state.pet.house.id !== 'box') bg.innerText = state.pet.house.ico;
+            else bg.innerText = '📦';
+        }
+
+        window.petClick = (e) => {
+            if(state.pet.isDead) return;
+            const blob = document.getElementById('pet-blob');
+            if(state.pet.isSleeping) { showToast("Тсс! Питомец спит 😴"); return; }
+            
+            blob.style.transform = 'scale(0.95)';
+            setTimeout(()=>blob.style.transform = 'scale(1)', 100);
+
+            let mult = 1;
+            state.pet.activeBuffs.forEach(b => { if(b.type==='b_click'||b.type==='b_all') mult *= b.val; });
+            const gain = state.pet.clickPower * mult;
+
+            state.pet.coins += gain;
+            state.pet.love = Math.min(100, state.pet.love + 1);
+            state.pet.energy = Math.max(0, state.pet.energy - 0.5);
+            addExp(1);
+            
+            const float = document.createElement('div');
+            float.className = 'click-float';
+            float.innerText = `+${gain.toFixed(0)}`;
+            float.style.left = (e.clientX - 10) + 'px';
+            float.style.top = (e.clientY - 40) + 'px';
+            document.body.appendChild(float);
+            setTimeout(()=>float.remove(), 800);
+            savePet();
         };
 
-        window.toggleGarland = () => {
-            state.garland = !state.garland;
-            DOM.garland.classList.toggle('active', state.garland);
-            document.getElementById('btn-garland').classList.toggle('active');
+        function showThought(forcedText) {
+            const th = document.getElementById('pet-thought');
+            th.innerText = forcedText || THOUGHTS[Math.floor(Math.random()*THOUGHTS.length)];
+            th.classList.add('show');
+            setTimeout(() => th.classList.remove('show'), 2000);
+        }
+
+        // === MINI GAME: FLAPPY HEART ===
+        let gameLoop, birdY, birdV, pipes, score, gameActive = false, birdR = 0;
+        const cvs = document.getElementById('flappy-canvas');
+        const ctx = cvs.getContext('2d');
+
+        window.startFlappy = () => {
+            if(state.pet.isDead) return;
+            if(state.pet.isSleeping) { showToast("Питомец спит!"); return; }
+            if(state.pet.energy < 10) { showToast("Слишком мало энергии! 😴"); return; }
+            
+            document.getElementById('view-flappy').classList.add('active');
+            birdY = 200; birdV = 0; pipes = []; score = 0; birdR = 0;
+            gameActive = true;
+            cvs.onclick = () => { birdV = -5; }; 
+            gameLoop = setInterval(flappyLoop, 20);
+        }
+
+        window.closeFlappy = () => {
+            clearInterval(gameLoop); gameActive = false;
+            document.getElementById('view-flappy').classList.remove('active');
+        }
+
+        function flappyLoop() {
+            if(!gameActive) return;
+            birdV += 0.25; 
+            birdY += birdV;
+            birdR = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (birdV * 0.1)));
+            
+            if(pipes.length === 0 || pipes[pipes.length-1].x < 150) {
+                pipes.push({ x: 320, h: Math.random()*200 + 50 });
+            }
+            pipes.forEach(p => p.x -= 2);
+            if(pipes[0].x < -50) { pipes.shift(); score++; addExp(5); }
+
+            if(birdY > 480 || birdY < 0) return gameOver();
+            pipes.forEach(p => {
+                if(p.x < 35 && p.x > 5 && (birdY < p.h || birdY > p.h + 120)) return gameOver();
+            });
+
+            ctx.fillStyle = "#87CEEB"; ctx.fillRect(0,0,320,480);
+            
+            // Draw rotated bird
+            ctx.save();
+            ctx.translate(25, birdY);
+            ctx.rotate(birdR);
+            ctx.font = "24px Arial"; ctx.fillText("❤️", -10, 10);
+            ctx.restore();
+            
+            ctx.fillStyle = "#75aa31";
+            pipes.forEach(p => {
+                ctx.fillRect(p.x, 0, 40, p.h);
+                ctx.fillRect(p.x, p.h+120, 40, 480);
+            });
+            ctx.fillStyle = "#fff"; ctx.font = "bold 20px Nunito";
+            ctx.fillText("Score: " + score, 10, 30);
+            ctx.fillText("Coins: " + (score*2), 10, 50);
+        }
+
+        function gameOver() {
+            clearInterval(gameLoop); gameActive = false;
+            // Luck Potion Check
+            let luck = 1;
+            state.pet.activeBuffs.forEach(b => { if(b.type==='b_luck') luck = b.val; });
+            
+            const reward = score * 2;
+            const expGain = (score * 2) * luck;
+            
+            state.pet.coins += reward;
+            state.pet.energy = Math.max(0, state.pet.energy - 10);
+            addExp(expGain);
+            savePet();
+            alert(`Игра окончена! Счет: ${score}\nМонеты: ${reward} 💰\nОпыт: ${expGain} XP`);
+            closeFlappy();
+        }
+
+        // === SHOP ===
+        let currentShopTab = 'food';
+        window.openShop = () => {
+            if(state.pet.isDead) return;
+            document.getElementById('shop-modal').classList.add('active');
+            switchShop('food');
+        }
+        window.closeShop = () => document.getElementById('shop-modal').classList.remove('active');
+
+        window.switchShop = (tab) => {
+            currentShopTab = tab;
+            document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.shop-tab').forEach(t => { if(t.innerText.includes(getTabName(tab))) t.classList.add('active'); });
+            renderShop();
+        }
+
+        function getTabName(t) {
+            if(t==='food') return 'Еда';
+            if(t==='wear') return 'Одежда';
+            if(t==='house') return 'Домик';
+            if(t==='gadget') return 'Гаджеты';
+            if(t==='buff') return 'Зелья';
+            return 'Навыки';
+        }
+
+        function renderShop() {
+            const lst = document.getElementById('shop-list');
+            lst.innerHTML = '';
+            let items = [];
+            
+            if(currentShopTab === 'upgrade') {
+                const cLvl = state.pet.upgrades.click;
+                const aLvl = state.pet.upgrades.auto;
+                const clickCost = cLvl >= 10 ? 'MAX' : Math.floor(100 * Math.pow(2.5, cLvl));
+                const autoCost = aLvl >= 10 ? 'MAX' : Math.floor(200 * Math.pow(2.5, aLvl));
+                items = [
+                    { ...SHOP.upgrade[0], cost: clickCost, lvl: cLvl, max: 10 },
+                    { ...SHOP.upgrade[1], cost: autoCost, lvl: aLvl, max: 10 }
+                ];
+            } else if (currentShopTab === 'buff') {
+                items = SHOP.buff;
+            } else if (currentShopTab === 'gadget') {
+                items = SHOP.gadget;
+            } else {
+                items = SHOP[currentShopTab];
+            }
+
+            items.forEach(item => {
+                const el = document.createElement('div');
+                const owned = (state.pet.inventory.includes(item.id)) || (currentShopTab === 'house' && state.pet.inventory.includes('house_'+item.id));
+                const isEquipped = (state.pet.wear && state.pet.wear.id === item.id) || (state.pet.house && state.pet.house.id === item.id);
+                
+                el.className = `shop-item ${owned && currentShopTab !== 'food' && currentShopTab !== 'buff' ? 'owned' : ''} ${isEquipped ? 'selected' : ''}`;
+                
+                let btnText = item.cost === 'MAX' ? 'Макс. Ур.' : item.cost + ' 💰';
+                
+                if(currentShopTab === 'wear' || currentShopTab === 'house') {
+                    if(isEquipped) btnText = 'Надето';
+                    else if(owned) btnText = 'Надеть';
+                }
+                
+                if(currentShopTab === 'gadget') {
+                     // Check active
+                     if(state.pet.gadgets[item.id] > Date.now()) btnText = "Активно";
+                }
+                
+                if(currentShopTab === 'upgrade') {
+                    if(item.lvl >= item.max) btnText = "МАКСИМУМ";
+                    else btnText = `Ур.${item.lvl+1} (${item.cost} 💰)`;
+                }
+
+                el.innerHTML = `
+                    <div style="font-size:30px">${item.ico}</div>
+                    <div style="font-size:12px; font-weight:700">${item.name}</div>
+                    <div class="shop-desc">${item.desc}</div>
+                    <div class="shop-price">${btnText}</div>
+                `;
+                el.onclick = () => buyItem(item);
+                lst.appendChild(el);
+            });
+        }
+
+        function buyItem(item) {
+            if(state.pet.coins < item.cost && item.cost !== 'MAX' && !state.pet.inventory.includes(item.id)) {
+                 showToast("Мало монеток 😢"); return;
+            }
+
+            if(currentShopTab === 'food') {
+                if(item.effect === 'bad') {
+                    state.pet.coins -= item.cost;
+                    state.pet.love = Math.max(0, state.pet.love - 10);
+                    showToast("Бее! Я такое не люблю! 🤢");
+                    savePet();
+                    updatePetUI();
+                    return;
+                }
+                
+                state.pet.coins -= item.cost;
+                const effects = item.effect.split(' ');
+                effects.forEach(eff => {
+                    const val = parseInt(eff.split('+')[1]);
+                    if(eff.includes('h+')) state.pet.hunger = Math.min(100, state.pet.hunger + val);
+                    if(eff.includes('e+')) state.pet.energy = Math.min(100, state.pet.energy + val);
+                    if(eff.includes('l+')) state.pet.love = Math.min(100, state.pet.love + val);
+                });
+                
+                showToast("Вкусно! 😋");
+                addExp(10);
+            }
+            else if(currentShopTab === 'buff') {
+                state.pet.coins -= item.cost;
+                state.pet.activeBuffs.push({
+                    id: item.id, type: item.type, val: item.val, ico: item.ico,
+                    end: Date.now() + (item.dur * 1000)
+                });
+                showToast(`Эффект "${item.name}" активирован! ✨`);
+            }
+            else if(currentShopTab === 'gadget') {
+                if(state.pet.gadgets[item.id] > Date.now()) { showToast("Уже активно!"); return; }
+                state.pet.coins -= item.cost;
+                state.pet.gadgets[item.id] = Date.now() + (item.dur * 86400000);
+                showToast("Гаджет установлен на 7 дней! 🤖");
+            }
+            else if(currentShopTab === 'wear' || currentShopTab === 'house') {
+                const invId = currentShopTab === 'house' ? 'house_'+item.id : item.id;
+                if(state.pet.inventory.includes(invId)) {
+                    if(currentShopTab === 'wear') state.pet.wear = item;
+                    else state.pet.house = item;
+                } else {
+                    state.pet.coins -= item.cost;
+                    state.pet.inventory.push(invId);
+                    if(currentShopTab === 'wear') state.pet.wear = item;
+                    else state.pet.house = item;
+                    showToast("Куплено! ✨");
+                }
+            }
+            else if(currentShopTab === 'upgrade') {
+                if(item.lvl >= 10) return;
+                state.pet.coins -= item.cost;
+                if(item.type === 'u_click') { state.pet.upgrades.click++; state.pet.clickPower++; } 
+                else { state.pet.upgrades.auto++; state.pet.autoIncome += 1; }
+                showToast("Улучшено! 💪");
+                addExp(50);
+            }
+            savePet();
+            renderShop();
+            updatePetUI();
+        }
+
+        // === COMMON UI & GRAPH ===
+        window.setView = (v) => {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+            document.getElementById(`view-${v}`).classList.add('active-view');
+            if(v === 'pet') {
+                document.getElementById('btn-view-cal').classList.remove('active');
+                document.getElementById('btn-view-pet').classList.add('active');
+            } else {
+                document.getElementById('btn-view-cal').classList.add('active');
+                document.getElementById('btn-view-pet').classList.remove('active');
+            }
         };
 
-        window.toggleDark = () => {
-            state.dark = !state.dark;
-            DOM.body.classList.toggle('dark-mode', state.dark);
-            document.getElementById('btn-dark').classList.toggle('active');
-        };
+        window.setMode = (m) => { state.settings.mode = m; applySettings(); saveSettings(); };
+        window.toggleGarland = () => { state.settings.garland = !state.settings.garland; applySettings(); saveSettings(); };
+        window.toggleDark = () => { state.settings.dark = !state.settings.dark; applySettings(); saveSettings(); };
+        window.doBarrelRoll = () => {
+            const icon = document.getElementById('plane-icon');
+            icon.style.animation = 'barrelRoll 1s ease-in-out';
+            setTimeout(() => icon.style.animation = '', 1000);
+            showToast("Вжууух! ✈️");
+        }
 
-        // === GRAPH ===
         let len = 0;
         function calcGraph() {
             const el = document.getElementById('flight-viz');
+            if(!el) return;
             const w = el.offsetWidth; const h = el.offsetHeight;
             const d = `M 20 ${h-30} Q ${w/2} -20 ${w-20} ${h-50}`;
             DOM.track.setAttribute('d', d); DOM.active.setAttribute('d', d);
@@ -596,33 +1517,25 @@
             const tot = END - START;
             const pass = new Date() - START;
             let p = pass / tot; if(p<0) p=0; if(p>1) p=1;
-
-            DOM.active.style.strokeDasharray = len;
-            DOM.active.style.strokeDashoffset = len * (1 - p);
-
-            const pt = DOM.track.getPointAtLength(len * p);
-            const next = DOM.track.getPointAtLength(Math.min(len, len*p + 2));
-            const ang = Math.atan2(next.y - pt.y, next.x - pt.x) * 180 / Math.PI;
-
-            // Hover effect
-            const hover = Math.sin(Date.now() / 800) * 3;
-            
-            DOM.plane.style.transform = `translate(${pt.x - 20}px, ${pt.y - 20 + hover}px) rotate(${ang}deg)`;
-            DOM.pct.innerText = (p * 100).toFixed(5) + '%';
-            // Keep text straight
-            DOM.pct.style.transform = `rotate(${-ang}deg)`;
-
+            if(DOM.active && DOM.track) {
+                DOM.active.style.strokeDasharray = len;
+                DOM.active.style.strokeDashoffset = len * (1 - p);
+                const pt = DOM.track.getPointAtLength(len * p);
+                const next = DOM.track.getPointAtLength(Math.min(len, len*p + 2));
+                const ang = Math.atan2(next.y - pt.y, next.x - pt.x) * 180 / Math.PI;
+                const hover = Math.sin(Date.now() / 800) * 3;
+                DOM.plane.style.transform = `translate(${pt.x - 20}px, ${pt.y - 20 + hover}px) rotate(${ang}deg)`;
+                DOM.pct.innerText = (p * 100).toFixed(5) + '%';
+                DOM.pct.style.transform = `rotate(${-ang}deg)`;
+            }
             requestAnimationFrame(flightLoop);
         }
 
-        // === PARTICLES V3 ===
         function runParticles() {
             const c = document.getElementById('canvas-fx');
             const ctx = c.getContext('2d');
-            
             const rsz = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
             window.addEventListener('resize', rsz); rsz();
-            
             let pts = [];
             for(let i=0; i<80; i++) pts.push({
                 x: Math.random()*c.width, y: Math.random()*c.height,
@@ -633,53 +1546,30 @@
 
             function anim() {
                 ctx.clearRect(0,0,c.width,c.height);
-                const m = state.mode;
-                const isDark = state.dark;
-                
+                const m = state.settings.mode;
+                const isDark = state.settings.dark;
                 pts.forEach(p => {
                     p.y += p.z * (m==='rain' ? 12 : 1);
                     p.x += Math.sin(p.y*0.003 + p.s)*0.5;
                     p.s += p.v;
                     if(p.y > c.height) { p.y = -20; p.x = Math.random()*c.width; }
-                    
                     ctx.beginPath();
                     if(m === 'snow') {
-                        // Soft Bokeh Snow
                         const rad = p.z * 3;
                         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
-                        // On light mode, snow is white but the background is deeper blue now.
-                        // We can add a very slight tint if needed, but white on the new blue looks good.
                         grad.addColorStop(0, `rgba(255,255,255,${0.8*p.z})`);
                         grad.addColorStop(1, `rgba(255,255,255,0)`);
                         ctx.fillStyle = grad;
                         ctx.arc(p.x, p.y, rad, 0, Math.PI*2);
                         ctx.fill();
-                    } 
-                    else if(m === 'spring') {
-                        // Realistic Petals
-                        ctx.save();
-                        ctx.translate(p.x, p.y);
-                        // 3D Rotation simulation
-                        ctx.scale(Math.cos(p.s), 1); 
-                        ctx.rotate(p.s * 0.5);
-                        
+                    } else if(m === 'spring') {
+                        ctx.save(); ctx.translate(p.x, p.y); ctx.scale(Math.cos(p.s), 1); ctx.rotate(p.s * 0.5);
                         ctx.fillStyle = `rgba(255, 192, 203, ${p.z})`;
-                        ctx.moveTo(0,0);
-                        ctx.bezierCurveTo(5, -5, 10, 0, 0, 10);
-                        ctx.bezierCurveTo(-10, 0, -5, -5, 0, 0);
-                        ctx.fill();
-                        ctx.restore();
-                    }
-                    else if(m === 'rain') {
-                        // Rain color changes based on mode
-                        // Light Mode: Dark Grey/Blue. Dark Mode: White/Grey
+                        ctx.moveTo(0,0); ctx.bezierCurveTo(5, -5, 10, 0, 0, 10); ctx.bezierCurveTo(-10, 0, -5, -5, 0, 0);
+                        ctx.fill(); ctx.restore();
+                    } else if(m === 'rain') {
                         const color = isDark ? `rgba(255,255,255,${0.3*p.z})` : `rgba(80, 100, 130, ${0.5*p.z})`;
-                        
-                        ctx.strokeStyle = color;
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p.x - 1, p.y + 15*p.z);
-                        ctx.stroke();
+                        ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - 1, p.y + 15*p.z); ctx.stroke();
                     }
                 });
                 requestAnimationFrame(anim);
@@ -687,55 +1577,59 @@
             anim();
         }
 
-        // === CALENDAR ===
         function renderCal() {
             DOM.mount.innerHTML = '';
             let ptr = new Date(START);
             const today = new Date(); today.setHours(0,0,0,0);
-
             while(ptr <= END) {
                 const y = ptr.getFullYear(); const m = ptr.getMonth();
                 const card = document.createElement('div'); card.className = 'glass-panel';
-                
                 const name = ptr.toLocaleString('ru', { month: 'long' });
                 const ico = (m<=1 || m===11) ? '❄️' : '🌸';
                 card.innerHTML = `<div class="month-title">${ico} <span style="text-transform:capitalize">${name}</span></div>`;
-                
+                const wh = document.createElement('div'); wh.className = 'week-header';
+                WEEKDAYS.forEach(wd => {
+                    const el = document.createElement('div'); el.className = 'week-day'; el.innerText = wd;
+                    wh.appendChild(el);
+                });
+                card.appendChild(wh);
                 const grid = document.createElement('div'); grid.className = 'cal-grid';
                 const f = new Date(y,m,1);
-                let skip = f.getDay(); if(skip===0) skip=7;
-                for(let i=1; i<skip; i++) grid.appendChild(document.createElement('div'));
-                
+                let skip = f.getDay() - 1; if(skip===-1) skip=6;
+                for(let i=0; i<skip; i++) grid.appendChild(document.createElement('div'));
                 const days = new Date(y,m+1,0).getDate();
                 for(let d=1; d<=days; d++) {
                     const date = new Date(y,m,d);
                     if(date < START && m===START.getMonth()) { grid.appendChild(document.createElement('div')); continue; }
                     if(date > END) break;
-                    
                     const k = date.toISOString().split('T')[0];
                     const fut = date > today;
                     const isT = date.getTime()===today.getTime();
                     const op = state.opened[k];
-                    
+                    const holKey = `${m}-${d}`;
                     const el = document.createElement('div'); el.className = 'day-item';
                     el.innerText = d;
-                    
+                    if(HOLIDAYS[holKey]) {
+                        el.classList.add('holiday');
+                        const hIco = document.createElement('div'); hIco.className = 'holiday-icon'; hIco.innerText = HOLIDAYS[holKey];
+                        el.appendChild(hIco);
+                    }
                     if(fut) {
                         el.classList.add('future');
-                        el.onclick = () => showToast(`Потерпи, Биба! Открыть можно ${d} ${name}`);
+                        el.onclick = () => { const dateStr = date.toLocaleString('ru', { day: 'numeric', month: 'long' }); showToast(`Потерпи, Биба! Открыть можно ${dateStr}`); };
                     } else {
                         if(isT) el.classList.add('today');
                         if(op) { el.classList.add('opened'); addHeart(el); }
                         else if(!isT) el.classList.add('missed');
-                        
                         el.onclick = () => {
-                            state.opened[k]=true; localStorage.setItem(KEY, JSON.stringify(state.opened));
+                            if(!state.opened[k]) { state.opened[k]=true; state.pet.coins += 50; savePet(); showToast("Найдено: 50 монет! 💰"); }
+                            localStorage.setItem(DATA_KEY, JSON.stringify(state.opened));
                             el.classList.add('opened'); el.classList.remove('missed');
                             if(isT) el.classList.remove('today');
                             addHeart(el);
-                            
                             const diff = Math.floor((date - START)/(86400000));
-                            openLetter(d + ' ' + name, quotes[diff % quotes.length]);
+                            const dateStr = date.toLocaleString('ru', { day: 'numeric', month: 'long' });
+                            openLetter(dateStr, quotes[diff % quotes.length]);
                         }
                     }
                     grid.appendChild(el);
@@ -745,12 +1639,7 @@
             }
         }
 
-        function addHeart(p) {
-            if(p.querySelector('.mini-heart')) return;
-            const h = document.createElement('span'); h.className = 'mini-heart'; h.innerText = '❤';
-            p.appendChild(h);
-        }
-
+        function addHeart(p) { if(p.querySelector('.mini-heart')) return; const h = document.createElement('span'); h.className = 'mini-heart'; h.innerText = '❤'; p.appendChild(h); }
         function tick() {
             const rem = END - new Date();
             if(rem<=0) { document.getElementById('timer').innerText="МЫ ВМЕСТЕ!"; return; }
@@ -760,21 +1649,10 @@
             const s = Math.floor((rem%60000)/1000);
             document.getElementById('timer').innerText = `${d}д ${("0"+h).slice(-2)}:${("0"+m).slice(-2)}:${("0"+s).slice(-2)}`;
         }
-
-        function openLetter(d, q) {
-            document.getElementById('m-date').innerText = d;
-            document.getElementById('m-text').innerText = q.t;
-            document.getElementById('m-source').innerText = "— " + q.s;
-            DOM.modal.classList.add('active');
-        }
+        function openLetter(d, q) { document.getElementById('m-date').innerText = d; document.getElementById('m-text').innerText = q.t; document.getElementById('m-source').innerText = "— " + q.s; DOM.modal.classList.add('active'); }
         window.closeModal = () => DOM.modal.classList.remove('active');
-        
         let tm;
-        function showToast(t) {
-            document.getElementById('toast-text').innerText = t;
-            DOM.toast.classList.add('visible');
-            clearTimeout(tm); tm = setTimeout(()=>DOM.toast.classList.remove('visible'), 2500);
-        }
+        function showToast(t) { document.getElementById('toast-text').innerText = t; DOM.toast.classList.add('visible'); clearTimeout(tm); tm = setTimeout(()=>DOM.toast.classList.remove('visible'), 2500); }
 
         init();
     </script>
