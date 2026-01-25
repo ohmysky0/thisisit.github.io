@@ -14,18 +14,18 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@500;700;800&family=SF+Mono:wght@400&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@600;700;800&family=SF+Mono:wght@400&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --card-light: rgba(255, 255, 255, 0.65);
-            --card-border-light: rgba(255, 255, 255, 0.4);
+            --card-light: rgba(255, 255, 255, 0.75);
+            --card-border-light: rgba(255, 255, 255, 0.6);
             --text-main-light: #1d1d1f;
-            --text-sub-light: #86868b;
+            --text-sub-light: #515154;
             
-            --card-dark: rgba(30, 30, 35, 0.85);
+            --card-dark: rgba(30, 30, 35, 0.9);
             --card-border-dark: rgba(255, 255, 255, 0.15);
-            --text-main-dark: #f0f0f2;
+            --text-main-dark: #f5f5f7;
             --text-sub-dark: #a0a0a5;
 
             --accent: #ff3b30;
@@ -50,6 +50,8 @@
             background: transparent;
             user-select: none;
             transition: color 0.3s;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* --- DYNAMIC BACKGROUNDS --- */
@@ -144,7 +146,7 @@
         }
         .dark-mode h1 { color: var(--text-main-dark); text-shadow: 0 2px 20px rgba(0,0,0,0.8); }
         .subtitle {
-            font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+            font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
             color: var(--text-sub-light); margin-top: 10px;
         }
         .dark-mode .subtitle { color: var(--text-sub-dark); }
@@ -160,7 +162,7 @@
         /* --- FLIGHT --- */
         .flight-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
         .city-code { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
-        .city-name { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-sub-light); }
+        .city-name { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-sub-light); }
         .dark-mode .city-name { color: var(--text-sub-dark); }
         #flight-viz { width: 100%; height: 130px; position: relative; }
         .track-path { fill: none; stroke: var(--text-sub-light); stroke-width: 2; stroke-dasharray: 6 6; opacity: 0.3; }
@@ -184,9 +186,9 @@
             margin-top: 15px; color: var(--text-main-light); letter-spacing: -1px;
         }
         .dark-mode .countdown { color: var(--text-main-dark); }
-        .timer-caption { text-align: center; font-size: 13px; color: var(--text-sub-light); margin-bottom: 5px; }
+        .timer-caption { text-align: center; font-size: 13px; color: var(--text-sub-light); margin-bottom: 5px; font-weight: 600; }
         .dark-mode .timer-caption { color: var(--text-sub-dark); }
-        .dates-meta { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--text-sub-light); opacity: 0.6; margin-top: 20px; }
+        .dates-meta { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: var(--text-sub-light); opacity: 0.6; margin-top: 20px; }
         .dark-mode .dates-meta { color: var(--text-sub-dark); opacity: 0.8; }
 
         /* CALENDAR GRID */
@@ -198,7 +200,7 @@
         .day-item {
             aspect-ratio: 1; border-radius: 14px; background: rgba(0,0,0,0.03);
             display: flex; justify-content: center; align-items: center;
-            font-size: 15px; font-weight: 700; color: var(--text-sub-light);
+            font-size: 15px; font-weight: 800; color: var(--text-sub-light);
             position: relative; cursor: pointer; transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .dark-mode .day-item { background: rgba(255,255,255,0.06); color: var(--text-main-dark); }
@@ -227,12 +229,12 @@
         }
         .dark-mode .letter-box { background: #1c1c1e; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
         .modal-layer.active .letter-box { transform: scale(1) translateY(0); }
-        .quote-text { font-family: 'Caveat', cursive; font-size: 30px; line-height: 1.3; margin: 24px 0; color: #1d1d1f; }
+        .quote-text { font-family: 'Caveat', cursive; font-size: 32px; line-height: 1.3; margin: 24px 0; color: #1d1d1f; }
         .dark-mode .quote-text { color: #f5f5f7; }
 
         .action-btn {
             background: #1d1d1f; color: #fff; border: none; width: 100%; padding: 18px;
-            border-radius: 24px; font-weight: 700; font-size: 16px; cursor: pointer; transition: transform 0.2s;
+            border-radius: 24px; font-weight: 800; font-size: 16px; cursor: pointer; transition: transform 0.2s;
         }
         .dark-mode .action-btn { background: #fff; color: #000; }
         .action-btn:active { transform: scale(0.97); }
@@ -241,7 +243,7 @@
         .toast-pill {
             position: fixed; bottom: 40px; left: 50%; transform: translate(-50%, 150px);
             background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
-            padding: 14px 28px; border-radius: 50px; font-weight: 600; color: #000;
+            padding: 14px 28px; border-radius: 50px; font-weight: 700; color: #000;
             box-shadow: 0 15px 50px rgba(0,0,0,0.2); z-index: 3000;
             display: flex; align-items: center; gap: 10px; white-space: nowrap;
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -257,6 +259,14 @@
             position: absolute; top:0; left:0; width:100%; height:100%; z-index: 0; opacity: 0.3; font-size: 150px; 
             display: flex; align-items: center; justify-content: center; pointer-events: none; transition: all 0.5s;
         }
+        .rent-info-text {
+            position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+            font-size: 11px; font-weight: 800; color: var(--text-sub-light); opacity: 0.8; z-index: 10;
+            background: rgba(255,255,255,0.5); padding: 4px 10px; border-radius: 10px; backdrop-filter: blur(5px);
+            display: none; white-space: nowrap;
+        }
+        .dark-mode .rent-info-text { color: var(--text-sub-dark); background: rgba(0,0,0,0.5); }
+
         .pet-blob {
             width: 140px; height: 130px; background: #fff; border-radius: 50% 50% 45% 45%;
             box-shadow: 0 15px 40px rgba(0,0,0,0.1); position: relative; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -271,12 +281,12 @@
         
         .pet-face { font-size: 50px; position: relative; z-index: 2; pointer-events: none; }
         
-        /* Accessories Positioning FIXED */
+        /* Accessories Positioning FIXED V2 */
         .pet-acc { position: absolute; pointer-events: none; z-index: 3; left: 50%; transform: translateX(-50%); }
-        .acc-head { top: -25px; font-size: 35px; } /* Bows, Hats - Smaller and higher */
-        .acc-eyes { top: 35px; font-size: 40px; } /* Glasses */
-        .acc-body { bottom: 10px; font-size: 50px; } /* Shirts, Dresses */
-        .acc-neck { bottom: 20px; font-size: 45px; z-index: 4; } /* Scarves */
+        .acc-head { top: -35px; font-size: 35px; } /* Improved: sits ON head */
+        .acc-eyes { top: 30px; font-size: 40px; } /* Improved: Aligned with standard face */
+        .acc-body { bottom: 5px; font-size: 55px; } /* Improved: Covers body better */
+        .acc-neck { bottom: 20px; font-size: 45px; z-index: 4; } /* Improved: Sits around neck area */
 
         .pet-zzz { position: absolute; top: -30px; right: -10px; font-size: 24px; font-weight: 800; color: var(--text-sub-light); opacity: 0; }
         .sleeping .pet-zzz { opacity: 1; animation: floatZ 2s infinite; }
@@ -330,6 +340,9 @@
             display: none; align-items: center; justify-content: center; padding: 20px;
         }
         .shop-modal.active { display: flex; }
+        /* SOLID BACKGROUND FOR SHOP IN DARK MODE */
+        .dark-mode .shop-modal .glass-panel { background: #1c1c1e; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
+        
         .shop-tabs { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
         .shop-tab { padding: 5px 10px; border-radius: 10px; background: rgba(0,0,0,0.05); font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer; }
         .shop-tab.active { background: var(--accent); color: #fff; }
@@ -509,6 +522,7 @@
                 
                 <div class="pet-stage" id="pet-stage">
                     <div class="weather-badge" id="weather-badge">☀️ Тепло</div>
+                    <div class="rent-info-text" id="rent-info">Аренда оплачена</div>
                     <div class="house-bg" id="house-bg"></div>
                     <div class="pet-thought" id="pet-thought">Привет!</div>
                     <div class="buffs-row" id="buffs-row"></div>
@@ -904,7 +918,13 @@
             ]
         };
 
-        const THOUGHTS = ["Люблю тебя!", "Где еда?", "Хочу гулять", "Муррр...", "Кчау!", "Скучаю...", "Ты лучшая!", "Оля топ!"];
+        const THOUGHTS = [
+            "Люблю тебя!", "Ты моя вселенная", "Хочу на ручки", "Мур-мур...", 
+            "Скучаю по тебе", "Ты самая красивая", "Где еда?", "Хочу гулять", 
+            "Ты мое счастье", "Жду тебя!", "Ты вкусно пахнешь", "Обними меня",
+            "Оля топ!", "Люблю больше пиццы", "Ты - космос", "Скоро увидимся!"
+        ];
+        
         const DOM = {
             mount: document.getElementById('calendar-root'), modal: document.getElementById('modal'),
             track: document.getElementById('path-bg'), active: document.getElementById('path-active'),
@@ -942,7 +962,7 @@
             
             // --- LOOPS ---
             setInterval(gameLoop, 1000); // Income and Events (1s)
-            setInterval(decayLoop, 300000); // Decay Stats (5 mins = 300s) VERY SLOW
+            setInterval(decayLoop, 180000); // Decay Stats (3 mins = 180s) OPTIMAL BALANCE
             setInterval(petBehavior, 10000);
             setInterval(() => checkCircadianRhythm(false), 60000);
         }
@@ -1038,13 +1058,13 @@
                 state.pet.coins += finalInc;
             }
 
-            // Random Mini Events (Low chance)
-            if(Math.random() < 0.02) triggerRandomEvent();
+            // Random Mini Events (LOWER chance: 0.8% per sec instead of 2%)
+            if(Math.random() < 0.008) triggerRandomEvent();
 
             savePet();
         }
 
-        // Decay (5 mins)
+        // Decay (3 mins)
         function decayLoop() {
              if(state.pet.isDead || state.pet.isSleeping) return;
              const m = new Date().getMonth();
@@ -1116,6 +1136,17 @@
             document.getElementById('lvl-text').innerText = `Ур. ${state.pet.level}`;
             document.getElementById('exp-fill').style.width = (state.pet.exp/state.pet.maxExp*100)+'%';
             
+            // Rent Status Text
+            const rentEl = document.getElementById('rent-info');
+            if(state.pet.house && state.pet.house.rent > 0) {
+                rentEl.style.display = 'block';
+                const months = ['Января','Февраля','Марта','Апреля','Мая','Июня','Июля','Августа','Сентября','Октября','Ноября','Декабря'];
+                // Rent is paid for current month. So it's valid until end of current month.
+                rentEl.innerText = `Аренда оплачена до конца: ${months[state.pet.rentPaidMonth]}`;
+            } else {
+                rentEl.style.display = 'none';
+            }
+
             const buffsDiv = document.getElementById('buffs-row'); buffsDiv.innerHTML='';
             const now = Date.now();
             if(state.pet.gadgets.feeder > now) buffsDiv.innerHTML+='<div class="buff-icon">🥣</div>';
