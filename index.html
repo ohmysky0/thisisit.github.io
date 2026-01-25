@@ -23,14 +23,13 @@
             --text-main-light: #1d1d1f;
             --text-sub-light: #86868b;
             
-            --card-dark: rgba(30, 30, 35, 0.7);
+            --card-dark: rgba(30, 30, 35, 0.85);
             --card-border-dark: rgba(255, 255, 255, 0.15);
             --text-main-dark: #f0f0f2;
             --text-sub-dark: #a0a0a5;
 
             --accent: #ff3b30;
             --accent-glow: rgba(255, 59, 48, 0.5);
-            
             --holiday-color: #ff9500;
             
             --blur: blur(30px);
@@ -43,18 +42,17 @@
         body {
             margin: 0; padding: 0;
             font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #f5f5f7; /* Fallback */
+            background-color: #f5f5f7;
             color: var(--text-main-light);
             min-height: 100vh;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            /* Important: Make body transparent so fixed backgrounds show through */
             background: transparent;
             user-select: none;
+            transition: color 0.3s;
         }
 
         /* --- DYNAMIC BACKGROUNDS --- */
-        
         .bg-mesh {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             z-index: -2;
@@ -63,9 +61,7 @@
         }
         .bg-mesh.active { opacity: 1; }
 
-        /* LIGHT MODE GRADIENTS */
         #bg-snow {
-            /* Deeper blue at top to see white snow */
             background: radial-gradient(at 30% 0%, #dbeafe 0%, transparent 60%), 
                         radial-gradient(at 70% 0%, #bfdbfe 0%, transparent 60%),
                         #eff6ff;
@@ -76,63 +72,38 @@
                         #fff1f2;
         }
         #bg-rain {
-            /* Darker grey at top for visible rain */
             background: radial-gradient(at 50% 0%, #94a3b8 0%, transparent 70%),
                         #cbd5e1;
         }
 
-        /* DARK MODE GRADIENTS & OVERRIDES */
         body.dark-mode { color: var(--text-main-dark); }
-        
-        body.dark-mode #bg-snow {
-            background: radial-gradient(circle at 50% -20%, #172a45 0%, #0a0a0a 80%);
-        }
-        body.dark-mode #bg-spring {
-            background: radial-gradient(circle at 50% -20%, #3e1f26 0%, #0a0a0a 80%);
-        }
-        body.dark-mode #bg-rain {
-            background: radial-gradient(circle at 50% -20%, #252b36 0%, #050505 80%);
-        }
+        body.dark-mode #bg-snow { background: radial-gradient(circle at 50% -20%, #172a45 0%, #0a0a0a 80%); }
+        body.dark-mode #bg-spring { background: radial-gradient(circle at 50% -20%, #3e1f26 0%, #0a0a0a 80%); }
+        body.dark-mode #bg-rain { background: radial-gradient(circle at 50% -20%, #252b36 0%, #050505 80%); }
 
         #canvas-fx { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
-        /* --- GARLAND (Fairy Lights) --- */
+        /* --- GARLAND --- */
         .garland-wrap {
             position: fixed; top: 0; left: 0; width: 100%; height: 60px; z-index: 100;
             display: flex; justify-content: space-between; pointer-events: none;
             opacity: 0; transition: opacity 0.5s; padding: 0 20px;
         }
         .garland-wrap.active { opacity: 1; }
-
         .string-segment {
-            flex: 1; position: relative;
-            /* Darker wire for Light Mode so it's visible against sky */
-            border-top: 1px solid rgba(80, 80, 80, 0.5);
+            flex: 1; position: relative; border-top: 1px solid rgba(80, 80, 80, 0.5);
             border-radius: 50%; height: 20px; margin-top: -8px;
-            display: flex; justify-content: space-around;
-            transform-origin: top center;
+            display: flex; justify-content: space-around; transform-origin: top center;
             animation: gentleSway 5s ease-in-out infinite alternate;
         }
-        /* Lighter wire for Dark Mode */
         .dark-mode .string-segment { border-top-color: rgba(255,255,255,0.2); }
-
-        .micro-led {
-            width: 4px; height: 4px; border-radius: 50%;
-            margin-top: -2px;
-            background: #fff;
-            position: relative;
-        }
-        
-        /* LIGHT MODE LEDS: Stronger colors/shadows to compete with daylight */
+        .micro-led { width: 4px; height: 4px; border-radius: 50%; margin-top: -2px; background: #fff; position: relative; }
         .led-warm { background: #ffb347; box-shadow: 0 0 6px #ff9e2c; }
         .led-cool { background: #5bc0de; box-shadow: 0 0 6px #2a9fd6; }
         .led-pink { background: #ff69b4; box-shadow: 0 0 6px #ff1493; }
-        
-        /* DARK MODE LEDS: Soft, wide glow */
         .dark-mode .led-warm { background: #ffdfba; box-shadow: 0 0 15px #ffdfba; }
         .dark-mode .led-cool { background: #cceeff; box-shadow: 0 0 15px #cceeff; }
         .dark-mode .led-pink { background: #ffbbcc; box-shadow: 0 0 15px #ffbbcc; }
-
         @keyframes gentleSway { from { transform: rotate(-1deg) translateY(0); } to { transform: rotate(1deg) translateY(2px); } }
 
         /* --- CONTROLS --- */
@@ -140,39 +111,30 @@
             position: fixed; top: calc(15px + var(--safe-top)); left: 50%; transform: translateX(-50%);
             background: rgba(240, 240, 240, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             padding: 4px; border-radius: 100px; display: flex; gap: 6px; z-index: 200;
-            border: 1px solid rgba(255,255,255,0.4);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         .dark-mode .control-dock { background: rgba(40,40,40,0.6); border-color: rgba(255,255,255,0.1); }
-
         .dock-btn {
             width: 42px; height: 42px; border-radius: 50%; border: none; background: transparent;
             font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s;
-            position: relative;
+            transition: all 0.2s; position: relative;
         }
         .dock-btn.active { background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transform: scale(1.05); }
         .dark-mode .dock-btn.active { background: rgba(255,255,255,0.2); }
         .dock-btn:active { transform: scale(0.95); }
-
         .coin-badge {
-            position: absolute; top: -5px; right: -5px;
-            background: #FFD700; color: #000; font-size: 10px; font-weight: 800;
-            padding: 2px 5px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            min-width: 15px;
+            position: absolute; top: -5px; right: -5px; background: #FFD700; color: #000;
+            font-size: 10px; font-weight: 800; padding: 2px 5px; border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); min-width: 15px;
         }
 
         /* --- LAYOUT --- */
         .app-layout {
-            max-width: 500px; margin: 0 auto;
-            padding: calc(90px + var(--safe-top)) 20px 100px;
+            max-width: 500px; margin: 0 auto; padding: calc(90px + var(--safe-top)) 20px 100px;
             position: relative; z-index: 10;
         }
-        
-        /* Views */
         .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active-view { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         header { text-align: center; margin-bottom: 30px; }
@@ -181,7 +143,6 @@
             color: var(--text-main-light); text-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         .dark-mode h1 { color: var(--text-main-dark); text-shadow: 0 2px 20px rgba(0,0,0,0.8); }
-        
         .subtitle {
             font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
             color: var(--text-sub-light); margin-top: 10px;
@@ -191,46 +152,29 @@
         /* --- GLASS PANEL --- */
         .glass-panel {
             background: var(--card-light); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
-            border: 1px solid var(--card-border-light);
-            border-radius: 32px; padding: 24px; margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            transition: background 0.3s, border-color 0.3s;
+            border: 1px solid var(--card-border-light); border-radius: 32px; padding: 24px; margin-bottom: 24px;
+            box-shadow: var(--shadow); transition: background 0.3s, border-color 0.3s;
         }
-        .dark-mode .glass-panel {
-            background: var(--card-dark); border-color: var(--card-border-dark);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        }
+        .dark-mode .glass-panel { background: var(--card-dark); border-color: var(--card-border-dark); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
 
         /* --- FLIGHT --- */
         .flight-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
         .city-code { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
         .city-name { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-sub-light); }
         .dark-mode .city-name { color: var(--text-sub-dark); }
-
         #flight-viz { width: 100%; height: 130px; position: relative; }
-        
         .track-path { fill: none; stroke: var(--text-sub-light); stroke-width: 2; stroke-dasharray: 6 6; opacity: 0.3; }
         .active-path { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; filter: drop-shadow(0 0 8px var(--accent-glow)); }
-
         #plane-wrapper {
-            position: absolute; top: 0; left: 0; width: 40px; height: 40px;
-            will-change: transform; pointer-events: auto; /* Enable click */
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer;
+            position: absolute; top: 0; left: 0; width: 40px; height: 40px; will-change: transform; pointer-events: auto;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
         }
         .plane-emoji { font-size: 38px; line-height: 1; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); transform: rotate(90deg); transition: transform 0.5s; }
-
-        @keyframes barrelRoll {
-            0% { transform: rotate(90deg); }
-            100% { transform: rotate(450deg); }
-        }
-
+        @keyframes barrelRoll { 0% { transform: rotate(90deg); } 100% { transform: rotate(450deg); } }
         .pct-pill {
-            position: absolute; top: -30px;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
-            padding: 5px 12px; border-radius: 12px;
-            font-family: 'Roboto Mono', monospace; font-size: 12px; font-weight: 700; color: #000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); white-space: nowrap;
+            position: absolute; top: -30px; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
+            padding: 5px 12px; border-radius: 12px; font-family: 'Roboto Mono', monospace; font-size: 12px;
+            font-weight: 700; color: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); white-space: nowrap;
         }
         .dark-mode .pct-pill { background: rgba(60,60,60,0.9); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
 
@@ -240,76 +184,33 @@
             margin-top: 15px; color: var(--text-main-light); letter-spacing: -1px;
         }
         .dark-mode .countdown { color: var(--text-main-dark); }
-        
         .timer-caption { text-align: center; font-size: 13px; color: var(--text-sub-light); margin-bottom: 5px; }
         .dark-mode .timer-caption { color: var(--text-sub-dark); }
-        
         .dates-meta { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--text-sub-light); opacity: 0.6; margin-top: 20px; }
         .dark-mode .dates-meta { color: var(--text-sub-dark); opacity: 0.8; }
 
         /* CALENDAR GRID */
         .month-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        
-        .week-header {
-            display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 8px;
-        }
-        .week-day {
-            text-align: center; font-size: 11px; font-weight: 800; color: var(--text-sub-light); opacity: 0.5;
-        }
+        .week-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 8px; }
+        .week-day { text-align: center; font-size: 11px; font-weight: 800; color: var(--text-sub-light); opacity: 0.5; }
         .dark-mode .week-day { color: var(--text-sub-dark); }
-
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-        
         .day-item {
-            aspect-ratio: 1; border-radius: 14px;
-            background: rgba(0,0,0,0.03);
+            aspect-ratio: 1; border-radius: 14px; background: rgba(0,0,0,0.03);
             display: flex; justify-content: center; align-items: center;
             font-size: 15px; font-weight: 700; color: var(--text-sub-light);
             position: relative; cursor: pointer; transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .dark-mode .day-item { background: rgba(255,255,255,0.06); color: var(--text-main-dark); }
-
         .day-item.future { opacity: 0.3; cursor: default; }
-        
-        .day-item.today {
-            background: transparent; border: 2px solid var(--accent); color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow); z-index: 2; transform: scale(1.1);
-        }
-
-        .day-item.holiday {
-            border: 1px solid var(--holiday-color);
-            color: var(--holiday-color);
-        }
-        
-        .day-item.opened {
-            background: var(--accent); color: #fff; border-color: var(--accent);
-            box-shadow: 0 5px 15px var(--accent-glow);
-        }
-        
-        .day-item.missed {
-            background: transparent; border: 1px dashed var(--accent); color: var(--accent);
-        }
-        
+        .day-item.today { background: transparent; border: 2px solid var(--accent); color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); z-index: 2; transform: scale(1.1); }
+        .day-item.holiday { border: 1px solid var(--holiday-color); color: var(--holiday-color); }
+        .day-item.opened { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 5px 15px var(--accent-glow); }
+        .day-item.missed { background: transparent; border: 1px dashed var(--accent); color: var(--accent); }
         .day-item:active { transform: scale(0.92); }
-
-        .mini-heart {
-            position: absolute; bottom: 3px; right: 3px; font-size: 9px;
-            color: rgba(255,255,255,0.9);
-            animation: heartBeat 1.5s infinite;
-        }
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.3); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-
-        .holiday-icon {
-            position: absolute; top: -6px; right: -6px; font-size: 12px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-            z-index: 3;
-        }
+        .mini-heart { position: absolute; bottom: 3px; right: 3px; font-size: 9px; color: rgba(255,255,255,0.9); animation: heartBeat 1.5s infinite; }
+        @keyframes heartBeat { 0% { transform: scale(1); } 15% { transform: scale(1.3); } 30% { transform: scale(1); } 45% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .holiday-icon { position: absolute; top: -6px; right: -6px; font-size: 12px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); z-index: 3; }
 
         /* --- MODAL --- */
         .modal-layer {
@@ -319,7 +220,6 @@
             display: flex; align-items: center; justify-content: center; padding: 20px;
         }
         .modal-layer.active { opacity: 1; pointer-events: all; }
-
         .letter-box {
             background: #fff; width: 100%; border-radius: 40px; padding: 32px; text-align: center;
             transform: scale(0.9) translateY(40px); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -327,17 +227,12 @@
         }
         .dark-mode .letter-box { background: #1c1c1e; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
         .modal-layer.active .letter-box { transform: scale(1) translateY(0); }
-
-        .quote-text {
-            font-family: 'Caveat', cursive; font-size: 30px; line-height: 1.3; margin: 24px 0;
-            color: #1d1d1f;
-        }
+        .quote-text { font-family: 'Caveat', cursive; font-size: 30px; line-height: 1.3; margin: 24px 0; color: #1d1d1f; }
         .dark-mode .quote-text { color: #f5f5f7; }
 
         .action-btn {
             background: #1d1d1f; color: #fff; border: none; width: 100%; padding: 18px;
-            border-radius: 24px; font-weight: 700; font-size: 16px; cursor: pointer;
-            transition: transform 0.2s;
+            border-radius: 24px; font-weight: 700; font-size: 16px; cursor: pointer; transition: transform 0.2s;
         }
         .dark-mode .action-btn { background: #fff; color: #000; }
         .action-btn:active { transform: scale(0.97); }
@@ -356,27 +251,17 @@
         /* --- PET GAME STYLES --- */
         .pet-stage {
             height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; overflow: visible;
-            border-radius: 24px;
-            transition: all 0.5s;
+            position: relative; overflow: visible; border-radius: 24px; transition: all 0.5s;
         }
-        
         .house-bg {
-            position: absolute; top:0; left:0; width:100%; height:100%; 
-            z-index: 0; opacity: 0.3; font-size: 150px; 
-            display: flex; align-items: center; justify-content: center;
-            pointer-events: none; transition: all 0.5s;
+            position: absolute; top:0; left:0; width:100%; height:100%; z-index: 0; opacity: 0.3; font-size: 150px; 
+            display: flex; align-items: center; justify-content: center; pointer-events: none; transition: all 0.5s;
         }
-
         .pet-blob {
-            width: 140px; height: 130px; background: #fff;
-            border-radius: 50% 50% 45% 45%;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            position: relative; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex; align-items: center; justify-content: center;
-            animation: breathe 3s infinite ease-in-out;
-            cursor: pointer;
-            z-index: 2;
+            width: 140px; height: 130px; background: #fff; border-radius: 50% 50% 45% 45%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1); position: relative; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex; align-items: center; justify-content: center; animation: breathe 3s infinite ease-in-out;
+            cursor: pointer; z-index: 2;
         }
         .pet-blob.sleeping { animation: breathe 6s infinite ease-in-out; opacity: 0.9; }
         .pet-blob.dirty { filter: sepia(0.6) brightness(0.9); }
@@ -385,29 +270,24 @@
         .dark-mode .pet-blob { background: #f0f0f5; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         
         .pet-face { font-size: 50px; position: relative; z-index: 2; pointer-events: none; }
-        .pet-acc { position: absolute; font-size: 50px; z-index: 3; pointer-events: none; }
-        .pet-zzz { 
-            position: absolute; top: -30px; right: -10px; font-size: 24px; font-weight: 800; 
-            color: var(--text-sub-light); opacity: 0; 
-        }
+        
+        /* Accessories Positioning FIXED */
+        .pet-acc { position: absolute; pointer-events: none; z-index: 3; left: 50%; transform: translateX(-50%); }
+        .acc-head { top: -25px; font-size: 35px; } /* Bows, Hats - Smaller and higher */
+        .acc-eyes { top: 35px; font-size: 40px; } /* Glasses */
+        .acc-body { bottom: 10px; font-size: 50px; } /* Shirts, Dresses */
+        .acc-neck { bottom: 20px; font-size: 45px; z-index: 4; } /* Scarves */
+
+        .pet-zzz { position: absolute; top: -30px; right: -10px; font-size: 24px; font-weight: 800; color: var(--text-sub-light); opacity: 0; }
         .sleeping .pet-zzz { opacity: 1; animation: floatZ 2s infinite; }
 
         @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03) translateY(-3px); } }
-        @keyframes walk { 
-            0% { transform: translateX(0) scale(1) rotate(0); }
-            25% { transform: translateX(30px) scale(0.95) rotate(5deg); }
-            50% { transform: translateX(0) scale(1) rotate(0); }
-            75% { transform: translateX(-30px) scale(0.95) rotate(-5deg); }
-            100% { transform: translateX(0) scale(1) rotate(0); }
-        }
+        @keyframes walk { 0% { transform: translateX(0) scale(1) rotate(0); } 25% { transform: translateX(30px) scale(0.95) rotate(5deg); } 50% { transform: translateX(0) scale(1) rotate(0); } 75% { transform: translateX(-30px) scale(0.95) rotate(-5deg); } 100% { transform: translateX(0) scale(1) rotate(0); } }
         @keyframes floatZ { 0% { transform: translate(0,0); opacity:0; } 50% { opacity:1; } 100% { transform: translate(10px, -20px); opacity:0; } }
 
-        /* Floating Click Text */
         .click-float {
-            position: absolute; font-weight: 800; font-size: 20px; color: #FFD700;
-            pointer-events: none; z-index: 100;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            animation: floatUp 0.8s ease-out forwards;
+            position: absolute; font-weight: 800; font-size: 20px; color: #FFD700; pointer-events: none; z-index: 100;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2); animation: floatUp 0.8s ease-out forwards;
         }
         @keyframes floatUp { to { transform: translateY(-50px); opacity: 0; } }
         
@@ -415,14 +295,13 @@
         .stat-col { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
         .stat-icon { font-size: 14px; }
         .stat-num { font-size: 9px; font-weight: 800; opacity: 0.6; font-family: 'SF Mono', monospace; margin-top: 2px; }
-        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 10px; overflow: hidden; }
-        .dark-mode .progress-bar { background: rgba(255,255,255,0.1); }
-        .progress-fill { height: 100%; transition: width 0.5s; }
+        
+        /* Fixed Progress Bar Visuals */
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; position: relative; }
+        .dark-mode .progress-bar { background: rgba(255,255,255,0.15); }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.5s ease-out; display: block; }
 
-        .game-info {
-            display: flex; justify-content: space-between; width: 100%; margin-bottom: 5px;
-            font-size: 11px; font-weight: 700; color: var(--text-sub-light);
-        }
+        .game-info { display: flex; justify-content: space-between; width: 100%; margin-bottom: 5px; font-size: 11px; font-weight: 700; color: var(--text-sub-light); }
         .streak-fire { color: #FF9500; }
 
         .pet-thought {
@@ -433,27 +312,15 @@
         }
         .pet-thought.show { opacity: 1; transform: translateY(-10px); }
 
-        .exp-container {
-            width: 100%; margin-top: 5px; margin-bottom: 10px;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .exp-bar {
-            width: 80%; height: 4px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden;
-        }
-        .exp-fill {
-            height: 100%; background: linear-gradient(90deg, #32ade6, #007aff); width: 0%; transition: width 0.3s;
-        }
-        .lvl-text {
-            font-size: 10px; font-weight: 800; color: var(--text-sub-light); margin-top: 3px;
-        }
+        .exp-container { width: 100%; margin-top: 5px; margin-bottom: 10px; display: flex; flex-direction: column; align-items: center; }
+        .exp-bar { width: 80%; height: 4px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; }
+        .exp-fill { height: 100%; background: linear-gradient(90deg, #32ade6, #007aff); width: 0%; transition: width 0.3s; }
+        .lvl-text { font-size: 10px; font-weight: 800; color: var(--text-sub-light); margin-top: 3px; }
 
-        .buffs-row {
-            display: flex; gap: 5px; justify-content: center; margin-bottom: 5px; min-height: 20px;
-        }
+        .buffs-row { display: flex; gap: 5px; justify-content: center; margin-bottom: 5px; min-height: 20px; }
         .buff-icon {
             font-size: 12px; background: rgba(255,255,255,0.5); padding: 2px 6px; border-radius: 10px;
-            border: 1px solid var(--accent); color: var(--accent); font-weight: 700;
-            animation: pulse 1s infinite;
+            border: 1px solid var(--accent); color: var(--accent); font-weight: 700; animation: pulse 1s infinite;
         }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
@@ -463,18 +330,10 @@
             display: none; align-items: center; justify-content: center; padding: 20px;
         }
         .shop-modal.active { display: flex; }
-        
         .shop-tabs { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
-        .shop-tab { 
-            padding: 5px 10px; border-radius: 10px; background: rgba(0,0,0,0.05); 
-            font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer;
-        }
+        .shop-tab { padding: 5px 10px; border-radius: 10px; background: rgba(0,0,0,0.05); font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer; }
         .shop-tab.active { background: var(--accent); color: #fff; }
-
-        .shop-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-            max-height: 300px; overflow-y: auto;
-        }
+        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 300px; overflow-y: auto; }
         .shop-item {
             background: rgba(0,0,0,0.05); padding: 10px; border-radius: 15px;
             display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer;
@@ -486,15 +345,6 @@
         .shop-price { font-size: 11px; font-weight: 800; color: var(--holiday-color); }
         .shop-desc { font-size: 9px; opacity: 0.7; line-height: 1.1; margin-bottom: 4px; }
 
-        /* --- FLAPPY GAME --- */
-        #view-flappy {
-            position: fixed; top:0; left:0; width:100%; height:100%; z-index: 2000;
-            background: rgba(0,0,0,0.9); display: none;
-            flex-direction: column; align-items: center; justify-content: center;
-        }
-        #view-flappy.active { display: flex; }
-        #flappy-canvas { border: 2px solid #fff; border-radius: 10px; background: #87CEEB; }
-
         /* --- DEATH --- */
         .dead-filter { filter: grayscale(100%) contrast(1.2); }
         .death-overlay {
@@ -503,7 +353,6 @@
             flex-direction: column; align-items: center; justify-content: center;
             border-radius: 24px; color: #fff;
         }
-        
         .sleep-overlay {
             position: absolute; top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,10,0.6); z-index: 40; pointer-events: none;
@@ -511,6 +360,73 @@
             align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 800;
         }
         .sleep-overlay.active { display: flex; }
+
+        /* --- CASINO (REAL WHEEL) --- */
+        #view-casino {
+            position: fixed; top:0; left:0; width:100%; height:100%; z-index: 2200;
+            background: rgba(0,0,0,0.85); display: none;
+            flex-direction: column; align-items: center; justify-content: center; padding: 20px;
+        }
+        #view-casino.active { display: flex; }
+        .roulette-table {
+            background: #0f4d19; padding: 20px; border-radius: 20px; border: 5px solid #d4af37;
+            width: 100%; max-width: 350px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        
+        .wheel-container {
+            width: 200px; height: 200px; border-radius: 50%; border: 8px solid #d4af37;
+            position: relative; overflow: hidden; margin: 20px 0;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        .wheel {
+            width: 100%; height: 100%; border-radius: 50%;
+            background: conic-gradient(
+                #2ecc71 0deg 24deg,   /* 0 Green */
+                #e74c3c 24deg 48deg,  /* Red */
+                #333 48deg 72deg,     /* Black */
+                #e74c3c 72deg 96deg,  /* Red */
+                #333 96deg 120deg,    /* Black */
+                #e74c3c 120deg 144deg, /* Red */
+                #333 144deg 168deg,   /* Black */
+                #e74c3c 168deg 192deg, /* Red */
+                #333 192deg 216deg,   /* Black */
+                #e74c3c 216deg 240deg, /* Red */
+                #333 240deg 264deg,   /* Black */
+                #e74c3c 264deg 288deg, /* Red */
+                #333 288deg 312deg,   /* Black */
+                #e74c3c 312deg 336deg, /* Red */
+                #333 336deg 360deg    /* Black */
+            );
+            transition: transform 3s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+        .wheel-arrow {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent;
+            border-top: 20px solid #fff; z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+        }
+
+        .roulette-opts { display: flex; gap: 10px; justify-content: center; margin-top: 20px; width: 100%; }
+        .r-btn { border: none; padding: 15px; border-radius: 10px; color: #fff; font-weight: 700; flex: 1; cursor: pointer; transition: transform 0.2s; }
+        .r-btn:active { transform: scale(0.95); }
+        .r-red { background: #d91e18; }
+        .r-black { background: #111; border: 1px solid #444; }
+        .r-green { background: #2ecc71; }
+        .casino-input { 
+            padding: 10px; border-radius: 12px; border: none; width: 150px; text-align: center;
+            font-size: 18px; font-weight: 700; margin-bottom: 20px;
+        }
+
+        .weather-badge {
+            position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.7);
+            padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: 700; z-index: 20;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .rent-warn { color: #ff3b30; animation: pulse 1s infinite; }
+        
+        .real-clock {
+            font-size: 14px; font-weight: 700; color: var(--text-sub-light); margin-bottom: 5px; opacity: 0.8;
+        }
 
     </style>
 </head>
@@ -536,9 +452,7 @@
         <button class="dock-btn" onclick="toggleDark()" id="btn-dark">🌗</button>
     </div>
 
-    <div class="garland-wrap" id="garland">
-        <!-- JS Generated -->
-    </div>
+    <div class="garland-wrap" id="garland"></div>
 
     <div class="app-layout">
         <header>
@@ -550,16 +464,9 @@
         <div id="view-calendar" class="view-section active-view">
             <div class="glass-panel">
                 <div class="flight-header">
-                    <div>
-                        <div class="city-code">UFA</div>
-                        <div class="city-name">Уфа</div>
-                    </div>
-                    <div>
-                        <div class="city-code">MOW</div>
-                        <div class="city-name">Москва</div>
-                    </div>
+                    <div><div class="city-code">UFA</div><div class="city-name">Уфа</div></div>
+                    <div><div class="city-code">MOW</div><div class="city-name">Москва</div></div>
                 </div>
-
                 <div id="flight-viz">
                     <svg width="100%" height="100%" style="overflow:visible;">
                         <path id="path-bg" class="track-path" d="" />
@@ -570,16 +477,10 @@
                         <div class="plane-emoji" id="plane-icon">✈️</div>
                     </div>
                 </div>
-
                 <div class="countdown" id="timer">...</div>
                 <div class="timer-caption">осталось до нашего отпуска</div>
-                
-                <div class="dates-meta">
-                    <span>11 Янв</span>
-                    <span>12 Мая</span>
-                </div>
+                <div class="dates-meta"><span>11 Янв</span><span>12 Мая</span></div>
             </div>
-
             <div id="calendar-root"></div>
         </div>
 
@@ -589,6 +490,7 @@
                 <div class="month-title">
                     💖 Твой Любимка
                 </div>
+                <div class="real-clock" id="real-clock">...</div>
 
                 <!-- EXP BAR -->
                 <div class="exp-container">
@@ -606,6 +508,7 @@
                 </div>
                 
                 <div class="pet-stage" id="pet-stage">
+                    <div class="weather-badge" id="weather-badge">☀️ Тепло</div>
                     <div class="house-bg" id="house-bg"></div>
                     <div class="pet-thought" id="pet-thought">Привет!</div>
                     <div class="buffs-row" id="buffs-row"></div>
@@ -613,7 +516,7 @@
                     <div class="death-overlay" id="death-overlay">
                         <div style="font-size:60px">👻</div>
                         <div style="font-weight:800; margin:10px 0;">Любимка покинул нас...</div>
-                        <div style="font-size:12px; margin-bottom:20px; opacity:0.8">Ты не заходила больше 3 дней</div>
+                        <div style="font-size:12px; margin-bottom:20px; opacity:0.8">Ты не заходила больше 7 дней</div>
                         <button class="action-btn" style="background:#fff; color:#000;" onclick="resurrectPet()">Воскресить (Сброс стрика)</button>
                     </div>
 
@@ -621,7 +524,8 @@
 
                     <div class="pet-blob" id="pet-blob" onclick="petClick(event)">
                         <div class="pet-zzz">Zzz...</div>
-                        <div class="pet-acc" id="pet-acc-wear"></div>
+                        <!-- Accessories will be injected here with specific classes -->
+                        <div class="pet-acc" id="pet-acc-root"></div>
                         <div class="pet-face" id="pet-face">😺</div>
                     </div>
 
@@ -654,30 +558,40 @@
                     <button class="action-btn" style="background:#5856d6; color:#fff; flex:1; padding:12px;" id="btn-sleep" onclick="toggleSleep()">😴 Спать</button>
                 </div>
 
+                <button class="action-btn" id="btn-rent" style="margin-top:10px; background:#ff3b30; display:none;" onclick="payRent()">🏠 Оплатить Аренду</button>
+
                 <div style="display:flex; gap:10px; margin-top:10px;">
-                    <button class="action-btn" style="background:#FF9500; color:#fff; flex:1" onclick="startFlappy()">🎮 Играть</button>
-                    <button class="action-btn" style="background:var(--accent); color:#fff; flex:1" onclick="openShop()">🛍️ Магазин</button>
-                </div>
-                
-                <div style="text-align:center; font-size:11px; opacity:0.6; margin-top:10px;">
-                    В 22:00 пора спать! В 9, 13, 19 — время кушать!
+                    <button class="action-btn" style="background:#32ade6; color:#fff; flex:1;" onclick="openCasino()">🎰 Казино</button>
+                    <button class="action-btn" style="background:var(--accent); color:#fff; flex:1;" onclick="openShop()">🛍️ Магазин</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Flappy Mini Game -->
-    <div id="view-flappy">
-        <div style="color:#fff; font-weight:800; font-size:20px; margin-bottom:10px;">Flappy Heart</div>
-        <canvas id="flappy-canvas" width="320" height="480"></canvas>
-        <div style="color:#fff; font-size:14px; margin-top:10px;">Тапай чтобы лететь!</div>
-        <button class="action-btn" style="margin-top:20px; width:200px; background:#fff; color:#000;" onclick="closeFlappy()">Выход</button>
+    <!-- Casino View -->
+    <div id="view-casino">
+        <div class="roulette-table">
+            <div style="color:#fff; font-weight:800; font-size:24px; margin-bottom:10px;">🎰 Рулетка</div>
+            <div style="color:#d4af37; margin-bottom:10px;">Баланс: <span id="casino-balance">0</span></div>
+            
+            <div class="wheel-container">
+                <div class="wheel-arrow"></div>
+                <div class="wheel" id="roulette-wheel"></div>
+            </div>
+
+            <input type="number" id="casino-bet" class="casino-input" placeholder="Ставка" min="1">
+            
+            <div class="roulette-opts">
+                <button class="r-btn r-red" onclick="spinRoulette('red')">🔴 x2</button>
+                <button class="r-btn r-green" onclick="spinRoulette('green')">🟢 x14</button>
+                <button class="r-btn r-black" onclick="spinRoulette('black')">⚫ x2</button>
+            </div>
+        </div>
+        <button class="action-btn" style="margin-top:20px; background:rgba(255,255,255,0.2); width:auto; padding:10px 30px;" onclick="document.getElementById('view-casino').classList.remove('active')">Выход</button>
     </div>
 
     <!-- Notification -->
-    <div class="toast-pill" id="toast">
-        <span>🔒</span> <span id="toast-text">...</span>
-    </div>
+    <div class="toast-pill" id="toast"><span>🔒</span> <span id="toast-text">...</span></div>
 
     <!-- Modal -->
     <div class="modal-layer" id="modal">
@@ -692,127 +606,119 @@
 
     <!-- Shop Modal -->
     <div class="shop-modal" id="shop-modal">
-        <div class="glass-panel" style="background: #fff; width: 100%; max-width: 350px;">
+        <div class="glass-panel" style="background: var(--card-light); width: 100%; max-width: 350px;">
             <div class="month-title">🛍️ Магазин <span style="margin-left:auto; font-size:14px;">💰 <span id="shop-coins">0</span></span></div>
-            
             <div class="shop-tabs">
                 <div class="shop-tab active" onclick="switchShop('food')">🍔 Еда</div>
                 <div class="shop-tab" onclick="switchShop('wear')">👗 Одежда</div>
-                <div class="shop-tab" onclick="switchShop('house')">🏠 Домик</div>
+                <div class="shop-tab" onclick="switchShop('house')">🏠 Жилье</div>
                 <div class="shop-tab" onclick="switchShop('gadget')">🤖 Гаджеты</div>
                 <div class="shop-tab" onclick="switchShop('buff')">✨ Зелья</div>
                 <div class="shop-tab" onclick="switchShop('upgrade')">⚡ Навыки</div>
             </div>
-
             <div class="shop-grid" id="shop-list"></div>
             <button class="action-btn" style="margin-top:20px;" onclick="closeShop()">Закрыть</button>
         </div>
     </div>
 
     <script>
-        // === STRICT TEXT DATA ===
+        // === DATA ===
         const START = new Date(2026, 0, 11);
         const END = new Date(2026, 4, 12);
-        const DATA_KEY = 'love_cal_v2026';
-        const SETTINGS_KEY = 'love_cal_settings_2026';
-        const PET_KEY = 'love_cal_pet_advanced_v3_2026';
+        const DATA_KEY = 'love_cal_v3_final_r1';
+        const SETTINGS_KEY = 'love_cal_settings_v3_r1';
+        const PET_KEY = 'love_cal_pet_v3_final_r1';
 
         const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-        const HOLIDAYS = {
-            '1-14': '💘', // Feb 14 (Month 1 in JS)
-            '1-23': '⭐', // Feb 23
-            '2-8': '🌷',  // Mar 8
-            '4-1': '🎈',  // May 1
-            '4-9': '🎖️'  // May 9
-        };
-
+        const HOLIDAYS = { '1-14': '💘', '1-23': '⭐', '2-8': '🌷', '4-1': '🎈', '4-9': '🎖️' };
+        
         const quotes = [
-            {t: "Моя милая Биба, мы с тобой одной крови, ты и я. Ты — часть меня, которая сейчас далеко, но скоро мы станем одним целым.", s: "Твой Буба"},
-            {t: "Оля, знаешь, как говорил Молния Маккуин? «Кчау!» Так быстро бьется мое сердце, когда я вижу твое сообщение.", s: "Тачки & Буба"},
-            {t: "Я не хочу быть человеком, я хочу быть с тобой! Даже если придется стать Чебурашкой и жить в телефонной будке, главное — рядом с тобой.", s: "Чебурашка"},
-            {t: "Биба, расстояние значит так мало, когда ты значишь для меня так много. Ты — мой мир.", s: "Искренне"},
-            {t: "Охана — значит семья. А семья — это мы с тобой. И в семье никого не бросают и не забывают, даже если они в другом городе.", s: "Лило и Стич"},
-            {t: "Улыбаемся и машем, Биба! Улыбаемся и машем! Скоро мы будем смеяться вместе, глядя друг другу в глаза.", s: "Мадагаскар"},
-            {t: "Оленька, ты красива, как самый яркий майский рассвет. И скоро этот рассвет мы встретим вместе.", s: "Твой влюбленный"},
-            {t: "Я люблю тебя больше, чем вчера, но меньше, чем завтра. Моя любовь к тебе растет с каждым днем разлуки.", s: "Навсегда"},
-            {t: "Мы строили, строили и наконец... построим наше счастье! Гена и Чебурашка смогли, и мы сможем.", s: "Мудрость"},
-            {t: "Ты — причина моей улыбки сегодня, Биба. Даже через тысячи километров я чувствую твое тепло.", s: "Буба"},
-            {t: "Ждать тяжело, моя хорошая, я знаю. Но награда — это ты, и за такую награду я готов ждать вечность.", s: "О главном"},
-            {t: "Биба, ты мой лучший друг, моя любовь и моя вселенная. Без тебя город кажется пустым.", s: "Признание"},
-            {t: "В моем сердце всегда весна, когда я думаю о тебе, Оля. Там всегда поют птицы и светит солнце.", s: "Чувства"},
-            {t: "Я скучаю по тебе 3000. Нет, 3 миллиона! Люблю тебя бесконечно.", s: "Мстители"},
-            {t: "Каждый день — это шаг навстречу. Сегодня мы стали на один день ближе к нашему отпуску!", s: "Мотивация"},
-            {t: "Ты делаешь меня сильнее, Биба. Ради нас я готов свернуть горы.", s: "Твоя опора"},
-            {t: "Я с тобой. Всегда. Даже если ты меня не видишь, я стою за твоим плечом и держу тебя за руку.", s: "Гарри Поттер (почти)"},
-            {t: "Ты — мой океан, Оля. Глубокий, красивый и бесконечный. Я хочу тонуть в тебе.", s: "Романтика"},
-            {t: "Скоро мы будем пить кофе вместе, гулять за руку и никуда не спешить. Обещаю.", s: "Мечта"},
-            {t: "Обнимаю тебя крепко-крепко, моя маленькая Биба. Чувствуешь?", s: "Действие"},
-            {t: "Ты — мое солнышко. Даже когда на улице пасмурно, ты светишь мне из телефона.", s: "Телепузики"},
-            {t: "Наша встреча неизбежна, как рассвет. Ночь темна, но солнце (это ты!) обязательно взойдет.", s: "Уверенность"},
-            {t: "Я берегу тебя в самом надежном сейфе — в своем сердце. Ключ только у тебя, Оля.", s: "Секрет"},
-            {t: "Ты самая-самая лучшая девочка на свете. И ты — моя.", s: "Факт"},
-            {t: "Знаешь, даже Шрек не так любил Фиону через болота, как я люблю тебя через города.", s: "Шрек"},
-            {t: "Мой мир без тебя черно-белый, Биба. Ты приносишь краски в мою жизнь.", s: "Цвет"},
-            {t: "Скоро все изменится. Мы проснемся в одной кровати и поймем, что ожидание того стоило.", s: "Надежда"},
-            {t: "Биба, ты мой штурман. Куда бы я ни ехал, все дороги ведут к тебе.", s: "Тачки"},
-            {t: "Любовь — это когда счастье другого важнее твоего. Я хочу, чтобы ты была счастлива, Оля.", s: "Холодное сердце"},
-            {t: "Случайности не случайны. То, что мы встретились — это лучший подарок судьбы.", s: "Кунг-фу Панда"},
-            {t: "Я смотрю на твое фото и понимаю: ради этих глаз я готов работать без выходных, лишь бы скорее приехать.", s: "Буба"},
-            {t: "Ты — мой личный сорт героина. Я зависим от тебя, Биба.", s: "Сумерки"},
-            {t: "Если бы мне давали монету каждый раз, когда я думаю о тебе, я бы уже купил нам остров.", s: "Богатство"},
-            {t: "Ты — чудо. Мое личное новогоднее чудо, которое длится круглый год.", s: "Волшебство"},
-            {t: "Как там Джулиан говорил? «Я люблю, когда меня обожают!» А я обожаю тебя, моя королева.", s: "Мадагаскар"},
-            {t: "Я считаю дни, часы и минуты. Тик-так. Время идет, и оно играет за нас.", s: "Время"},
-            {t: "Ты снишься мне каждую ночь. И просыпаться без тебя — самое сложное.", s: "Сны"},
-            {t: "Оля, твоя улыбка освещает мне путь лучше любых фар.", s: "Тачки"},
-            {t: "Я рядом. Просто закрой глаза и представь. Я здесь.", s: "Магия"},
-            {t: "Ты делаешь меня лучше. Рядом с тобой я хочу быть супергероем.", s: "Влияние"},
-            {t: "Скоро весна, Биба! А весна — это жизнь, это любовь, это мы.", s: "Календарь"},
-            {t: "Я люблю, когда ты меня называешь Бубой. Это звучит как музыка.", s: "Признание"},
-            {t: "Мы с тобой как Мэтр и Маккуин — лучшие друзья и лучшая команда.", s: "Тачки"},
-            {t: "Расстояние — это просто тест. И мы сдадим его на отлично.", s: "Учеба"},
-            {t: "Мне не нужны подарки, мне нужна ты. Ты — мой главный подарок.", s: "Праздник"},
-            {t: "Я люблю каждую твою черточку, каждую твою эмоцию.", s: "Детали"},
-            {t: "Ты — мой дом, Оля. И я ужасно хочу домой.", s: "Уют"},
-            {t: "Еще один день зачеркнут. Мы побеждаем это расстояние.", s: "Победа"},
-            {t: "Март! Коты поют, а мое сердце поет твое имя: О-ля! Би-ба!", s: "Весна"},
-            {t: "Ты расцветаешь, как самый красивый цветок. Я хочу поливать тебя своей любовью.", s: "Садовник"},
-            {t: "Я скучаю по твоим рукам. Хочу держать их в своих и греть.", s: "Тепло"},
-            {t: "Биба, ты — моя батарейка. Без тебя я сажусь.", s: "Энергия"},
-            {t: "Скоро лед растает, и мы встретимся. Осталось совсем немного.", s: "Прогноз"},
-            {t: "Ты — мое вдохновение. Все, что я делаю — я делаю для нас.", s: "Работа"},
-            {t: "Я люблю тебя до Луны и обратно. И еще три раза вокруг Земли.", s: "Космос"},
-            {t: "Ты — моя единственная. Никого нет лучше тебя во всем мире.", s: "Истина"},
-            {t: "Помнишь, как в «Вверх»? «Спасибо за приключение!» Наше приключение только начинается.", s: "Вверх"},
-            {t: "Биба, не грусти. Твой Буба скоро приедет и зацелует тебя.", s: "Обещание"},
-            {t: "Твои глаза — как два океана. Я хочу смотреть в них вечно.", s: "Взгляд"},
-            {t: "Я горжусь тобой, Оля. Ты у меня такая сильная.", s: "Гордость"},
+            {t: "Моя милая Биба, мы с тобой одной крови, ты и я.", s: "Твой Буба"},
+            {t: "Оля, знаешь, как говорил Молния Маккуин? «Кчау!»", s: "Тачки & Буба"},
+            {t: "Я не хочу быть человеком, я хочу быть с тобой!", s: "Чебурашка"},
+            {t: "Биба, расстояние значит так мало, когда ты значишь так много.", s: "Искренне"},
+            {t: "Охана — значит семья. А семья — это мы с тобой.", s: "Лило и Стич"},
+            {t: "Улыбаемся и машем, Биба! Улыбаемся и машем!", s: "Мадагаскар"},
+            {t: "Оленька, ты красива, как самый яркий майский рассвет.", s: "Твой влюбленный"},
+            {t: "Я люблю тебя больше, чем вчера, но меньше, чем завтра.", s: "Навсегда"},
+            {t: "Мы строили, строили и наконец... построим наше счастье!", s: "Мудрость"},
+            {t: "Ты — причина моей улыбки сегодня, Биба.", s: "Буба"},
+            {t: "Ждать тяжело, моя хорошая, я знаю. Но награда — это ты.", s: "О главном"},
+            {t: "Биба, ты мой лучший друг, моя любовь и моя вселенная.", s: "Признание"},
+            {t: "В моем сердце всегда весна, когда я думаю о тебе, Оля.", s: "Чувства"},
+            {t: "Я скучаю по тебе 3000.", s: "Мстители"},
+            {t: "Каждый день — это шаг навстречу.", s: "Мотивация"},
+            {t: "Ты делаешь меня сильнее, Биба.", s: "Твоя опора"},
+            {t: "Я с тобой. Всегда. Даже если ты меня не видишь.", s: "Гарри Поттер"},
+            {t: "Ты — мой океан, Оля.", s: "Романтика"},
+            {t: "Скоро мы будем пить кофе вместе.", s: "Мечта"},
+            {t: "Обнимаю тебя крепко-крепко.", s: "Действие"},
+            {t: "Ты — мое солнышко.", s: "Телепузики"},
+            {t: "Наша встреча неизбежна, как рассвет.", s: "Уверенность"},
+            {t: "Я берегу тебя в самом надежном сейфе — в своем сердце.", s: "Секрет"},
+            {t: "Ты самая-самая лучшая девочка на свете.", s: "Факт"},
+            {t: "Знаешь, даже Шрек не так любил Фиону через болота.", s: "Шрек"},
+            {t: "Мой мир без тебя черно-белый, Биба.", s: "Цвет"},
+            {t: "Скоро все изменится. Мы проснемся в одной кровати.", s: "Надежда"},
+            {t: "Биба, ты мой штурман.", s: "Тачки"},
+            {t: "Любовь — это когда счастье другого важнее твоего.", s: "Холодное сердце"},
+            {t: "Случайности не случайны. То, что мы встретились — лучший подарок.", s: "Кунг-фу Панда"},
+            {t: "Я смотрю на твое фото и понимаю: ради этих глаз я готов на все.", s: "Буба"},
+            {t: "Ты — мой личный сорт героина.", s: "Сумерки"},
+            {t: "Если бы мне давали монету каждый раз, когда я думаю о тебе, я бы был богат.", s: "Богатство"},
+            {t: "Ты — чудо. Мое личное новогоднее чудо.", s: "Волшебство"},
+            {t: "Я люблю, когда меня обожают! А я обожаю тебя.", s: "Мадагаскар"},
+            {t: "Я считаю дни, часы и минуты.", s: "Время"},
+            {t: "Ты снишься мне каждую ночь.", s: "Сны"},
+            {t: "Оля, твоя улыбка освещает мне путь.", s: "Тачки"},
+            {t: "Я рядом. Просто закрой глаза.", s: "Магия"},
+            {t: "Ты делаешь меня лучше.", s: "Влияние"},
+            {t: "Скоро весна, Биба! А весна — это жизнь.", s: "Календарь"},
+            {t: "Я люблю, когда ты меня называешь Бубой.", s: "Признание"},
+            {t: "Мы с тобой как Мэтр и Маккуин.", s: "Тачки"},
+            {t: "Расстояние — это просто тест.", s: "Учеба"},
+            {t: "Мне не нужны подарки, мне нужна ты.", s: "Праздник"},
+            {t: "Я люблю каждую твою черточку.", s: "Детали"},
+            {t: "Ты — мой дом, Оля.", s: "Уют"},
+            {t: "Еще один день зачеркнут.", s: "Победа"},
+            {t: "Март! Коты поют, а мое сердце поет твое имя.", s: "Весна"},
+            {t: "Ты расцветаешь, как самый красивый цветок.", s: "Садовник"},
+            {t: "Я скучаю по твоим рукам.", s: "Тепло"},
+            {t: "Биба, ты — моя батарейка.", s: "Энергия"},
+            {t: "Скоро лед растает, и мы встретимся.", s: "Прогноз"},
+            {t: "Ты — мое вдохновение.", s: "Работа"},
+            {t: "Я люблю тебя до Луны и обратно.", s: "Космос"},
+            {t: "Ты — моя единственная.", s: "Истина"},
+            {t: "Спасибо за приключение!", s: "Вверх"},
+            {t: "Биба, не грусти. Твой Буба скоро приедет.", s: "Обещание"},
+            {t: "Твои глаза — как два океана.", s: "Взгляд"},
+            {t: "Я горжусь тобой, Оля.", s: "Гордость"},
             {t: "Мы справимся. Мы же банда!", s: "Команда"},
-            {t: "Любовь — это когда не можешь уснуть, потому что реальность лучше снов. Но без тебя реальность грустная. Жду тебя.", s: "Классика"},
-            {t: "Ты — моя звездочка. Свети мне ярче!", s: "Ночь"},
+            {t: "Любовь — это когда не можешь уснуть, потому что реальность лучше снов.", s: "Классика"},
+            {t: "Ты — моя звездочка.", s: "Ночь"},
             {t: "Я хочу готовить тебе завтраки.", s: "Забота"},
             {t: "Каждая песня о любви теперь напоминает мне о тебе.", s: "Музыка"},
             {t: "Ты — мой самый сладкий пончик.", s: "Вкусно"},
             {t: "Я люблю тебя, Биба. Просто, сильно и навсегда.", s: "Просто"},
             {t: "Скоро апрель. Это уже финишная прямая!", s: "Время"},
-            {t: "Я верю в нас. У нас все получится.", s: "Вера"},
+            {t: "Я верю в нас.", s: "Вера"},
             {t: "Ты — магия вне Хогвартса.", s: "Гарри Поттер"},
-            {t: "Мое сердце принадлежит тебе. Целиком и полностью.", s: "Собственность"},
-            {t: "Жду момента, когда увижу тебя на вокзале/в аэропорту. Это будет лучший миг.", s: "Встреча"},
+            {t: "Мое сердце принадлежит тебе.", s: "Собственность"},
+            {t: "Жду момента, когда увижу тебя.", s: "Встреча"},
             {t: "Ты — моя радость.", s: "Эмоции"},
-            {t: "Я скучаю по твоему голосу. Звони мне чаще.", s: "Связь"},
-            {t: "Мы с тобой как пазл. Идеально подходим.", s: "Совпадение"},
-            {t: "Любить тебя — это самое легкое, что я когда-либо делал.", s: "Чувства"},
+            {t: "Я скучаю по твоему голосу.", s: "Связь"},
+            {t: "Мы с тобой как пазл.", s: "Совпадение"},
+            {t: "Любить тебя — это самое легкое дело.", s: "Чувства"},
             {t: "Ты — мое все, Оля.", s: "Итог"},
             {t: "Апрель! Биба, смотри, май уже на горизонте!", s: "Календарь"},
-            {t: "Еще чуть-чуть, моя хорошая. Потерпи.", s: "Терпение"},
-            {t: "Я уже планирую, куда мы пойдем и что будем делать.", s: "Планы"},
+            {t: "Еще чуть-чуть, моя хорошая.", s: "Терпение"},
+            {t: "Я уже планирую, куда мы пойдем.", s: "Планы"},
             {t: "Ты чувствуешь? Воздух пахнет нашей встречей.", s: "Атмосфера"},
-            {t: "Я люблю тебя сильнее, чем вчера. И так каждый день.", s: "Прогрессия"},
+            {t: "Я люблю тебя сильнее, чем вчера.", s: "Прогрессия"},
             {t: "Ты — моя весна.", s: "Метафора"},
-            {t: "Скорость! Я скорость! Время, лети быстрее к маю!", s: "Тачки"},
-            {t: "Джулиан бы сказал: «Какая женщина!» И я с ним согласен.", s: "Мадагаскар"},
-            {t: "Ты самая красивая девушка в мире. И в Москве. И везде.", s: "Комплимент"},
+            {t: "Скорость! Я скорость! Время, лети быстрее!", s: "Тачки"},
+            {t: "Джулиан бы сказал: «Какая женщина!»", s: "Мадагаскар"},
+            {t: "Ты самая красивая девушка в мире.", s: "Комплимент"},
             {t: "Я считаю даже секунды.", s: "Математика"},
             {t: "Ты делаешь этот мир добрым.", s: "Добро"},
             {t: "Я хочу гулять с тобой под дождем.", s: "Романтика"},
@@ -820,30 +726,30 @@
             {t: "Скоро все изменится. Мы будем рядом.", s: "Будущее"},
             {t: "Ты — моя единственная Биба.", s: "Уникальность"},
             {t: "Давай никогда больше не расставаться так надолго.", s: "Уговор"},
-            {t: "Ты мне снишься. И в этих снах мы счастливы.", s: "Сон"},
-            {t: "Любовь — это когда не нужно говорить «прости», но я прости, что уехал.", s: "История"},
+            {t: "Ты мне снишься.", s: "Сон"},
+            {t: "Любовь — это когда не нужно говорить «прости».", s: "История"},
             {t: "Я всегда буду искать тебя в толпе.", s: "Ориентир"},
             {t: "Твоя улыбка — мое солнце.", s: "Свет"},
             {t: "Я берегу каждое твое слово.", s: "Ценность"},
-            {t: "Расстояние учит ценить время. Мы будем ценить каждую секунду.", s: "Урок"},
+            {t: "Расстояние учит ценить время.", s: "Урок"},
             {t: "Ты — мой компас, Оля.", s: "Навигация"},
             {t: "Я люблю тебя до глубины души.", s: "Глубина"},
             {t: "Ты — мое спокойствие.", s: "Дзен"},
             {t: "Еще капельку...", s: "Финал"},
             {t: "Я уже собираю чемодан в мыслях.", s: "Сборы"},
-            {t: "Ты даже не представляешь, как я соскучился, Биба.", s: "Тоска"},
+            {t: "Ты даже не представляешь, как я соскучился.", s: "Тоска"},
             {t: "Май уже стучится в дверь!", s: "Радость"},
             {t: "МАЙ! Биба, мы дожили! Ура!", s: "Победа"},
-            {t: "Остались считанные дни. Сердце выпрыгивает.", s: "Пульс"},
+            {t: "Остались считанные дни.", s: "Пульс"},
             {t: "Я уже чувствую твои духи.", s: "Обоняние"},
-            {t: "Готовься к самым крепким обнимашкам в мире.", s: "Предупреждение"},
-            {t: "Скоро я увижу твои глаза вживую, а не через экран.", s: "Счастье"},
-            {t: "Это было долго, но мы смогли. Мы молодцы.", s: "Гордость"},
+            {t: "Готовься к самым крепким обнимашкам.", s: "Предупреждение"},
+            {t: "Скоро я увижу твои глаза вживую.", s: "Счастье"},
+            {t: "Это было долго, но мы смогли.", s: "Гордость"},
             {t: "Я люблю тебя бесконечно, моя Оля.", s: "Космос"},
-            {t: "Чемодан собран. Билет в кармане (почти).", s: "Готовность"},
-            {t: "Жди меня, и я вернусь. Очень скоро.", s: "Классика"},
+            {t: "Чемодан собран. Билет в кармане.", s: "Готовность"},
+            {t: "Жди меня, и я вернусь.", s: "Классика"},
             {t: "Кчау! Я еду к тебе!", s: "Тачки"},
-            {t: "Завтра или послезавтра? Уже неважно, это СКОРО!", s: "Близость"},
+            {t: "Завтра или послезавтра? Уже неважно!", s: "Близость"},
             {t: "БИБА! Я ТУТ! ОТПУСК! БУБА ПРИЕХАЛ!", s: "12 МАЯ"}
         ];
 
@@ -851,734 +757,609 @@
             opened: JSON.parse(localStorage.getItem(DATA_KEY)) || {},
             settings: { mode: 'snow', garland: false, dark: false },
             pet: JSON.parse(localStorage.getItem(PET_KEY)) || {
-                coins: 0,
-                clickPower: 1,
-                autoIncome: 0,
-                hunger: 80,
-                love: 80,
-                energy: 100,
-                hygiene: 100,
-                lastLogin: 0,
-                streak: 0,
-                wear: null,
-                house: null,
-                inventory: [],
-                upgrades: { click: 1, auto: 0 },
-                level: 1,
-                exp: 0,
-                maxExp: 100,
-                activeBuffs: [],
-                gadgets: { feeder: 0, sleeper: 0 }, // Timestamp when expires
-                isDead: false,
-                isSleeping: false,
-                lastSleepCheck: Date.now()
+                coins: 0, 
+                clickLevel: 1, 
+                autoLevel: 0,
+                hunger: 80, love: 80, energy: 100, hygiene: 100,
+                lastLogin: 0, streak: 0,
+                wear: null, house: null, inventory: [],
+                exp: 0, maxExp: 100, level: 1,
+                activeBuffs: [], gadgets: { feeder: 0, sleeper: 0, heater: 0, ac: 0 },
+                rentPaidMonth: -1, isDead: false, isSleeping: false
             }
         };
+        // Migration to new scaling
+        if(!state.pet.clickLevel) state.pet.clickLevel = 1;
+        if(state.pet.rentPaidMonth === undefined) state.pet.rentPaidMonth = new Date().getMonth();
 
-        // Migrations
-        if(state.pet.energy === undefined) state.pet.energy = 100;
-        if(state.pet.hygiene === undefined) state.pet.hygiene = 100;
-        if(state.pet.level === undefined) { 
-            state.pet.level = 1; state.pet.exp = 0; state.pet.maxExp = 100; state.pet.activeBuffs = []; 
-        }
-        if(state.pet.gadgets === undefined) state.pet.gadgets = { feeder: 0, sleeper: 0 };
+        // --- MATH FOR INFINITE SCALING (Prices x1.5) ---
+        const getClickPower = () => Math.floor(1 * Math.pow(1.2, state.pet.clickLevel));
+        const getAutoIncome = () => state.pet.autoLevel === 0 ? 0 : Math.floor(1 * Math.pow(1.15, state.pet.autoLevel));
+        const getClickUpgradeCost = () => Math.floor(100 * Math.pow(1.5, state.pet.clickLevel));
+        const getAutoUpgradeCost = () => Math.floor(200 * Math.pow(1.5, state.pet.autoLevel));
 
-        // Shop Content
+        // --- EXTENSIVE SHOP DATA (Accessories with positions) ---
         const SHOP = {
             food: [
-                { id: 'candy', name: 'Конфетка', ico: '🍬', cost: 10, effect: 'h+10', desc: '+10 Сытости' },
-                { id: 'cookie', name: 'Печенька', ico: '🍪', cost: 25, effect: 'h+30', desc: '+30 Сытости' },
-                { id: 'burger', name: 'Бургер', ico: '🍔', cost: 50, effect: 'h+60', desc: '+60 Сытости' },
-                { id: 'coffee', name: 'Кофе', ico: '☕', cost: 40, effect: 'e+40', desc: '+40 Энергии' },
-                { id: 'pizza', name: 'Пицца', ico: '🍕', cost: 70, effect: 'h+80', desc: 'Сытно!' },
-                { id: 'sushi', name: 'Суши', ico: '🍣', cost: 120, effect: 'h+50 l+5', desc: 'Вкусно! +Любовь' },
-                { id: 'salad', name: 'Салат', ico: '🥗', cost: 60, effect: 'h+40 e+10', desc: 'Полезно' },
-                { id: 'dark_choco', name: 'Т. Шоколад', ico: '🍫', cost: 30, effect: 'bad', desc: 'Не люблю...' },
-                { id: 'kuraga', name: 'Курага', ico: '🍑', cost: 20, effect: 'bad', desc: 'Бее...' }
+                {id:'f1',name:'Конфетка',ico:'🍬',cost:5,effect:'h+5'},
+                {id:'f2',name:'Яблоко',ico:'🍎',cost:10,effect:'h+10'},
+                {id:'f3',name:'Банан',ico:'🍌',cost:12,effect:'h+12'},
+                {id:'f4',name:'Вишня',ico:'🍒',cost:15,effect:'h+5 l+5'},
+                {id:'f5',name:'Клубника',ico:'🍓',cost:20,effect:'h+10 l+5'},
+                {id:'f6',name:'Круассан',ico:'🥐',cost:25,effect:'h+20'},
+                {id:'f7',name:'Хлеб',ico:'🍞',cost:15,effect:'h+15'},
+                {id:'f8',name:'Яичница',ico:'🍳',cost:30,effect:'h+25'},
+                {id:'f9',name:'Блинчики',ico:'🥞',cost:35,effect:'h+30'},
+                {id:'f10',name:'Вафли',ico:'🧇',cost:35,effect:'h+30'},
+                {id:'f11',name:'Сыр',ico:'🧀',cost:40,effect:'h+35'},
+                {id:'f12',name:'Мясо',ico:'🍖',cost:50,effect:'h+45'},
+                {id:'f13',name:'Курица',ico:'🍗',cost:45,effect:'h+40'},
+                {id:'f14',name:'Бургер',ico:'🍔',cost:60,effect:'h+50'},
+                {id:'f15',name:'Картошка',ico:'🍟',cost:30,effect:'h+25'},
+                {id:'f16',name:'Пицца',ico:'🍕',cost:70,effect:'h+60'},
+                {id:'f17',name:'Хотдог',ico:'🌭',cost:40,effect:'h+35'},
+                {id:'f18',name:'Сэндвич',ico:'🥪',cost:35,effect:'h+30'},
+                {id:'f19',name:'Тако',ico:'🌮',cost:45,effect:'h+40'},
+                {id:'f20',name:'Буррито',ico:'🌯',cost:50,effect:'h+45'},
+                {id:'f21',name:'Суши',ico:'🍣',cost:100,effect:'h+50 l+10'},
+                {id:'f22',name:'Креветка',ico:'🍤',cost:80,effect:'h+40 l+5'},
+                {id:'f23',name:'Рамен',ico:'🍜',cost:90,effect:'h+55 e+10'},
+                {id:'f24',name:'Спагетти',ico:'🍝',cost:85,effect:'h+50'},
+                {id:'f25',name:'Пончик',ico:'🍩',cost:25,effect:'h+20 e+5'},
+                {id:'f26',name:'Печенье',ico:'🍪',cost:20,effect:'h+15'},
+                {id:'f27',name:'Торт',ico:'🎂',cost:150,effect:'h+80 l+20'},
+                {id:'f28',name:'Мороженое',ico:'🍦',cost:30,effect:'h+20 l+5'},
+                {id:'f29',name:'Шоколад',ico:'🍫',cost:30,effect:'l+15'},
+                {id:'f30',name:'Курага',ico:'🍑',cost:20,effect:'h+10'},
+                {id:'f31',name:'Кофе',ico:'☕',cost:50,effect:'e+40'},
+                {id:'f32',name:'Чай',ico:'🍵',cost:30,effect:'e+20'},
+                {id:'f33',name:'Стейк',ico:'🥩',cost:200,effect:'h+90 e+10'},
+                {id:'f34',name:'Лобстер',ico:'🦞',cost:500,effect:'h+100 l+50'},
+                {id:'f35',name:'Золотой Стейк',ico:'📀',cost:5000,effect:'h+100 e+100 l+100'},
+                {id:'f36',name:'Оливки',ico:'🫒',cost:60,effect:'h+10'},
+                {id:'f37',name:'Ананас',ico:'🍍',cost:70,effect:'h+30'},
+                {id:'f38',name:'Кокос',ico:'🥥',cost:70,effect:'h+30 e+5'}
             ],
             wear: [
-                { id: 'bow', name: 'Бантик', ico: '🎀', cost: 200, desc: 'Милота +100' },
-                { id: 'glasses', name: 'Очки', ico: '🕶️', cost: 350, desc: 'Крутость' },
-                { id: 'crown', name: 'Корона', ico: '👑', cost: 1000, desc: 'Королева' },
-                { id: 'hat', name: 'Шляпка', ico: '👒', cost: 500, desc: 'Леди' },
-                { id: 'flower', name: 'Цветок', ico: '🌺', cost: 150, desc: 'Весна' }
+                {id:'w1',name:'Бантик',ico:'🎀',cost:200,pos:'head'},
+                {id:'w2',name:'Очки',ico:'👓',cost:300,pos:'eyes'},
+                {id:'w3',name:'Темные очки',ico:'🕶️',cost:350,pos:'eyes'},
+                {id:'w4',name:'Шарф',ico:'🧣',cost:250,pos:'neck'},
+                {id:'w5',name:'Перчатки',ico:'🧤',cost:200,pos:'body'},
+                {id:'w6',name:'Пальто',ico:'🧥',cost:800,pos:'body'},
+                {id:'w7',name:'Носки',ico:'🧦',cost:100,pos:'body'},
+                {id:'w8',name:'Платье',ico:'👗',cost:1000,pos:'body'},
+                {id:'w9',name:'Кимоно',ico:'👘',cost:1500,pos:'body'},
+                {id:'w10',name:'Сари',ico:'🥻',cost:1500,pos:'body'},
+                {id:'w11',name:'Купальник',ico:'🥱',cost:600,pos:'body'},
+                {id:'w12',name:'Шорты',ico:'🩳',cost:400,pos:'body'},
+                {id:'w13',name:'Футболка',ico:'👕',cost:300,pos:'body'},
+                {id:'w14',name:'Джинсы',ico:'👖',cost:500,pos:'body'},
+                {id:'w15',name:'Галстук',ico:'👔',cost:400,pos:'neck'},
+                {id:'w16',name:'Корона',ico:'👑',cost:2000,pos:'head'},
+                {id:'w17',name:'Шляпа',ico:'👒',cost:450,pos:'head'},
+                {id:'w18',name:'Цилиндр',ico:'🎩',cost:800,pos:'head'},
+                {id:'w19',name:'Кепка',ico:'🧢',cost:350,pos:'head'},
+                {id:'w20',name:'Кроссовки',ico:'👟',cost:600,pos:'body'},
+                {id:'w21',name:'Туфли',ico:'👠',cost:900,pos:'body'},
+                {id:'w22',name:'Сапоги',ico:'👢',cost:800,pos:'body'},
+                {id:'w23',name:'Рюкзак',ico:'🎒',cost:500,pos:'body'},
+                {id:'w24',name:'Сумочка',ico:'👜',cost:1200,pos:'body'},
+                {id:'w25',name:'Кольцо',ico:'💍',cost:5000,pos:'body'},
+                {id:'w26',name:'Помада',ico:'💄',cost:200,pos:'head'},
+                {id:'w27',name:'Маска',ico:'🎭',cost:300,pos:'eyes'},
+                {id:'w28',name:'Наушники',ico:'🎧',cost:700,pos:'head'},
+                {id:'w29',name:'Крылья',ico:'🧚',cost:3000,pos:'body'},
+                {id:'w30',name:'Плащ',ico:'🧛',cost:2000,pos:'body'},
+                {id:'w31',name:'Берет',ico:'🎨',cost:350,pos:'head'},
+                {id:'w32',name:'Худи',ico:'🧥',cost:600,pos:'body'},
+                {id:'w33',name:'Пижама',ico:'🛌',cost:500,pos:'body'}
             ],
             house: [
-                { id: 'box', name: 'Коробка', ico: '📦', cost: 0, desc: 'Уютно' },
-                { id: 'doghouse', name: 'Будка', ico: '🏠', cost: 1000, desc: 'Свой угол' },
-                { id: 'tent', name: 'Палатка', ico: '⛺', cost: 2500, desc: 'Поход' },
-                { id: 'cottage', name: 'Коттедж', ico: '🏡', cost: 5000, desc: 'Мечта' },
-                { id: 'castle', name: 'Замок', ico: '🏰', cost: 15000, desc: 'Принцесса' },
-                { id: 'island', name: 'Остров', ico: '🏝️', cost: 50000, desc: 'Наш отпуск' }
-            ],
-            upgrade: [
-                { id: 'click_up', name: 'Сила клика', ico: '💪', type:'u_click', desc: 'Больше монет за клик' },
-                { id: 'auto_up', name: 'Авто-доход', ico: '🤖', type:'u_auto', desc: 'Монетки капают сами' }
-            ],
-            buff: [
-                { id: 'sugar_rush', name: 'Сахарный рывок', ico: '🍭', cost: 50, type:'b_click', dur: 120, val: 2, desc: 'x2 Клик (2 мин)' },
-                { id: 'caffeine', name: 'Кофейный бум', ico: '☕', cost: 100, type:'b_auto', dur: 300, val: 2, desc: 'x2 Авто (5 мин)' },
-                { id: 'love_potion', name: 'Зелье любви', ico: '🧪', cost: 300, type:'b_all', dur: 600, val: 2, desc: 'x2 Все доходы (10 мин)' },
-                { id: 'lucky_charm', name: 'Зелье удачи', ico: '🍀', cost: 150, type:'b_luck', dur: 600, val: 2, desc: 'x2 Опыт Flappy (10 мин)' }
+                {id:'h1',name:'Коробка',ico:'📦',cost:0,rent:0},
+                {id:'h2',name:'Коврик',ico:'🧘',cost:500,rent:0},
+                {id:'h3',name:'Палатка',ico:'⛺',cost:2500,rent:0},
+                {id:'h4',name:'Будка',ico:'🏠',cost:1500,rent:0},
+                {id:'h5',name:'Домик',ico:'🏡',cost:5000,rent:0},
+                {id:'h6',name:'Руины',ico:'🏛️',cost:1000,rent:0},
+                {id:'h7',name:'Замок',ico:'🏰',cost:50000,rent:0},
+                {id:'h8',name:'Остров',ico:'🏝️',cost:100000,rent:0},
+                {id:'h9',name:'Пустыня',ico:'🏜️',cost:10000,rent:0},
+                {id:'h10',name:'Горы',ico:'🏔️',cost:20000,rent:0},
+                {id:'h11',name:'Вулкан',ico:'🌋',cost:30000,rent:0},
+                {id:'h12',name:'Стадион',ico:'🏟️',cost:40000,rent:0},
+                {id:'h13',name:'Хостел',ico:'🛏️',cost:100,rent:50},
+                {id:'h14',name:'Комната',ico:'🚪',cost:300,rent:100},
+                {id:'h15',name:'Студия',ico:'🖼️',cost:400,rent:200},
+                {id:'h16',name:'Квартира',ico:'🏢',cost:500,rent:300},
+                {id:'h17',name:'Дуплекс',ico:'🏘️',cost:800,rent:500},
+                {id:'h18',name:'Лофт',ico:'🌇',cost:1000,rent:800},
+                {id:'h19',name:'Офис',ico:'💼',cost:1200,rent:1000},
+                {id:'h20',name:'Пентхаус',ico:'🌃',cost:2000,rent:1500},
+                {id:'h21',name:'Вилла',ico:'⛲',cost:3000,rent:2000},
+                {id:'h22',name:'Отель',ico:'🏨',cost:4000,rent:2500},
+                {id:'h23',name:'Дворец',ico:'🕌',cost:5000,rent:3000},
+                {id:'h24',name:'Башня',ico:'🗼',cost:6000,rent:3500},
+                {id:'h25',name:'Ракета',ico:'🚀',cost:10000,rent:5000},
+                {id:'h26',name:'Луна',ico:'🌑',cost:50000,rent:10000},
+                {id:'h27',name:'Марс',ico:'🪐',cost:100000,rent:20000},
+                {id:'h28',name:'Яхта',ico:'🛥️',cost:20000,rent:4000},
+                {id:'h29',name:'Бункер',ico:'🛡️',cost:15000,rent:3000},
+                {id:'h30',name:'Облако',ico:'☁️',cost:7000,rent:1200}
             ],
             gadget: [
-                { id: 'feeder', name: 'Авто-кормушка', ico: '🥣', cost: 2000, dur: 7, desc: 'Кормит 7 дней' },
-                { id: 'sleeper', name: 'Смарт-люлька', ico: '🛌', cost: 2000, dur: 7, desc: 'Укладывает 7 дней' }
+                {id:'feeder',name:'Кормушка',ico:'🥣',cost:2000,dur:7,desc:'Еда 7дн'},
+                {id:'sleeper',name:'Люлька',ico:'🛌',cost:2000,dur:7,desc:'Сон 7дн'},
+                {id:'heater',name:'Обогреватель',ico:'🔥',cost:1500,dur:3,desc:'Тепло 3дн'},
+                {id:'ac',name:'Кондиционер',ico:'❄️',cost:1500,dur:3,desc:'Холод 3дн'},
+                {id:'fan',name:'Вентилятор',ico:'🌀',cost:500,dur:1,desc:'Ветер 1дн'},
+                {id:'robot',name:'Робот',ico:'🤖',cost:5000,dur:10,desc:'Уход 10дн'}
+            ],
+            buff: [
+                {id:'b1',name:'Малое зелье',ico:'🧪',cost:50,val:1.2,dur:60,desc:'x1.2 (1мин)'},
+                {id:'b2',name:'Среднее зелье',ico:'⚗️',cost:150,val:1.5,dur:120,desc:'x1.5 (2мин)'},
+                {id:'b3',name:'Большое зелье',ico:'🏺',cost:300,val:2.0,dur:300,desc:'x2.0 (5мин)'},
+                {id:'b4',name:'Эликсир',ico:'🍷',cost:1000,val:5.0,dur:60,desc:'x5.0 (1мин)'},
+                {id:'b5',name:'Любовное зелье',ico:'💗',cost:5000,val:10.0,dur:60,desc:'x10 (1мин)'}
             ]
         };
 
-        const THOUGHTS = [
-            "Ты лучшая!", "Хочу кушать...", "Где Буба?", "Скучаю...", 
-            "Какая ты красивая!", "Мур-мур!", "Хочу на ручки", "Люблю тебя!",
-            "Мы скоро увидимся!", "Ты моя мама?", "Копим на домик!", "Кчау!"
-        ];
-
+        const THOUGHTS = ["Люблю тебя!", "Где еда?", "Хочу гулять", "Муррр...", "Кчау!", "Скучаю...", "Ты лучшая!", "Оля топ!"];
         const DOM = {
-            mount: document.getElementById('calendar-root'),
-            modal: document.getElementById('modal'),
-            track: document.getElementById('path-bg'),
-            active: document.getElementById('path-active'),
-            plane: document.getElementById('plane-wrapper'),
-            pct: document.getElementById('rt-percent'),
-            toast: document.getElementById('toast'),
-            garland: document.getElementById('garland'),
-            body: document.body,
-            coinDisp: document.getElementById('coin-display')
+            mount: document.getElementById('calendar-root'), modal: document.getElementById('modal'),
+            track: document.getElementById('path-bg'), active: document.getElementById('path-active'),
+            plane: document.getElementById('plane-wrapper'), pct: document.getElementById('rt-percent'),
+            toast: document.getElementById('toast'), garland: document.getElementById('garland'),
+            body: document.body, coinDisp: document.getElementById('coin-display')
         };
 
         function init() {
             const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY));
             if(saved) state.settings = { ...state.settings, ...saved };
-            applySettings();
-            checkDaily();
-            checkCircadianRhythm(true);
+            applySettings(); checkDaily(); checkCircadianRhythm(true); checkRentStatus(); 
+            // FIXED: Ensure updatePetUI runs immediately after load to sync bars
             updatePetUI();
-
-            const welcomes = ["Привет, Биба! ❤️", "Скучал по тебе!", "Ты чудо! ✨", "Кликай питомца!"];
-            showToast(welcomes[Math.floor(Math.random()*welcomes.length)]);
+            
+            setInterval(() => {
+                const now = new Date();
+                const d = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+                const t = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute:'2-digit' });
+                document.getElementById('real-clock').innerText = `${d} | ${t}`;
+            }, 1000);
 
             const colors = ['led-warm', 'led-cool', 'led-pink'];
             for(let i=0; i<8; i++) {
-                const seg = document.createElement('div'); seg.className = 'string-segment';
-                seg.style.animationDelay = `${i * 0.5}s`;
+                const seg = document.createElement('div'); seg.className = 'string-segment'; seg.style.animationDelay = `${i * 0.5}s`;
                 for(let k=0; k<4; k++) {
-                    const led = document.createElement('div');
-                    led.className = `micro-led ${colors[(i+k)%3]}`;
-                    led.style.top = `${Math.sin(k)*5 + 10}px`; 
-                    led.style.animationDelay = `${Math.random()*2}s`;
+                    const led = document.createElement('div'); led.className = `micro-led ${colors[(i+k)%3]}`;
+                    led.style.top = `${Math.sin(k)*5 + 10}px`; led.style.animationDelay = `${Math.random()*2}s`;
                     seg.appendChild(led);
                 }
                 DOM.garland.appendChild(seg);
             }
+            renderCal(); calcGraph(); window.addEventListener('resize', calcGraph);
+            requestAnimationFrame(flightLoop); setInterval(tick, 1000); tick(); runParticles();
             
-            renderCal();
-            calcGraph();
-            window.addEventListener('resize', calcGraph);
-            requestAnimationFrame(flightLoop);
-            setInterval(tick, 1000); tick();
-            runParticles();
-            
-            setInterval(petLoop, 1000);
-            setInterval(petBehavior, 4000);
-            setInterval(() => checkCircadianRhythm(false), 60000); // Check every minute
+            // --- LOOPS ---
+            setInterval(gameLoop, 1000); // Income and Events (1s)
+            setInterval(decayLoop, 300000); // Decay Stats (5 mins = 300s) VERY SLOW
+            setInterval(petBehavior, 10000);
+            setInterval(() => checkCircadianRhythm(false), 60000);
         }
 
         function applySettings() {
             const s = state.settings;
             document.querySelectorAll('.bg-mesh').forEach(b => b.classList.remove('active'));
             document.getElementById(`bg-${s.mode}`).classList.add('active');
-            document.querySelectorAll('.dock-btn').forEach(b=>b.classList.remove('active'));
-            document.getElementById(`btn-${s.mode}`).classList.add('active');
+            
+            // Highlight Active Theme Button
+            document.querySelectorAll('.dock-btn').forEach(b => b.style.background = 'transparent');
+            if(s.mode === 'snow') document.getElementById('btn-snow').style.background = 'rgba(255,255,255,0.5)';
+            if(s.mode === 'spring') document.getElementById('btn-spring').style.background = 'rgba(255,255,255,0.5)';
+            if(s.mode === 'rain') document.getElementById('btn-rain').style.background = 'rgba(255,255,255,0.5)';
+
             DOM.body.classList.toggle('dark-mode', s.dark);
-            document.getElementById('btn-dark').classList.toggle('active', s.dark);
             DOM.garland.classList.toggle('active', s.garland);
-            document.getElementById('btn-garland').classList.toggle('active', s.garland);
         }
         function saveSettings() { localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings)); }
         function savePet() { localStorage.setItem(PET_KEY, JSON.stringify(state.pet)); updatePetUI(); }
 
-        // === PET LOGIC ===
         function checkDaily() {
             if(state.pet.isDead) return;
             const today = new Date().toDateString();
-            const now = Date.now();
-            if(state.pet.lastLogin && (now - new Date(state.pet.lastLogin).getTime() > 259200000)) {
-                state.pet.isDead = true; state.pet.deathDate = now; savePet(); return;
-            }
-            const yesterday = new Date(Date.now() - 86400000).toDateString();
             if(state.pet.lastLogin !== today) {
-                if(state.pet.lastLogin === yesterday) state.pet.streak++;
-                else state.pet.streak = 1;
-                state.pet.lastLogin = today; 
-                state.pet.lastLoginTime = now; 
-                const bonus = state.pet.streak * 10;
-                state.pet.coins += bonus;
-                if(state.pet.streak >= 7) showToast(`Стрик 7 дней! Супер бонус +${bonus} 💰`);
-                else showToast(`День ${state.pet.streak}! Бонус +${bonus} 💰`);
-                savePet();
+                // Check death if absent for > 7 days
+                const diff = (Date.now() - new Date(state.pet.lastLoginTime || Date.now()).getTime()) / (1000 * 3600 * 24);
+                if(diff > 7) {
+                     state.pet.isDead = true; savePet(); updatePetUI(); return;
+                }
+                state.pet.streak++; state.pet.lastLogin = today; state.pet.lastLoginTime = Date.now();
+                state.pet.coins += state.pet.streak * 50;
+                savePet(); showToast(`Новый день! +${state.pet.streak*50} 💰`);
             }
         }
-        if(!state.pet.lastLoginTime) state.pet.lastLoginTime = Date.now();
 
         function checkCircadianRhythm(isInit) {
             if(state.pet.isDead) return;
             const h = new Date().getHours();
             const now = Date.now();
-            
-            // Check Auto Gadgets
-            const hasFeeder = state.pet.gadgets.feeder > now;
             const hasSleeper = state.pet.gadgets.sleeper > now;
 
-            // Sleep: 22:00 - 08:00
-            const shouldSleep = (h >= 22 || h < 8);
-            
-            if(shouldSleep) {
-                if(hasSleeper && !state.pet.isSleeping) {
-                    state.pet.isSleeping = true;
-                    showToast("Смарт-люлька уложила питомца 🛌");
-                } else if (!state.pet.isSleeping && isInit) {
-                    showThought("Ты забыла меня уложить... 🥺");
-                    state.pet.love = Math.max(0, state.pet.love - 10);
-                }
+            if(h >= 23 || h < 7) {
+                if(hasSleeper && !state.pet.isSleeping) state.pet.isSleeping = true;
             } else {
-                if(hasSleeper && state.pet.isSleeping) {
-                     state.pet.isSleeping = false; // Auto wake up
-                }
-            }
-
-            // Hunger Spikes: 9, 13, 19
-            if((h === 9 || h === 13 || h === 19) && isInit) {
-                if(hasFeeder) {
-                    state.pet.hunger = Math.min(100, state.pet.hunger + 30);
-                    showToast("Авто-кормушка покормила! 🥣");
-                } else {
-                    state.pet.hunger = Math.max(0, state.pet.hunger - 20);
-                    showThought("Время кушать! Я голоден!");
-                }
+                if(hasSleeper && state.pet.isSleeping) state.pet.isSleeping = false;
             }
             savePet();
+        }
+
+        function checkRentStatus() {
+            if(!state.pet.house || !state.pet.house.rent) { document.getElementById('btn-rent').style.display = 'none'; return; }
+            const currentMonth = new Date().getMonth();
+            if(state.pet.rentPaidMonth !== currentMonth) {
+                document.getElementById('btn-rent').style.display = 'block';
+                document.getElementById('btn-rent').innerText = `🏠 Оплатить: ${state.pet.house.rent}`;
+                if(new Date().getDate() > 5) { // Late payment > 5th day
+                    state.pet.house = SHOP.house[0]; state.pet.rentPaidMonth = currentMonth;
+                    showToast("Выселили за неуплату! 📦"); savePet(); document.getElementById('btn-rent').style.display = 'none';
+                }
+            } else document.getElementById('btn-rent').style.display = 'none';
+        }
+
+        window.payRent = () => {
+            if(state.pet.coins >= state.pet.house.rent) {
+                state.pet.coins -= state.pet.house.rent; state.pet.rentPaidMonth = new Date().getMonth();
+                showToast("Оплачено!"); savePet(); checkRentStatus();
+            } else showToast("Нет денег!");
         }
 
         window.resurrectPet = () => {
-            state.pet.isDead = false;
-            state.pet.hunger = 50; state.pet.love = 50; state.pet.energy = 50; state.pet.hygiene = 100;
-            state.pet.streak = 0; state.pet.lastLoginTime = Date.now();
-            state.pet.isSleeping = false;
-            savePet(); updatePetUI(); showToast("С возвращением! ❤️");
+            state.pet.isDead=false; state.pet.hunger=50; state.pet.love=50; state.pet.energy=50; state.pet.streak=0;
+            savePet(); updatePetUI();
         }
+        window.toggleSleep = () => { state.pet.isSleeping = !state.pet.isSleeping; savePet(); }
+        window.washPet = () => { state.pet.hygiene=100; addExp(5); savePet(); showToast("Чисто!"); }
 
-        window.toggleSleep = () => {
+        // --- RELAXED LOOPS ---
+        
+        // Income & Events (1s)
+        function gameLoop() {
             if(state.pet.isDead) return;
-            state.pet.isSleeping = !state.pet.isSleeping;
-            if(state.pet.isSleeping) showToast("Спокойной ночи! 😴");
-            else showToast("Доброе утро! ☀️");
-            savePet();
-        }
-
-        window.washPet = () => {
-            if(state.pet.isDead) return;
-            if(state.pet.isSleeping) { showToast("Не буди!"); return; }
-            state.pet.hygiene = 100;
-            showToast("Буль-буль! Чистый питомец 🧼");
-            addExp(5);
-            savePet();
-        }
-
-        function petLoop() {
-            if(state.pet.isDead) return;
-
-            // Auto Income
-            let mult = 1;
             const now = Date.now();
-            state.pet.activeBuffs = state.pet.activeBuffs.filter(b => b.end > now);
-            state.pet.activeBuffs.forEach(b => { if(b.type === 'b_auto' || b.type === 'b_all') mult *= b.val; });
-
-            if(state.pet.autoIncome > 0 && !state.pet.isSleeping) {
-                state.pet.coins += (state.pet.autoIncome * mult);
-            }
             
-            // Decays
-            if(!state.pet.isSleeping) {
-                if(state.pet.hunger > 0) state.pet.hunger -= 0.5;
-                if(state.pet.love > 0) state.pet.love -= 0.2;
-                if(state.pet.energy > 0) state.pet.energy -= 0.3;
-                if(state.pet.hygiene > 0) state.pet.hygiene -= 0.4;
-            } else {
-                // Sleeping recovers energy but drains hunger slightly
-                if(state.pet.energy < 100) state.pet.energy += 1;
-                if(state.pet.hunger > 0) state.pet.hunger -= 0.1;
+            // Auto Income (Fixed logic)
+            const income = getAutoIncome();
+            if(income > 0) {
+                let mult = 1;
+                state.pet.activeBuffs = state.pet.activeBuffs.filter(b=>b.end>now);
+                state.pet.activeBuffs.forEach(b=>mult*=b.val);
+                // If sleeping, reduce income by 50%
+                const finalInc = state.pet.isSleeping ? (income * mult * 0.5) : (income * mult);
+                state.pet.coins += finalInc;
             }
 
-            // Sleep auto-wake if full energy and day time? No, manual control preferred unless gadget.
-            if(state.pet.energy <= 0 && !state.pet.isSleeping) {
-                state.pet.isSleeping = true; // Pass out
-                showToast("Упал без сил... 😴");
-            }
-            
+            // Random Mini Events (Low chance)
+            if(Math.random() < 0.02) triggerRandomEvent();
+
             savePet();
         }
 
-        function addExp(amount) {
-            state.pet.exp += amount;
-            if(state.pet.exp >= state.pet.maxExp) {
-                state.pet.level++;
-                state.pet.exp -= state.pet.maxExp;
-                state.pet.maxExp = Math.floor(state.pet.maxExp * 1.5);
-                state.pet.energy = 100;
-                state.pet.coins += state.pet.level * 50;
-                showToast(`Уровень ${state.pet.level}! Энергия восстановлена! 🎉`);
-            }
+        // Decay (5 mins)
+        function decayLoop() {
+             if(state.pet.isDead || state.pet.isSleeping) return;
+             const m = new Date().getMonth();
+             const isWinter = (m===11||m===0||m===1);
+             const isSummer = (m>=5&&m<=7);
+             const now = Date.now();
+
+             let eDecay = 1, hDecay = 1;
+             // Mild weather penalty
+             if(isWinter && state.pet.gadgets.heater < now && (!state.pet.wear || state.pet.wear.cost < 250)) eDecay++;
+             if(isSummer && state.pet.gadgets.ac < now) hDecay++;
+
+             state.pet.energy = Math.max(0, state.pet.energy - eDecay);
+             state.pet.hygiene = Math.max(0, state.pet.hygiene - hDecay);
+             state.pet.hunger = Math.max(0, state.pet.hunger - 1);
+             state.pet.love = Math.max(0, state.pet.love - 0.5);
+             
+             savePet();
         }
 
+        function triggerRandomEvent() {
+            const events = [
+                {t: "Нашла монетку! +50", c: 50},
+                {t: "Поймала бабочку! +20 Exp", x: 20},
+                {t: "Хорошая погода! +10 ❤️", l: 10},
+                {t: "Птичка спела! +10 ⚡", e: 10},
+                {t: "Нашла заначку! +100", c: 100}
+            ];
+            const ev = events[Math.floor(Math.random()*events.length)];
+            if(ev.c) state.pet.coins+=ev.c;
+            if(ev.x) addExp(ev.x);
+            if(ev.l) state.pet.love=Math.min(100, state.pet.love+ev.l);
+            if(ev.e) state.pet.energy=Math.min(100, state.pet.energy+ev.e);
+            showToast("✨ " + ev.t);
+        }
+
+        function addExp(a) {
+            state.pet.exp+=a; 
+            if(state.pet.exp>=state.pet.maxExp) { 
+                state.pet.level++; state.pet.exp=0; state.pet.maxExp=Math.floor(state.pet.maxExp*1.5); 
+                state.pet.energy=100; state.pet.coins+=100*state.pet.level; showToast("Уровень UP! 🎉"); 
+            }
+        }
         function petBehavior() {
             if(state.pet.isDead || state.pet.isSleeping) return;
-            const blob = document.getElementById('pet-blob');
-            const r = Math.random();
-            blob.classList.remove('walking');
-            
-            if(state.pet.hygiene < 40) showThought("Я грязный... 🛁");
-            else if(state.pet.hunger < 20) showThought("Хочу кушать!");
-            else if(r > 0.7 && state.pet.energy > 10) showThought();
-            else if (r < 0.3) blob.classList.add('walking');
+            if(Math.random()>0.7) showThought();
         }
 
         function updatePetUI() {
             DOM.coinDisp.innerText = Math.floor(state.pet.coins);
             document.getElementById('shop-coins').innerText = Math.floor(state.pet.coins);
             document.getElementById('stat-balance').innerText = Math.floor(state.pet.coins);
+            document.getElementById('casino-balance').innerText = Math.floor(state.pet.coins);
             
-            document.getElementById('bar-hunger').style.width = state.pet.hunger + '%';
-            document.getElementById('txt-hunger').innerText = Math.floor(state.pet.hunger) + '/100';
-            document.getElementById('bar-love').style.width = state.pet.love + '%';
-            document.getElementById('txt-love').innerText = Math.floor(state.pet.love) + '/100';
-            document.getElementById('bar-energy').style.width = state.pet.energy + '%';
-            document.getElementById('txt-energy').innerText = Math.floor(state.pet.energy) + '/100';
-            document.getElementById('bar-hygiene').style.width = state.pet.hygiene + '%';
-            document.getElementById('txt-hygiene').innerText = Math.floor(state.pet.hygiene) + '/100';
-            
-            // EXP
-            const expPct = Math.min(100, (state.pet.exp / state.pet.maxExp) * 100);
-            document.getElementById('exp-fill').style.width = expPct + '%';
-            document.getElementById('lvl-text').innerText = `Уровень ${state.pet.level}`;
+            // Show stats
+            document.getElementById('stat-click').innerText = getClickPower();
+            document.getElementById('stat-auto').innerText = getAutoIncome();
 
-            // Buffs & Gadgets
-            const buffsDiv = document.getElementById('buffs-row');
-            buffsDiv.innerHTML = '';
+            document.getElementById('bar-hunger').style.width = state.pet.hunger+'%';
+            document.getElementById('bar-love').style.width = state.pet.love+'%';
+            document.getElementById('bar-energy').style.width = state.pet.energy+'%';
+            document.getElementById('bar-hygiene').style.width = state.pet.hygiene+'%';
+            
+            document.getElementById('txt-hunger').innerText = `${Math.floor(state.pet.hunger)}/100`;
+            document.getElementById('txt-love').innerText = `${Math.floor(state.pet.love)}/100`;
+            document.getElementById('txt-energy').innerText = `${Math.floor(state.pet.energy)}/100`;
+            document.getElementById('txt-hygiene').innerText = `${Math.floor(state.pet.hygiene)}/100`;
+
+            document.getElementById('lvl-text').innerText = `Ур. ${state.pet.level}`;
+            document.getElementById('exp-fill').style.width = (state.pet.exp/state.pet.maxExp*100)+'%';
+            
+            const buffsDiv = document.getElementById('buffs-row'); buffsDiv.innerHTML='';
             const now = Date.now();
-            
-            if(state.pet.gadgets.feeder > now) {
-                const el = document.createElement('div'); el.className = 'buff-icon'; el.innerText = '🥣'; buffsDiv.appendChild(el);
-            }
-            if(state.pet.gadgets.sleeper > now) {
-                const el = document.createElement('div'); el.className = 'buff-icon'; el.innerText = '🛌'; buffsDiv.appendChild(el);
-            }
+            if(state.pet.gadgets.feeder > now) buffsDiv.innerHTML+='<div class="buff-icon">🥣</div>';
+            if(state.pet.gadgets.heater > now) buffsDiv.innerHTML+='<div class="buff-icon">🔥</div>';
+            state.pet.activeBuffs.forEach(b => buffsDiv.innerHTML+=`<div class="buff-icon">${b.ico}</div>`);
 
-            state.pet.activeBuffs.forEach(b => {
-                const el = document.createElement('div');
-                el.className = 'buff-icon';
-                el.innerText = b.ico;
-                buffsDiv.appendChild(el);
-            });
-
-            // Stats
-            let cMult = 1; let aMult = 1;
-            state.pet.activeBuffs.forEach(b => { 
-                if(b.type==='b_click'||b.type==='b_all') cMult*=b.val; 
-                if(b.type==='b_auto'||b.type==='b_all') aMult*=b.val; 
-            });
-            document.getElementById('stat-click').innerText = (state.pet.clickPower * cMult).toFixed(1);
-            document.getElementById('stat-auto').innerText = (state.pet.autoIncome * aMult).toFixed(1);
-            document.getElementById('stat-streak').innerText = state.pet.streak;
-
+            const blob = document.getElementById('pet-blob');
             const face = document.getElementById('pet-face');
-            const blob = document.getElementById('pet-blob');
-            const deathOverlay = document.getElementById('death-overlay');
-            const sleepOverlay = document.getElementById('sleep-overlay');
-
-            // Visual States
-            deathOverlay.style.display = 'none'; 
-            sleepOverlay.classList.remove('active');
-            blob.classList.remove('dead-filter', 'sleeping', 'dirty');
-
-            if(state.pet.isDead) {
-                deathOverlay.style.display = 'flex'; face.innerText = '💀'; blob.classList.add('dead-filter');
-            } else if (state.pet.isSleeping) {
-                sleepOverlay.classList.add('active');
-                face.innerText = '😴'; blob.classList.add('sleeping');
-                document.getElementById('btn-sleep').innerText = "☀️ Вставать";
-            } else {
-                document.getElementById('btn-sleep').innerText = "😴 Спать";
-                if(state.pet.hygiene < 50) blob.classList.add('dirty');
-                
-                if(state.pet.hygiene < 30) face.innerText = '🤢';
-                else if(state.pet.hunger < 30) face.innerText = '🥺';
-                else if(state.pet.love > 90) face.innerText = '😻';
-                else face.innerText = '😺';
+            const accRoot = document.getElementById('pet-acc-root');
+            accRoot.innerHTML = ''; // Clear accessories
+            
+            document.getElementById('death-overlay').style.display = state.pet.isDead ? 'flex' : 'none';
+            document.getElementById('sleep-overlay').classList.toggle('active', state.pet.isSleeping);
+            blob.classList.toggle('sleeping', state.pet.isSleeping);
+            
+            if(state.pet.isDead) face.innerText = '💀';
+            else if(state.pet.isSleeping) { face.innerText = '😴'; document.getElementById('btn-sleep').innerText="☀️"; }
+            else { document.getElementById('btn-sleep').innerText="😴"; face.innerText = state.pet.hygiene<30 ? '🤢' : (state.pet.love>90?'😻':'😺'); }
+            
+            // Add accessories logic
+            if(state.pet.wear && !state.pet.isDead && !state.pet.isSleeping) {
+                const ac = document.createElement('div');
+                ac.className = `pet-acc acc-${state.pet.wear.pos || 'body'}`;
+                ac.innerText = state.pet.wear.ico;
+                accRoot.appendChild(ac);
             }
 
-            document.getElementById('pet-acc-wear').innerText = state.pet.wear ? state.pet.wear.ico : '';
-            const bg = document.getElementById('house-bg');
-            if(state.pet.house && state.pet.house.id !== 'box') bg.innerText = state.pet.house.ico;
-            else bg.innerText = '📦';
+            document.getElementById('house-bg').innerText = (state.pet.house && state.pet.house.id!=='box') ? state.pet.house.ico : '📦';
         }
-
         window.petClick = (e) => {
-            if(state.pet.isDead) return;
-            const blob = document.getElementById('pet-blob');
-            if(state.pet.isSleeping) { showToast("Тсс! Питомец спит 😴"); return; }
-            
-            blob.style.transform = 'scale(0.95)';
-            setTimeout(()=>blob.style.transform = 'scale(1)', 100);
+            if(state.pet.isDead || state.pet.isSleeping) return;
+            const power = getClickPower();
+            const float = document.createElement('div'); float.className='click-float';
+            float.innerText = `+${power}`;
+            float.style.left=(e.clientX-10)+'px'; float.style.top=(e.clientY-40)+'px';
+            document.body.appendChild(float); setTimeout(()=>float.remove(),800);
+            state.pet.coins += power; addExp(1); savePet();
+        }
+        function showThought(t) { 
+            const el = document.getElementById('pet-thought'); el.innerText=t||THOUGHTS[Math.floor(Math.random()*THOUGHTS.length)];
+            el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2000); 
+        }
 
-            let mult = 1;
-            state.pet.activeBuffs.forEach(b => { if(b.type==='b_click'||b.type==='b_all') mult *= b.val; });
-            const gain = state.pet.clickPower * mult;
-
-            state.pet.coins += gain;
-            state.pet.love = Math.min(100, state.pet.love + 1);
-            state.pet.energy = Math.max(0, state.pet.energy - 0.5);
-            addExp(1);
+        // CASINO - REAL WHEEL LOGIC
+        window.openCasino = () => { if(!state.pet.isDead) document.getElementById('view-casino').classList.add('active'); };
+        
+        window.spinRoulette = (choice) => {
+            const betInput = document.getElementById('casino-bet');
+            const bet = parseInt(betInput.value);
+            const wheel = document.getElementById('roulette-wheel');
             
-            const float = document.createElement('div');
-            float.className = 'click-float';
-            float.innerText = `+${gain.toFixed(0)}`;
-            float.style.left = (e.clientX - 10) + 'px';
-            float.style.top = (e.clientY - 40) + 'px';
-            document.body.appendChild(float);
-            setTimeout(()=>float.remove(), 800);
+            if(!bet || bet <= 0) { showToast("Введите ставку! ⚠️"); return; }
+            if(state.pet.coins < bet) { showToast("Нет монет! 💸"); return; }
+
+            // Deduct
+            state.pet.coins -= bet;
             savePet();
-        };
-
-        function showThought(forcedText) {
-            const th = document.getElementById('pet-thought');
-            th.innerText = forcedText || THOUGHTS[Math.floor(Math.random()*THOUGHTS.length)];
-            th.classList.add('show');
-            setTimeout(() => th.classList.remove('show'), 2000);
-        }
-
-        // === MINI GAME: FLAPPY HEART ===
-        let gameLoop, birdY, birdV, pipes, score, gameActive = false, birdR = 0;
-        const cvs = document.getElementById('flappy-canvas');
-        const ctx = cvs.getContext('2d');
-
-        window.startFlappy = () => {
-            if(state.pet.isDead) return;
-            if(state.pet.isSleeping) { showToast("Питомец спит!"); return; }
-            if(state.pet.energy < 10) { showToast("Слишком мало энергии! 😴"); return; }
-            
-            document.getElementById('view-flappy').classList.add('active');
-            birdY = 200; birdV = 0; pipes = []; score = 0; birdR = 0;
-            gameActive = true;
-            cvs.onclick = () => { birdV = -5; }; 
-            gameLoop = setInterval(flappyLoop, 20);
-        }
-
-        window.closeFlappy = () => {
-            clearInterval(gameLoop); gameActive = false;
-            document.getElementById('view-flappy').classList.remove('active');
-        }
-
-        function flappyLoop() {
-            if(!gameActive) return;
-            birdV += 0.25; 
-            birdY += birdV;
-            birdR = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (birdV * 0.1)));
-            
-            if(pipes.length === 0 || pipes[pipes.length-1].x < 150) {
-                pipes.push({ x: 320, h: Math.random()*200 + 50 });
-            }
-            pipes.forEach(p => p.x -= 2);
-            if(pipes[0].x < -50) { pipes.shift(); score++; addExp(5); }
-
-            if(birdY > 480 || birdY < 0) return gameOver();
-            pipes.forEach(p => {
-                if(p.x < 35 && p.x > 5 && (birdY < p.h || birdY > p.h + 120)) return gameOver();
-            });
-
-            ctx.fillStyle = "#87CEEB"; ctx.fillRect(0,0,320,480);
-            
-            // Draw rotated bird
-            ctx.save();
-            ctx.translate(25, birdY);
-            ctx.rotate(birdR);
-            ctx.font = "24px Arial"; ctx.fillText("❤️", -10, 10);
-            ctx.restore();
-            
-            ctx.fillStyle = "#75aa31";
-            pipes.forEach(p => {
-                ctx.fillRect(p.x, 0, 40, p.h);
-                ctx.fillRect(p.x, p.h+120, 40, 480);
-            });
-            ctx.fillStyle = "#fff"; ctx.font = "bold 20px Nunito";
-            ctx.fillText("Score: " + score, 10, 30);
-            ctx.fillText("Coins: " + (score*2), 10, 50);
-        }
-
-        function gameOver() {
-            clearInterval(gameLoop); gameActive = false;
-            // Luck Potion Check
-            let luck = 1;
-            state.pet.activeBuffs.forEach(b => { if(b.type==='b_luck') luck = b.val; });
-            
-            const reward = score * 2;
-            const expGain = (score * 2) * luck;
-            
-            state.pet.coins += reward;
-            state.pet.energy = Math.max(0, state.pet.energy - 10);
-            addExp(expGain);
-            savePet();
-            alert(`Игра окончена! Счет: ${score}\nМонеты: ${reward} 💰\nОпыт: ${expGain} XP`);
-            closeFlappy();
-        }
-
-        // === SHOP ===
-        let currentShopTab = 'food';
-        window.openShop = () => {
-            if(state.pet.isDead) return;
-            document.getElementById('shop-modal').classList.add('active');
-            switchShop('food');
-        }
-        window.closeShop = () => document.getElementById('shop-modal').classList.remove('active');
-
-        window.switchShop = (tab) => {
-            currentShopTab = tab;
-            document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.shop-tab').forEach(t => { if(t.innerText.includes(getTabName(tab))) t.classList.add('active'); });
-            renderShop();
-        }
-
-        function getTabName(t) {
-            if(t==='food') return 'Еда';
-            if(t==='wear') return 'Одежда';
-            if(t==='house') return 'Домик';
-            if(t==='gadget') return 'Гаджеты';
-            if(t==='buff') return 'Зелья';
-            return 'Навыки';
-        }
-
-        function renderShop() {
-            const lst = document.getElementById('shop-list');
-            lst.innerHTML = '';
-            let items = [];
-            
-            if(currentShopTab === 'upgrade') {
-                const cLvl = state.pet.upgrades.click;
-                const aLvl = state.pet.upgrades.auto;
-                const clickCost = cLvl >= 10 ? 'MAX' : Math.floor(100 * Math.pow(2.5, cLvl));
-                const autoCost = aLvl >= 10 ? 'MAX' : Math.floor(200 * Math.pow(2.5, aLvl));
-                items = [
-                    { ...SHOP.upgrade[0], cost: clickCost, lvl: cLvl, max: 10 },
-                    { ...SHOP.upgrade[1], cost: autoCost, lvl: aLvl, max: 10 }
-                ];
-            } else if (currentShopTab === 'buff') {
-                items = SHOP.buff;
-            } else if (currentShopTab === 'gadget') {
-                items = SHOP.gadget;
-            } else {
-                items = SHOP[currentShopTab];
-            }
-
-            items.forEach(item => {
-                const el = document.createElement('div');
-                const owned = (state.pet.inventory.includes(item.id)) || (currentShopTab === 'house' && state.pet.inventory.includes('house_'+item.id));
-                const isEquipped = (state.pet.wear && state.pet.wear.id === item.id) || (state.pet.house && state.pet.house.id === item.id);
-                
-                el.className = `shop-item ${owned && currentShopTab !== 'food' && currentShopTab !== 'buff' ? 'owned' : ''} ${isEquipped ? 'selected' : ''}`;
-                
-                let btnText = item.cost === 'MAX' ? 'Макс. Ур.' : item.cost + ' 💰';
-                
-                if(currentShopTab === 'wear' || currentShopTab === 'house') {
-                    if(isEquipped) btnText = 'Надето';
-                    else if(owned) btnText = 'Надеть';
-                }
-                
-                if(currentShopTab === 'gadget') {
-                     // Check active
-                     if(state.pet.gadgets[item.id] > Date.now()) btnText = "Активно";
-                }
-                
-                if(currentShopTab === 'upgrade') {
-                    if(item.lvl >= item.max) btnText = "МАКСИМУМ";
-                    else btnText = `Ур.${item.lvl+1} (${item.cost} 💰)`;
-                }
-
-                el.innerHTML = `
-                    <div style="font-size:30px">${item.ico}</div>
-                    <div style="font-size:12px; font-weight:700">${item.name}</div>
-                    <div class="shop-desc">${item.desc}</div>
-                    <div class="shop-price">${btnText}</div>
-                `;
-                el.onclick = () => buyItem(item);
-                lst.appendChild(el);
-            });
-        }
-
-        function buyItem(item) {
-            if(state.pet.coins < item.cost && item.cost !== 'MAX' && !state.pet.inventory.includes(item.id)) {
-                 showToast("Мало монеток 😢"); return;
-            }
-
-            if(currentShopTab === 'food') {
-                if(item.effect === 'bad') {
-                    state.pet.coins -= item.cost;
-                    state.pet.love = Math.max(0, state.pet.love - 10);
-                    showToast("Бее! Я такое не люблю! 🤢");
-                    savePet();
-                    updatePetUI();
-                    return;
-                }
-                
-                state.pet.coins -= item.cost;
-                const effects = item.effect.split(' ');
-                effects.forEach(eff => {
-                    const val = parseInt(eff.split('+')[1]);
-                    if(eff.includes('h+')) state.pet.hunger = Math.min(100, state.pet.hunger + val);
-                    if(eff.includes('e+')) state.pet.energy = Math.min(100, state.pet.energy + val);
-                    if(eff.includes('l+')) state.pet.love = Math.min(100, state.pet.love + val);
-                });
-                
-                showToast("Вкусно! 😋");
-                addExp(10);
-            }
-            else if(currentShopTab === 'buff') {
-                state.pet.coins -= item.cost;
-                state.pet.activeBuffs.push({
-                    id: item.id, type: item.type, val: item.val, ico: item.ico,
-                    end: Date.now() + (item.dur * 1000)
-                });
-                showToast(`Эффект "${item.name}" активирован! ✨`);
-            }
-            else if(currentShopTab === 'gadget') {
-                if(state.pet.gadgets[item.id] > Date.now()) { showToast("Уже активно!"); return; }
-                state.pet.coins -= item.cost;
-                state.pet.gadgets[item.id] = Date.now() + (item.dur * 86400000);
-                showToast("Гаджет установлен на 7 дней! 🤖");
-            }
-            else if(currentShopTab === 'wear' || currentShopTab === 'house') {
-                const invId = currentShopTab === 'house' ? 'house_'+item.id : item.id;
-                if(state.pet.inventory.includes(invId)) {
-                    if(currentShopTab === 'wear') state.pet.wear = item;
-                    else state.pet.house = item;
-                } else {
-                    state.pet.coins -= item.cost;
-                    state.pet.inventory.push(invId);
-                    if(currentShopTab === 'wear') state.pet.wear = item;
-                    else state.pet.house = item;
-                    showToast("Куплено! ✨");
-                }
-            }
-            else if(currentShopTab === 'upgrade') {
-                if(item.lvl >= 10) return;
-                state.pet.coins -= item.cost;
-                if(item.type === 'u_click') { state.pet.upgrades.click++; state.pet.clickPower++; } 
-                else { state.pet.upgrades.auto++; state.pet.autoIncome += 1; }
-                showToast("Улучшено! 💪");
-                addExp(50);
-            }
-            savePet();
-            renderShop();
             updatePetUI();
+            
+            // Reset for animation
+            wheel.style.transition = 'none';
+            wheel.style.transform = 'rotate(0deg)';
+            
+            // Force reflow
+            wheel.offsetHeight;
+
+            // Logic: 
+            // We have 15 segments (approx 24 degrees each). 
+            // 0 (Green) is at 0-24deg (approx).
+            // To land on a specific number, we rotate: (360 * 5 rotations) + targetAngle
+            
+            // Generate result (0-14)
+            const result = Math.floor(Math.random() * 15); 
+            // Result mapping based on our gradient:
+            // 0 = Green, Odd = Red, Even = Black (Simplified from gradient logic)
+            // But let's stick to gradient definition:
+            // 0deg starts Green.
+            // 24deg starts Red.
+            // 48deg starts Black.
+            // ... alternating.
+            
+            // Target angle (center of segment)
+            const segSize = 360 / 15;
+            const targetAngle = (result * segSize) + (segSize / 2);
+            
+            // We need to rotate NEGATIVE to visually move clockwise to the number at top
+            // Actually, arrow is at top. If we rotate 24deg clockwise, the segment at 336deg is at top.
+            // Let's just rotate + (360*5) + (360 - targetAngle).
+            
+            const spin = 1800 + (360 - targetAngle); // 5 spins
+            
+            wheel.style.transition = 'transform 3s cubic-bezier(0.1, 0.9, 0.2, 1)';
+            wheel.style.transform = `rotate(${spin}deg)`;
+
+            setTimeout(() => {
+                let color = 'green';
+                if(result === 0) color = 'green';
+                else if(result % 2 !== 0) color = 'red'; // Based on gradient index 1,3,5..
+                else color = 'black'; // Based on gradient index 2,4,6..
+                
+                // Correction for the gradient definition in CSS:
+                // 0 (0-24) Green
+                // 1 (24-48) Red
+                // 2 (48-72) Black
+                // etc.
+                
+                if(choice === color) {
+                    let win = 0;
+                    if(color === 'green') win = bet * 14;
+                    else win = bet * 2;
+                    state.pet.coins += win;
+                    showToast(`Победа! ${color.toUpperCase()}! +${win} 💰`);
+                } else {
+                    showToast(`Выпало ${color}. Попробуй еще!`);
+                }
+                savePet();
+                updatePetUI();
+
+            }, 3000);
         }
 
-        // === COMMON UI & GRAPH ===
-        window.setView = (v) => {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
-            document.getElementById(`view-${v}`).classList.add('active-view');
-            if(v === 'pet') {
-                document.getElementById('btn-view-cal').classList.remove('active');
-                document.getElementById('btn-view-pet').classList.add('active');
+        // SHOP
+        let curTab = 'food';
+        window.openShop = () => { if(!state.pet.isDead) { document.getElementById('shop-modal').classList.add('active'); switchShop('food'); } };
+        window.closeShop = () => document.getElementById('shop-modal').classList.remove('active');
+        window.switchShop = (t) => {
+            curTab = t; document.querySelectorAll('.shop-tab').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            const list = document.getElementById('shop-list'); list.innerHTML = '';
+            
+            let items = [];
+            if(t === 'upgrade') {
+                 // INFINITE SCALING GENERATION
+                 items.push({
+                     id:'click_up', 
+                     name:`Клик Ур.${state.pet.clickLevel}`, 
+                     ico:'💪', 
+                     cost: getClickUpgradeCost(), 
+                     type:'u_click', 
+                     desc:`Сила: ${getClickPower()} ➔ ${Math.floor(1 * Math.pow(1.2, state.pet.clickLevel+1))}`
+                 });
+                 items.push({
+                     id:'auto_up', 
+                     name:`Авто Ур.${state.pet.autoLevel}`, 
+                     ico:'⚙️', 
+                     cost: getAutoUpgradeCost(), 
+                     type:'u_auto', 
+                     desc:`Доход: ${getAutoIncome()} ➔ ${Math.floor(1 * Math.pow(1.15, state.pet.autoLevel+1))}/сек`
+                 });
             } else {
-                document.getElementById('btn-view-cal').classList.add('active');
-                document.getElementById('btn-view-pet').classList.remove('active');
+                items = SHOP[t];
             }
+
+            items.forEach(i => {
+                const el = document.createElement('div');
+                const owned = state.pet.inventory.includes(i.id) || state.pet.inventory.includes('house_'+i.id);
+                const equipped = (state.pet.wear && state.pet.wear.id === i.id) || (state.pet.house && state.pet.house.id === i.id);
+                el.className = `shop-item ${owned && t!=='food' && t!=='buff' ? 'owned' : ''} ${equipped ? 'selected' : ''}`;
+                
+                let txt = i.cost + ' 💰';
+                if(t === 'wear') txt = equipped ? 'Снять' : (owned ? 'Надеть' : txt);
+                if(t === 'house') txt = equipped ? 'Живу' : (owned && i.rent===0 ? 'Переехать' : (i.rent>0 ? `Аренда ${i.cost}` : txt));
+                if(t === 'gadget' && state.pet.gadgets[i.id] > Date.now()) txt = "Активно";
+                
+                // Improved Upgrade Text
+                if(t === 'upgrade') {
+                     txt = `Улучшить: ${i.cost} 💰`;
+                }
+
+                el.innerHTML = `<div style="font-size:30px">${i.ico}</div><div style="font-size:12px;font-weight:700">${i.name}</div><div class="shop-desc">${i.desc || ''}</div><div class="shop-price">${txt}</div>`;
+                el.onclick = () => buyItem(i, t);
+                list.appendChild(el);
+            });
         };
 
-        window.setMode = (m) => { state.settings.mode = m; applySettings(); saveSettings(); };
-        window.toggleGarland = () => { state.settings.garland = !state.settings.garland; applySettings(); saveSettings(); };
-        window.toggleDark = () => { state.settings.dark = !state.settings.dark; applySettings(); saveSettings(); };
-        window.doBarrelRoll = () => {
-            const icon = document.getElementById('plane-icon');
-            icon.style.animation = 'barrelRoll 1s ease-in-out';
-            setTimeout(() => icon.style.animation = '', 1000);
-            showToast("Вжууух! ✈️");
-        }
+        function buyItem(i, t) {
+            if(t==='wear' && state.pet.wear && state.pet.wear.id===i.id) { state.pet.wear=null; savePet(); switchShop(t); return; } // Unequip
+            if(t==='house' && state.pet.house && state.pet.house.id===i.id) return; // Already here
 
-        let len = 0;
-        function calcGraph() {
-            const el = document.getElementById('flight-viz');
-            if(!el) return;
-            const w = el.offsetWidth; const h = el.offsetHeight;
-            const d = `M 20 ${h-30} Q ${w/2} -20 ${w-20} ${h-50}`;
-            DOM.track.setAttribute('d', d); DOM.active.setAttribute('d', d);
-            len = DOM.track.getTotalLength();
-        }
+            if(state.pet.coins < i.cost && !state.pet.inventory.includes(i.id) && !state.pet.inventory.includes('house_'+i.id)) { showToast("Мало монет!"); return; }
 
-        function flightLoop() {
-            const tot = END - START;
-            const pass = new Date() - START;
-            let p = pass / tot; if(p<0) p=0; if(p>1) p=1;
-            if(DOM.active && DOM.track) {
-                DOM.active.style.strokeDasharray = len;
-                DOM.active.style.strokeDashoffset = len * (1 - p);
-                const pt = DOM.track.getPointAtLength(len * p);
-                const next = DOM.track.getPointAtLength(Math.min(len, len*p + 2));
-                const ang = Math.atan2(next.y - pt.y, next.x - pt.x) * 180 / Math.PI;
-                const hover = Math.sin(Date.now() / 800) * 3;
-                DOM.plane.style.transform = `translate(${pt.x - 20}px, ${pt.y - 20 + hover}px) rotate(${ang}deg)`;
-                DOM.pct.innerText = (p * 100).toFixed(5) + '%';
-                DOM.pct.style.transform = `rotate(${-ang}deg)`;
-            }
-            requestAnimationFrame(flightLoop);
-        }
-
-        function runParticles() {
-            const c = document.getElementById('canvas-fx');
-            const ctx = c.getContext('2d');
-            const rsz = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
-            window.addEventListener('resize', rsz); rsz();
-            let pts = [];
-            for(let i=0; i<80; i++) pts.push({
-                x: Math.random()*c.width, y: Math.random()*c.height,
-                z: Math.random()*0.5 + 0.5,
-                s: Math.random()*Math.PI*2,
-                v: Math.random()*0.02
-            });
-
-            function anim() {
-                ctx.clearRect(0,0,c.width,c.height);
-                const m = state.settings.mode;
-                const isDark = state.settings.dark;
-                pts.forEach(p => {
-                    p.y += p.z * (m==='rain' ? 12 : 1);
-                    p.x += Math.sin(p.y*0.003 + p.s)*0.5;
-                    p.s += p.v;
-                    if(p.y > c.height) { p.y = -20; p.x = Math.random()*c.width; }
-                    ctx.beginPath();
-                    if(m === 'snow') {
-                        const rad = p.z * 3;
-                        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
-                        grad.addColorStop(0, `rgba(255,255,255,${0.8*p.z})`);
-                        grad.addColorStop(1, `rgba(255,255,255,0)`);
-                        ctx.fillStyle = grad;
-                        ctx.arc(p.x, p.y, rad, 0, Math.PI*2);
-                        ctx.fill();
-                    } else if(m === 'spring') {
-                        ctx.save(); ctx.translate(p.x, p.y); ctx.scale(Math.cos(p.s), 1); ctx.rotate(p.s * 0.5);
-                        ctx.fillStyle = `rgba(255, 192, 203, ${p.z})`;
-                        ctx.moveTo(0,0); ctx.bezierCurveTo(5, -5, 10, 0, 0, 10); ctx.bezierCurveTo(-10, 0, -5, -5, 0, 0);
-                        ctx.fill(); ctx.restore();
-                    } else if(m === 'rain') {
-                        const color = isDark ? `rgba(255,255,255,${0.3*p.z})` : `rgba(80, 100, 130, ${0.5*p.z})`;
-                        ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - 1, p.y + 15*p.z); ctx.stroke();
-                    }
+            if(t==='food') {
+                const parts = i.effect.split(' ');
+                parts.forEach(p => {
+                    const v = parseInt(p.split('+')[1]);
+                    if(p.includes('h+')) state.pet.hunger = Math.min(100, state.pet.hunger+v);
+                    if(p.includes('e+')) state.pet.energy = Math.min(100, state.pet.energy+v);
+                    if(p.includes('l+')) state.pet.love = Math.min(100, state.pet.love+v);
                 });
-                requestAnimationFrame(anim);
+                showToast("Вкусно!"); addExp(5);
+                state.pet.coins -= i.cost;
+            } else if (t==='wear') {
+                if(!state.pet.inventory.includes(i.id)) { state.pet.coins-=i.cost; state.pet.inventory.push(i.id); }
+                state.pet.wear = i; showToast("Стиль!");
+            } else if (t==='house') {
+                const hid = 'house_'+i.id;
+                if(i.rent > 0) { // Rent
+                     state.pet.coins -= i.cost; state.pet.house = i; state.pet.rentPaidMonth = new Date().getMonth(); showToast("С новосельем!");
+                } else { // Buy
+                    if(!state.pet.inventory.includes(hid)) { state.pet.coins-=i.cost; state.pet.inventory.push(hid); }
+                    state.pet.house = i; showToast("Дом милый дом!");
+                }
+                checkRentStatus();
+            } else if (t==='gadget') {
+                if(state.pet.gadgets[i.id]>Date.now()) return;
+                state.pet.coins-=i.cost; state.pet.gadgets[i.id] = Date.now() + (i.dur*86400000); showToast("Работает!");
+            } else if (t==='upgrade') {
+                state.pet.coins-=i.cost; 
+                if(i.type==='u_click') state.pet.clickLevel++;
+                if(i.type==='u_auto') state.pet.autoLevel++;
+                showToast("Улучшено! 💪");
+            } else if (t==='buff') {
+                 state.pet.coins-=i.cost;
+                 state.pet.activeBuffs.push({id:i.id, val:i.val, end:Date.now()+(i.dur*1000), ico:i.ico});
+                 showToast("Магия! ✨");
             }
-            anim();
+            savePet(); switchShop(t); updatePetUI();
         }
 
-        function renderCal() {
-            DOM.mount.innerHTML = '';
+        // Common UI
+        window.setView = (v) => {
+            document.querySelectorAll('.view-section').forEach(el=>el.classList.remove('active-view'));
+            document.getElementById(`view-${v}`).classList.add('active-view');
+            document.getElementById('btn-view-cal').classList.toggle('active', v==='calendar');
+            document.getElementById('btn-view-pet').classList.toggle('active', v==='pet');
+        }
+        window.setMode = (m) => { state.settings.mode=m; applySettings(); saveSettings(); }
+        window.toggleGarland = () => { state.settings.garland=!state.settings.garland; applySettings(); saveSettings(); }
+        window.toggleDark = () => { state.settings.dark=!state.settings.dark; applySettings(); saveSettings(); }
+        window.doBarrelRoll = () => {
+            const icon = document.getElementById('plane-icon'); icon.style.animation = 'barrelRoll 1s ease-in-out';
+            setTimeout(() => icon.style.animation = '', 1000); showToast("Вжууух! ✈️");
+        }
+        function tick() {
+            const rem = END - new Date();
+            if(rem<=0) { document.getElementById('timer').innerText="МЫ ВМЕСТЕ!"; return; }
+            const d = Math.floor(rem/86400000);
+            const h = Math.floor((rem%86400000)/3600000);
+            const m = Math.floor((rem%3600000)/60000);
+            const s = Math.floor((rem%60000)/1000);
+            document.getElementById('timer').innerText = `${d}д ${("0"+h).slice(-2)}:${("0"+m).slice(-2)}:${("0"+s).slice(-2)}`;
+        }
+        function renderCal() { 
+             DOM.mount.innerHTML = '';
             let ptr = new Date(START);
             const today = new Date(); today.setHours(0,0,0,0);
             while(ptr <= END) {
@@ -1628,8 +1409,7 @@
                             if(isT) el.classList.remove('today');
                             addHeart(el);
                             const diff = Math.floor((date - START)/(86400000));
-                            const dateStr = date.toLocaleString('ru', { day: 'numeric', month: 'long' });
-                            openLetter(dateStr, quotes[diff % quotes.length]);
+                            openLetter(date.toLocaleString('ru', { day: 'numeric', month: 'long' }), quotes[diff % quotes.length]);
                         }
                     }
                     grid.appendChild(el);
@@ -1638,21 +1418,58 @@
                 ptr = new Date(y,m+1,1);
             }
         }
-
-        function addHeart(p) { if(p.querySelector('.mini-heart')) return; const h = document.createElement('span'); h.className = 'mini-heart'; h.innerText = '❤'; p.appendChild(h); }
-        function tick() {
-            const rem = END - new Date();
-            if(rem<=0) { document.getElementById('timer').innerText="МЫ ВМЕСТЕ!"; return; }
-            const d = Math.floor(rem/86400000);
-            const h = Math.floor((rem%86400000)/3600000);
-            const m = Math.floor((rem%3600000)/60000);
-            const s = Math.floor((rem%60000)/1000);
-            document.getElementById('timer').innerText = `${d}д ${("0"+h).slice(-2)}:${("0"+m).slice(-2)}:${("0"+s).slice(-2)}`;
+        function calcGraph() {
+            const el = document.getElementById('flight-viz'); if(!el) return;
+            const w = el.offsetWidth; const h = el.offsetHeight;
+            const d = `M 20 ${h-30} Q ${w/2} -20 ${w-20} ${h-50}`;
+            DOM.track.setAttribute('d', d); DOM.active.setAttribute('d', d);
+            len = DOM.track.getTotalLength();
+        }
+        function flightLoop() { 
+             const tot = END - START; const pass = new Date() - START;
+            let p = pass / tot; if(p<0) p=0; if(p>1) p=1;
+            if(DOM.active && DOM.track) {
+                DOM.active.style.strokeDasharray = len; DOM.active.style.strokeDashoffset = len * (1 - p);
+                const pt = DOM.track.getPointAtLength(len * p);
+                const next = DOM.track.getPointAtLength(Math.min(len, len*p + 2));
+                const ang = Math.atan2(next.y - pt.y, next.x - pt.x) * 180 / Math.PI;
+                const hover = Math.sin(Date.now() / 800) * 3;
+                DOM.plane.style.transform = `translate(${pt.x - 20}px, ${pt.y - 20 + hover}px) rotate(${ang}deg)`;
+                DOM.pct.innerText = (p * 100).toFixed(5) + '%'; DOM.pct.style.transform = `rotate(${-ang}deg)`;
+            }
+            requestAnimationFrame(flightLoop);
+        }
+        function runParticles() { 
+            const c = document.getElementById('canvas-fx'); const ctx = c.getContext('2d');
+            const rsz = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
+            window.addEventListener('resize', rsz); rsz();
+            let pts = []; for(let i=0; i<80; i++) pts.push({x: Math.random()*c.width, y: Math.random()*c.height, z: Math.random()*0.5 + 0.5, s: Math.random()*Math.PI*2, v: Math.random()*0.02});
+            function anim() {
+                ctx.clearRect(0,0,c.width,c.height); const m = state.settings.mode; const isDark = state.settings.dark;
+                pts.forEach(p => {
+                    p.y += p.z * (m==='rain' ? 12 : 1); p.x += Math.sin(p.y*0.003 + p.s)*0.5; p.s += p.v;
+                    if(p.y > c.height) { p.y = -20; p.x = Math.random()*c.width; }
+                    ctx.beginPath();
+                    if(m === 'snow') {
+                        const rad = p.z * 3; const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
+                        grad.addColorStop(0, `rgba(255,255,255,${0.8*p.z})`); grad.addColorStop(1, `rgba(255,255,255,0)`);
+                        ctx.fillStyle = grad; ctx.arc(p.x, p.y, rad, 0, Math.PI*2); ctx.fill();
+                    } else if(m === 'spring') {
+                        ctx.save(); ctx.translate(p.x, p.y); ctx.scale(Math.cos(p.s), 1); ctx.rotate(p.s * 0.5);
+                        ctx.fillStyle = `rgba(255, 192, 203, ${p.z})`;
+                        ctx.moveTo(0,0); ctx.bezierCurveTo(5, -5, 10, 0, 0, 10); ctx.bezierCurveTo(-10, 0, -5, -5, 0, 0); ctx.fill(); ctx.restore();
+                    } else if(m === 'rain') {
+                        const color = isDark ? `rgba(255,255,255,${0.3*p.z})` : `rgba(80, 100, 130, ${0.5*p.z})`;
+                        ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - 1, p.y + 15*p.z); ctx.stroke();
+                    }
+                }); requestAnimationFrame(anim);
+            } anim();
         }
         function openLetter(d, q) { document.getElementById('m-date').innerText = d; document.getElementById('m-text').innerText = q.t; document.getElementById('m-source').innerText = "— " + q.s; DOM.modal.classList.add('active'); }
         window.closeModal = () => DOM.modal.classList.remove('active');
         let tm;
         function showToast(t) { document.getElementById('toast-text').innerText = t; DOM.toast.classList.add('visible'); clearTimeout(tm); tm = setTimeout(()=>DOM.toast.classList.remove('visible'), 2500); }
+        function addHeart(p) { if(p.querySelector('.mini-heart')) return; const h = document.createElement('span'); h.className = 'mini-heart'; h.innerText = '❤'; p.appendChild(h); }
 
         init();
     </script>
