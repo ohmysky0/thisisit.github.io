@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Моя любимая Биба</title>
+    <title>Для моей Оли</title>
     
     <!-- iOS PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -281,25 +281,26 @@
         
         .pet-face { font-size: 50px; position: relative; z-index: 20; pointer-events: none; }
         
-        /* ACCESSORIES POSITIONING REWORKED - ABSOLUTE CONTAINER */
-        /* This container sits EXACTLY on top of the blob */
+        /* ACCESSORIES POSITIONING REWORKED V19 - Precise Layering */
         #pet-acc-root { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
         }
-        
-        .acc-item { position: absolute; display: flex; justify-content: center; width: 100%; }
+        .acc-item { position: absolute; display: flex; justify-content: center; width: 100%; transition: all 0.3s; }
 
-        /* Head (Hats): Top layer */
-        .acc-head { top: -50px; font-size: 55px; z-index: 30; text-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        /* Hats - Sit on top of head */
+        .acc-head { top: -45px; font-size: 60px; z-index: 30; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1)); }
         
-        /* Eyes (Glasses): Above face */
-        .acc-eyes { top: 30px; font-size: 45px; z-index: 25; }
+        /* Eyes - Sit on face */
+        .acc-eyes { top: 35px; font-size: 45px; z-index: 25; }
         
-        /* Neck (Scarves): Below face (z20), Above body (z10) */
-        .acc-neck { top: 75px; font-size: 55px; z-index: 15; text-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* Neck - Under face, over body */
+        .acc-neck { top: 80px; font-size: 55px; z-index: 15; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); }
         
-        /* Body (Clothes): Bottom layer */
-        .acc-body { bottom: -8px; font-size: 110px; z-index: 10; opacity: 1; }
+        /* Body - Main Outfit */
+        .acc-body { bottom: -10px; font-size: 115px; z-index: 10; opacity: 1; }
+        
+        /* Back - Wings etc (Behind blob) */
+        .acc-back { top: 10px; font-size: 100px; z-index: -1; opacity: 0.8; transform: scale(1.2); }
 
         .pet-zzz { position: absolute; top: -30px; right: -10px; font-size: 24px; font-weight: 800; color: var(--text-sub-light); opacity: 0; }
         .sleeping .pet-zzz { opacity: 1; animation: floatZ 2s infinite; }
@@ -704,12 +705,13 @@
     <div class="shop-modal" id="shop-modal">
         <div class="glass-panel" style="background: var(--card-light); width: 100%; max-width: 350px;">
             <div class="month-title">🛍️ Магазин <span style="margin-left:auto; font-size:14px;">💰 <span id="shop-coins">0</span></span></div>
+            <div style="font-size:10px; color:#666; margin-bottom:5px;">Инфляция цен (Ур.<span id="inf-lvl">1</span>): +<span id="inf-pct">0</span>%</div>
             <div class="shop-tabs">
                 <div class="shop-tab active" onclick="switchShop('food')">🍔 Еда</div>
                 <div class="shop-tab" onclick="switchShop('wear')">👗 Одежда</div>
                 <div class="shop-tab" onclick="switchShop('house')">🏠 Жилье</div>
                 <div class="shop-tab" onclick="switchShop('gadget')">🤖 Гаджеты</div>
-                <div class="shop-tab" onclick="switchShop('buff')">✨ Зелья</div>
+                <div class="shop-tab" onclick="switchShop('buff')">🧪 Зелья</div>
                 <div class="shop-tab" onclick="switchShop('upgrade')">⚡ Навыки</div>
             </div>
             <div class="shop-grid" id="shop-list"></div>
@@ -723,7 +725,7 @@
         const END = new Date(2026, 4, 12);
         const DATA_KEY = 'love_cal_v3_final_r1';
         const SETTINGS_KEY = 'love_cal_settings_v3_r1';
-        const PET_KEY = 'love_cal_pet_v3_final_r2'; // Version bump for reset/balance
+        const PET_KEY = 'love_cal_pet_v19_final'; // Hard reset for economy balance
 
         const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
         const HOLIDAYS = { '1-14': '💘', '1-23': '⭐', '2-8': '🌷', '4-1': '🎈', '4-9': '🎖️' };
@@ -858,77 +860,114 @@
                 autoLevel: 0,
                 hunger: 80, love: 80, energy: 100, hygiene: 100,
                 lastLogin: 0, streak: 0,
-                wear: null, house: null, inventory: [],
+                wear: null, house: {id:'box', rent:0, ico:'📦', mult:1}, inventory: [],
                 exp: 0, maxExp: 100, level: 1,
                 activeBuffs: [], gadgets: { feeder: 0, sleeper: 0, heater: 0, ac: 0 },
                 rentPaidMonth: -1, isSleeping: false,
                 stocks: 0, stockBank: 0, bankRate: 5,
-                outfit: { head:null, eyes:null, neck:null, body:null },
+                outfit: { head:null, eyes:null, neck:null, body:null, back:null },
                 lastDecay: Date.now()
             }
         };
-        // Migration
-        if(state.pet.outfit === undefined) { state.pet.outfit = { head:null, eyes:null, neck:null, body:null }; if(state.pet.wear && state.pet.wear.pos) state.pet.outfit[state.pet.wear.pos] = state.pet.wear; state.pet.wear = null; }
-        if(state.pet.bankRate === undefined) state.pet.bankRate = 5;
-        if(state.pet.lastDecay === undefined) state.pet.lastDecay = Date.now();
+        // Migration fix
+        if(state.pet.outfit === undefined) state.pet.outfit = { head:null, eyes:null, neck:null, body:null, back:null };
+        if(!state.pet.house.mult) state.pet.house.mult = 1;
 
-        // BALANCED FORMULAS V17 (Long term engagement)
-        const getClickPower = () => Math.floor(1 * Math.pow(1.2, state.pet.clickLevel));
-        const getAutoIncome = () => state.pet.autoLevel === 0 ? 0 : Math.floor(1 * Math.pow(1.15, state.pet.autoLevel));
+        // === ECONOMY FORMULAS ===
+        const getInflationMultiplier = () => 1 + ((state.pet.level - 1) * 0.07); // 7% price increase per level
         
-        // EXPONENTIAL COST GROWTH
+        // Click Power: Base + Happiness Bonus (Love/20)
+        const getClickPower = () => {
+            const base = Math.floor(1 * Math.pow(1.2, state.pet.clickLevel));
+            const happinessBonus = 1 + (state.pet.love / 200); // Up to 1.5x at max love
+            return Math.floor(base * happinessBonus);
+        }
+        
+        // Auto Income: Base * House Multiplier * Buffs
+        const getAutoIncome = () => {
+             if(state.pet.autoLevel === 0) return 0;
+             const base = Math.floor(1 * Math.pow(1.15, state.pet.autoLevel));
+             const houseMult = state.pet.house.mult || 1;
+             return Math.floor(base * houseMult * 10) / 10; // Keep 1 decimal
+        }
+
         const getClickUpgradeCost = () => Math.floor(100 * Math.pow(1.6, state.pet.clickLevel));
         const getAutoUpgradeCost = () => Math.floor(200 * Math.pow(1.6, state.pet.autoLevel));
 
-        // --- SHOP DATA ---
+        // --- SHOP DATA (MEGA EXPANSION) ---
         const SHOP = {
             food: [
-                {id:'f1',name:'Конфетка',ico:'🍬',cost:5,effect:'h+5'},
-                {id:'f2',name:'Яблоко',ico:'🍎',cost:15,effect:'h+10'},
-                {id:'f3',name:'Банан',ico:'🍌',cost:20,effect:'h+12'},
-                {id:'f4',name:'Круассан',ico:'🥐',cost:50,effect:'h+20'},
-                {id:'f5',name:'Яичница',ico:'🍳',cost:100,effect:'h+30'},
-                {id:'f6',name:'Бургер',ico:'🍔',cost:250,effect:'h+50'},
-                {id:'f7',name:'Пицца',ico:'🍕',cost:500,effect:'h+70'},
-                {id:'f8',name:'Суши',ico:'🍣',cost:1000,effect:'h+50 l+20'},
-                {id:'f9',name:'Стейк',ico:'🥩',cost:2500,effect:'h+90 e+20'},
-                {id:'f10',name:'Лобстер',ico:'🦞',cost:5000,effect:'h+100 l+50'},
-                {id:'f11',name:'Золотой Стейк',ico:'📀',cost:50000,effect:'h+100 e+100 l+100'},
-                {id:'f12',name:'Кофе',ico:'☕',cost:150,effect:'e+40'},
-                {id:'f13',name:'Энергетик',ico:'🔋',cost:300,effect:'e+60'}
+                {id:'f1',name:'Сухарик',ico:'🍞',cost:10,effect:'h+2'},
+                {id:'f2',name:'Конфетка',ico:'🍬',cost:20,effect:'h+5'},
+                {id:'f3',name:'Яблоко',ico:'🍎',cost:40,effect:'h+10'},
+                {id:'f4',name:'Банан',ico:'🍌',cost:50,effect:'h+12'},
+                {id:'f5',name:'Пончик',ico:'🍩',cost:100,effect:'h+15 l+2'},
+                {id:'f6',name:'Круассан',ico:'🥐',cost:150,effect:'h+20'},
+                {id:'f7',name:'Кофе',ico:'☕',cost:200,effect:'e+30'},
+                {id:'f8',name:'Мороженое',ico:'🍦',cost:300,effect:'h+15 l+10'},
+                {id:'f9',name:'Яичница',ico:'🍳',cost:500,effect:'h+35'},
+                {id:'f10',name:'Бургер',ico:'🍔',cost:800,effect:'h+50'},
+                {id:'f11',name:'Пицца',ico:'🍕',cost:1200,effect:'h+60 l+5'},
+                {id:'f12',name:'Суши',ico:'🍣',cost:2500,effect:'h+50 l+25'},
+                {id:'f13',name:'Рамен',ico:'🍜',cost:3000,effect:'h+70 e+10'},
+                {id:'f14',name:'Стейк',ico:'🥩',cost:5000,effect:'h+90 e+20'},
+                {id:'f15',name:'Лобстер',ico:'🦞',cost:10000,effect:'h+100 l+50'},
+                {id:'f16',name:'Устрицы',ico:'🦪',cost:15000,effect:'h+50 l+80'},
+                {id:'f17',name:'Черная Икра',ico:'🌑',cost:30000,effect:'h+80 l+100'},
+                {id:'f18',name:'Трюфель',ico:'🍄',cost:50000,effect:'h+100 e+50 l+50'},
+                {id:'f19',name:'Золотой Стейк',ico:'📀',cost:100000,effect:'h+100 e+100 l+100'},
+                {id:'f20',name:'Ужин с Маском',ico:'🚀',cost:500000,effect:'h+100 e+100 l+100 exp+500'}
             ],
             wear: [
                 {id:'w1',name:'Бантик',ico:'🎀',cost:500,pos:'head'},
-                {id:'w2',name:'Очки',ico:'👓',cost:1000,pos:'eyes'},
-                {id:'w3',name:'Шарф',ico:'🧣',cost:1500,pos:'neck'},
-                {id:'w4',name:'Футболка',ico:'👕',cost:2000,pos:'body'},
-                {id:'w5',name:'Кепка',ico:'🧢',cost:2500,pos:'head'},
-                {id:'w6',name:'Платье',ico:'👗',cost:10000,pos:'body'},
-                {id:'w7',name:'Корона',ico:'👑',cost:50000,pos:'head'},
-                {id:'w8',name:'Кольцо',ico:'💍',cost:100000,pos:'body'},
-                {id:'w9',name:'Крылья',ico:'🧚',cost:250000,pos:'body'},
-                {id:'w10',name:'Плащ',ico:'🧛',cost:150000,pos:'body'}
+                {id:'w2',name:'Очки',ico:'👓',cost:1500,pos:'eyes'},
+                {id:'w3',name:'Шарф',ico:'🧣',cost:2500,pos:'neck'},
+                {id:'w4',name:'Кепка',ico:'🧢',cost:5000,pos:'head'},
+                {id:'w5',name:'Футболка',ico:'👕',cost:5000,pos:'body'},
+                {id:'w6',name:'Темные Очки',ico:'🕶️',cost:8000,pos:'eyes'},
+                {id:'w7',name:'Бабочка',ico:'🎀',cost:10000,pos:'neck'},
+                {id:'w8',name:'Платье',ico:'👗',cost:25000,pos:'body'},
+                {id:'w9',name:'Цилиндр',ico:'🎩',cost:50000,pos:'head'},
+                {id:'w10',name:'Монокль',ico:'🧐',cost:75000,pos:'eyes'},
+                {id:'w11',name:'Цепь',ico:'⛓️',cost:100000,pos:'neck'},
+                {id:'w12',name:'Смокинг',ico:'🤵',cost:150000,pos:'body'},
+                {id:'w13',name:'Корона',ico:'👑',cost:500000,pos:'head'},
+                {id:'w14',name:'Мантия',ico:'🧛',cost:750000,pos:'back'},
+                {id:'w15',name:'Крылья Феи',ico:'🧚',cost:1000000,pos:'back'},
+                {id:'w16',name:'Рюкзак',ico:'🎒',cost:200000,pos:'back'},
+                {id:'w17',name:'Наушники',ico:'🎧',cost:300000,pos:'head'},
+                {id:'w18',name:'Маска',ico:'🎭',cost:400000,pos:'eyes'},
+                {id:'w19',name:'Алмаз',ico:'💎',cost:2000000,pos:'neck'},
+                {id:'w20',name:'Скафандр',ico:'👨‍🚀',cost:5000000,pos:'body'}
             ],
             house: [
-                {id:'h1',name:'Коробка',ico:'📦',cost:0,rent:0},
-                {id:'h2',name:'Коврик',ico:'🧘',cost:1000,rent:0},
-                {id:'h3',name:'Палатка',ico:'⛺',cost:5000,rent:0},
-                {id:'h4',name:'Квартира',ico:'🏢',cost:25000,rent:500},
-                {id:'h5',name:'Дом',ico:'🏡',cost:100000,rent:0},
-                {id:'h6',name:'Вилла',ico:'⛲',cost:500000,rent:5000},
-                {id:'h7',name:'Замок',ico:'🏰',cost:2500000,rent:10000},
-                {id:'h8',name:'Остров',ico:'🏝️',cost:10000000,rent:0},
-                {id:'h9',name:'Марс',ico:'🪐',cost:50000000,rent:0}
+                {id:'h1',name:'Коробка',ico:'📦',cost:0,rent:0,mult:1.0},
+                {id:'h2',name:'Коврик',ico:'🧘',cost:5000,rent:0,mult:1.02},
+                {id:'h3',name:'Палатка',ico:'⛺',cost:15000,rent:0,mult:1.05},
+                {id:'h4',name:'Шалаш',ico:'🪵',cost:50000,rent:0,mult:1.08},
+                {id:'h5',name:'Комната',ico:'🚪',cost:100000,rent:1000,mult:1.15},
+                {id:'h6',name:'Студия',ico:'🏢',cost:250000,rent:5000,mult:1.25},
+                {id:'h7',name:'Квартира',ico:'🌇',cost:500000,rent:15000,mult:1.4},
+                {id:'h8',name:'Таунхаус',ico:'🏘️',cost:1500000,rent:0,mult:1.6},
+                {id:'h9',name:'Коттедж',ico:'🏡',cost:3000000,rent:0,mult:1.8},
+                {id:'h10',name:'Вилла',ico:'⛲',cost:10000000,rent:50000,mult:2.5},
+                {id:'h11',name:'Пентхаус',ico:'🌃',cost:25000000,rent:0,mult:3.0},
+                {id:'h12',name:'Замок',ico:'🏰',cost:50000000,rent:0,mult:3.5},
+                {id:'h13',name:'Остров',ico:'🏝️',cost:100000000,rent:0,mult:4.0},
+                {id:'h14',name:'Марс',ico:'🪐',cost:500000000,rent:0,mult:5.0}
             ],
             gadget: [
-                {id:'feeder',name:'Кормушка',ico:'🥣',cost:5000,dur:7,desc:'Еда 7дн'},
-                {id:'sleeper',name:'Люлька',ico:'🛌',cost:5000,dur:7,desc:'Сон 7дн'},
-                {id:'heater',name:'Обогреватель',ico:'🔥',cost:3000,dur:3,desc:'Тепло 3дн'},
-                {id:'ac',name:'Кондиционер',ico:'❄️',cost:3000,dur:3,desc:'Холод 3дн'}
+                {id:'feeder',name:'Авто-Корм',ico:'🥣',cost:50000,dur:7,desc:'Еда 7дн'},
+                {id:'sleeper',name:'Авто-Сон',ico:'🛌',cost:50000,dur:7,desc:'Сон 7дн'},
+                {id:'heater',name:'Обогреватель',ico:'🔥',cost:30000,dur:3,desc:'Тепло 3дн'},
+                {id:'ac',name:'Кондиционер',ico:'❄️',cost:30000,dur:3,desc:'Холод 3дн'}
             ],
             buff: [
-                {id:'b1',name:'Зелье Скорости',ico:'🧪',cost:500,val:2.0,dur:60,desc:'x2 (1мин)'},
-                {id:'b2',name:'Эликсир Любви',ico:'💗',cost:5000,val:5.0,dur:300,desc:'x5 (5мин)'}
+                {id:'p_energy',name:'Энергетик XL',ico:'⚡',cost:1000,type:'instant',effect:'e+100',desc:'Макс Энергия'},
+                {id:'p_heal',name:'Аптечка',ico:'💊',cost:2000,type:'instant',effect:'h+100 l+50',desc:'Здоровье'},
+                {id:'p_love',name:'Духи',ico:'🧴',cost:5000,type:'instant',effect:'l+100',desc:'Макс Любовь'},
+                {id:'b_speed',name:'Зелье Скорости',ico:'🧪',cost:10000,type:'buff',val:2.0,dur:120,desc:'x2 Доход (2мин)'},
+                {id:'b_magnet',name:'Магнит Монет',ico:'🧲',cost:50000,type:'buff',val:5.0,dur:300,desc:'x5 Доход (5мин)'}
             ]
         };
 
@@ -1336,7 +1375,6 @@
                 Object.values(state.pet.outfit).forEach(item => {
                     if(item) {
                         const ac = document.createElement('div');
-                        // No extra classes, just item specific one
                         ac.className = `acc-item acc-${item.pos || 'body'}`;
                         ac.innerText = item.ico;
                         accRoot.appendChild(ac);
@@ -1431,6 +1469,11 @@
         window.switchShop = (t) => {
             curTab = t; document.querySelectorAll('.shop-tab').forEach(el => el.classList.remove('active'));
             event.target.classList.add('active');
+            
+            const infMult = getInflationMultiplier();
+            document.getElementById('inf-lvl').innerText = state.pet.level;
+            document.getElementById('inf-pct').innerText = Math.round((infMult-1)*100);
+            
             const list = document.getElementById('shop-list'); list.innerHTML = '';
             
             let items = [];
@@ -1458,6 +1501,13 @@
             items.forEach(i => {
                 const el = document.createElement('div');
                 const owned = state.pet.inventory.includes(i.id) || state.pet.inventory.includes('house_'+i.id);
+                
+                // INFLATION LOGIC: Price increases by 7% per level for consumables
+                let finalCost = i.cost;
+                if(t === 'food' || t === 'buff') {
+                    finalCost = Math.floor(i.cost * infMult);
+                }
+
                 // Check if equipped in slot
                 let equipped = false;
                 if(t === 'wear') equipped = state.pet.outfit[i.pos] && state.pet.outfit[i.pos].id === i.id;
@@ -1465,19 +1515,27 @@
 
                 el.className = `shop-item ${owned && t!=='food' && t!=='buff' ? 'owned' : ''} ${equipped ? 'selected' : ''}`;
                 
-                let txt = i.cost + ' 💰';
+                let txt = finalCost + ' 💰';
                 if(t === 'wear') txt = equipped ? 'Снять' : (owned ? 'Надеть' : txt);
                 if(t === 'house') txt = equipped ? 'Живу' : (owned && i.rent===0 ? 'Переехать' : (i.rent>0 ? `Аренда ${i.cost}` : txt));
-                if(t === 'gadget' && state.pet.gadgets[i.id] > Date.now()) txt = "Активно";
-                if(t === 'upgrade') txt = `Улучшить: ${i.cost} 💰`;
+                if(t === 'gadget') {
+                    if(state.pet.gadgets[i.id] > Date.now()) txt = "Активно";
+                    else txt = finalCost + ' 💰';
+                }
+                if(t === 'upgrade') txt = `Улучшить: ${i.cost} 💰`; // Upgrades have their own math
 
-                el.innerHTML = `<div style="font-size:30px">${i.ico}</div><div style="font-size:12px;font-weight:700">${i.name}</div><div class="shop-desc">${i.desc || ''}</div><div class="shop-price">${txt}</div>`;
-                el.onclick = () => buyItem(i, t);
+                // House description with multiplier
+                let desc = i.desc || '';
+                if(t === 'house' && i.mult > 1) desc = `Комфорт: +${Math.round((i.mult-1)*100)}% к Доходу`;
+                else if(t==='house') desc = 'Базовый комфорт';
+
+                el.innerHTML = `<div style="font-size:30px">${i.ico}</div><div style="font-size:12px;font-weight:700">${i.name}</div><div class="shop-desc">${desc}</div><div class="shop-price">${txt}</div>`;
+                el.onclick = () => buyItem(i, t, finalCost);
                 list.appendChild(el);
             });
         };
 
-        function buyItem(i, t) {
+        function buyItem(i, t, realCost) {
             // MULTI SLOT LOGIC FOR WEAR
             if(t==='wear') {
                 const slot = i.pos || 'body';
@@ -1488,11 +1546,11 @@
                     return;
                 }
                 // Check Cost
-                if(state.pet.coins < i.cost && !state.pet.inventory.includes(i.id)) { showToast("Мало монет!"); return; }
+                if(state.pet.coins < realCost && !state.pet.inventory.includes(i.id)) { showToast("Мало монет!"); return; }
                 
                 // Buy if needed
                 if(!state.pet.inventory.includes(i.id)) { 
-                    state.pet.coins -= i.cost; 
+                    state.pet.coins -= realCost; 
                     state.pet.inventory.push(i.id); 
                 }
                 
@@ -1504,8 +1562,11 @@
             }
 
             if(t==='house' && state.pet.house && state.pet.house.id===i.id) return; 
+            
+            // Check funds (upgrade uses i.cost, others realCost)
+            const c = (t==='upgrade') ? i.cost : realCost;
 
-            if(state.pet.coins < i.cost && !state.pet.inventory.includes(i.id) && !state.pet.inventory.includes('house_'+i.id)) { showToast("Мало монет!"); return; }
+            if(state.pet.coins < c && !state.pet.inventory.includes(i.id) && !state.pet.inventory.includes('house_'+i.id)) { showToast("Мало монет!"); return; }
 
             if(t==='food') {
                 const parts = i.effect.split(' ');
@@ -1514,30 +1575,42 @@
                     if(p.includes('h+')) state.pet.hunger = Math.min(100, state.pet.hunger+v);
                     if(p.includes('e+')) state.pet.energy = Math.min(100, state.pet.energy+v);
                     if(p.includes('l+')) state.pet.love = Math.min(100, state.pet.love+v);
+                    if(p.includes('exp+')) addExp(v);
                 });
                 showToast("Вкусно!"); addExp(5);
-                state.pet.coins -= i.cost;
+                state.pet.coins -= c;
             } else if (t==='house') {
                 const hid = 'house_'+i.id;
                 if(i.rent > 0) { 
-                     state.pet.coins -= i.cost; state.pet.house = i; state.pet.rentPaidMonth = new Date().getMonth(); showToast("С новосельем!");
+                     state.pet.coins -= c; state.pet.house = i; state.pet.rentPaidMonth = new Date().getMonth(); showToast("С новосельем!");
                 } else { 
-                    if(!state.pet.inventory.includes(hid)) { state.pet.coins-=i.cost; state.pet.inventory.push(hid); }
+                    if(!state.pet.inventory.includes(hid)) { state.pet.coins-=c; state.pet.inventory.push(hid); }
                     state.pet.house = i; showToast("Дом милый дом!");
                 }
                 checkRentStatus();
             } else if (t==='gadget') {
                 if(state.pet.gadgets[i.id]>Date.now()) return;
-                state.pet.coins-=i.cost; state.pet.gadgets[i.id] = Date.now() + (i.dur*86400000); showToast("Работает!");
+                state.pet.coins-=c; state.pet.gadgets[i.id] = Date.now() + (i.dur*86400000); showToast("Работает!");
             } else if (t==='upgrade') {
-                state.pet.coins-=i.cost; 
+                state.pet.coins-=c; 
                 if(i.type==='u_click') state.pet.clickLevel++;
                 if(i.type==='u_auto') state.pet.autoLevel++;
                 showToast("Улучшено! 💪");
             } else if (t==='buff') {
-                 state.pet.coins-=i.cost;
-                 state.pet.activeBuffs.push({id:i.id, val:i.val, end:Date.now()+(i.dur*1000), ico:i.ico});
-                 showToast("Магия! ✨");
+                 state.pet.coins-=c;
+                 if(i.type === 'instant') {
+                     const parts = i.effect.split(' ');
+                     parts.forEach(p => {
+                        const v = parseInt(p.split('+')[1]);
+                        if(p.includes('h+')) state.pet.hunger = Math.min(100, state.pet.hunger+v);
+                        if(p.includes('e+')) state.pet.energy = Math.min(100, state.pet.energy+v);
+                        if(p.includes('l+')) state.pet.love = Math.min(100, state.pet.love+v);
+                     });
+                     showToast("Мгновенный эффект! ⚡");
+                 } else {
+                     state.pet.activeBuffs.push({id:i.id, val:i.val, end:Date.now()+(i.dur*1000), ico:i.ico});
+                     showToast("Магия! ✨");
+                 }
             }
             savePet(); switchShop(t); updatePetUI();
         }
