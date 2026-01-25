@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Для моей Оли</title>
+    <title>Моя любимая Биба</title>
     
     <!-- iOS PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,14 +14,14 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@600;700;800&family=SF+Mono:wght@400&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@600;700;800;900&family=SF+Mono:wght@500&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --card-light: rgba(255, 255, 255, 0.75);
             --card-border-light: rgba(255, 255, 255, 0.6);
             --text-main-light: #1d1d1f;
-            --text-sub-light: #515154;
+            --text-sub-light: #424245;
             
             --card-dark: rgba(30, 30, 35, 0.9);
             --card-border-dark: rgba(255, 255, 255, 0.15);
@@ -141,7 +141,7 @@
 
         header { text-align: center; margin-bottom: 30px; }
         h1 {
-            font-family: 'Caveat', cursive; font-size: 56px; margin: 0; line-height: 0.9;
+            font-family: 'Caveat', cursive; font-size: 60px; margin: 0; line-height: 0.9;
             color: var(--text-main-light); text-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         .dark-mode h1 { color: var(--text-main-dark); text-shadow: 0 2px 20px rgba(0,0,0,0.8); }
@@ -161,8 +161,8 @@
 
         /* --- FLIGHT --- */
         .flight-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
-        .city-code { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
-        .city-name { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-sub-light); }
+        .city-code { font-size: 32px; font-weight: 900; line-height: 1; letter-spacing: -1px; }
+        .city-name { font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--text-sub-light); }
         .dark-mode .city-name { color: var(--text-sub-dark); }
         #flight-viz { width: 100%; height: 130px; position: relative; }
         .track-path { fill: none; stroke: var(--text-sub-light); stroke-width: 2; stroke-dasharray: 6 6; opacity: 0.3; }
@@ -182,17 +182,17 @@
 
         /* TIMER & CALENDAR */
         .countdown {
-            text-align: center; font-family: 'Roboto Mono', monospace; font-size: 30px; font-weight: 700;
+            text-align: center; font-family: 'Roboto Mono', monospace; font-size: 32px; font-weight: 700;
             margin-top: 15px; color: var(--text-main-light); letter-spacing: -1px;
         }
         .dark-mode .countdown { color: var(--text-main-dark); }
-        .timer-caption { text-align: center; font-size: 13px; color: var(--text-sub-light); margin-bottom: 5px; font-weight: 600; }
+        .timer-caption { text-align: center; font-size: 13px; color: var(--text-sub-light); margin-bottom: 5px; font-weight: 700; }
         .dark-mode .timer-caption { color: var(--text-sub-dark); }
-        .dates-meta { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: var(--text-sub-light); opacity: 0.6; margin-top: 20px; }
+        .dates-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--text-sub-light); opacity: 0.6; margin-top: 20px; }
         .dark-mode .dates-meta { color: var(--text-sub-dark); opacity: 0.8; }
 
         /* CALENDAR GRID */
-        .month-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .month-title { font-size: 20px; font-weight: 900; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
         .week-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 8px; }
         .week-day { text-align: center; font-size: 11px; font-weight: 800; color: var(--text-sub-light); opacity: 0.5; }
         .dark-mode .week-day { color: var(--text-sub-dark); }
@@ -200,7 +200,7 @@
         .day-item {
             aspect-ratio: 1; border-radius: 14px; background: rgba(0,0,0,0.03);
             display: flex; justify-content: center; align-items: center;
-            font-size: 15px; font-weight: 800; color: var(--text-sub-light);
+            font-size: 16px; font-weight: 800; color: var(--text-sub-light);
             position: relative; cursor: pointer; transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .dark-mode .day-item { background: rgba(255,255,255,0.06); color: var(--text-main-dark); }
@@ -229,7 +229,7 @@
         }
         .dark-mode .letter-box { background: #1c1c1e; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
         .modal-layer.active .letter-box { transform: scale(1) translateY(0); }
-        .quote-text { font-family: 'Caveat', cursive; font-size: 32px; line-height: 1.3; margin: 24px 0; color: #1d1d1f; }
+        .quote-text { font-family: 'Caveat', cursive; font-size: 34px; line-height: 1.3; margin: 24px 0; color: #1d1d1f; }
         .dark-mode .quote-text { color: #f5f5f7; }
 
         .action-btn {
@@ -261,11 +261,11 @@
         }
         .rent-info-text {
             position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
-            font-size: 11px; font-weight: 800; color: var(--text-sub-light); opacity: 0.8; z-index: 10;
-            background: rgba(255,255,255,0.5); padding: 4px 10px; border-radius: 10px; backdrop-filter: blur(5px);
-            display: none; white-space: nowrap;
+            font-size: 12px; font-weight: 800; color: var(--text-sub-light); opacity: 0.9; z-index: 10;
+            background: rgba(255,255,255,0.6); padding: 4px 12px; border-radius: 12px; backdrop-filter: blur(5px);
+            display: none; white-space: nowrap; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .dark-mode .rent-info-text { color: var(--text-sub-dark); background: rgba(0,0,0,0.5); }
+        .dark-mode .rent-info-text { color: var(--text-sub-dark); background: rgba(0,0,0,0.6); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
 
         .pet-blob {
             width: 140px; height: 130px; background: #fff; border-radius: 50% 50% 45% 45%;
@@ -274,49 +274,64 @@
             cursor: pointer; z-index: 2;
         }
         .pet-blob.sleeping { animation: breathe 6s infinite ease-in-out; opacity: 0.9; }
-        .pet-blob.dirty { filter: sepia(0.6) brightness(0.9); }
+        .pet-blob.sad { filter: grayscale(0.5) contrast(0.9); animation: sadShake 3s infinite; }
         .pet-blob.walking { animation: walk 4s infinite linear; }
         .pet-blob:active { transform: scale(0.9) translateY(5px); }
         .dark-mode .pet-blob { background: #f0f0f5; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         
-        .pet-face { font-size: 50px; position: relative; z-index: 2; pointer-events: none; }
+        .pet-face { font-size: 50px; position: relative; z-index: 20; pointer-events: none; }
         
-        /* Accessories Positioning FIXED V2 */
-        .pet-acc { position: absolute; pointer-events: none; z-index: 3; left: 50%; transform: translateX(-50%); }
-        .acc-head { top: -35px; font-size: 35px; } /* Improved: sits ON head */
-        .acc-eyes { top: 30px; font-size: 40px; } /* Improved: Aligned with standard face */
-        .acc-body { bottom: 5px; font-size: 55px; } /* Improved: Covers body better */
-        .acc-neck { bottom: 20px; font-size: 45px; z-index: 4; } /* Improved: Sits around neck area */
+        /* ACCESSORIES POSITIONING REWORKED - ABSOLUTE CONTAINER */
+        /* This container sits EXACTLY on top of the blob */
+        #pet-acc-root { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+        }
+        
+        .acc-item { position: absolute; display: flex; justify-content: center; width: 100%; }
+
+        /* Head (Hats): Top layer */
+        .acc-head { top: -50px; font-size: 55px; z-index: 30; text-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        
+        /* Eyes (Glasses): Above face */
+        .acc-eyes { top: 30px; font-size: 45px; z-index: 25; }
+        
+        /* Neck (Scarves): Below face (z20), Above body (z10) */
+        .acc-neck { top: 75px; font-size: 55px; z-index: 15; text-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        /* Body (Clothes): Bottom layer */
+        .acc-body { bottom: -8px; font-size: 110px; z-index: 10; opacity: 1; }
 
         .pet-zzz { position: absolute; top: -30px; right: -10px; font-size: 24px; font-weight: 800; color: var(--text-sub-light); opacity: 0; }
         .sleeping .pet-zzz { opacity: 1; animation: floatZ 2s infinite; }
 
         @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03) translateY(-3px); } }
+        @keyframes sadShake { 0%,100% {transform: rotate(0);} 25% {transform: rotate(-3deg);} 75% {transform: rotate(3deg);} }
         @keyframes walk { 0% { transform: translateX(0) scale(1) rotate(0); } 25% { transform: translateX(30px) scale(0.95) rotate(5deg); } 50% { transform: translateX(0) scale(1) rotate(0); } 75% { transform: translateX(-30px) scale(0.95) rotate(-5deg); } 100% { transform: translateX(0) scale(1) rotate(0); } }
         @keyframes floatZ { 0% { transform: translate(0,0); opacity:0; } 50% { opacity:1; } 100% { transform: translate(10px, -20px); opacity:0; } }
 
         .click-float {
             position: absolute; font-weight: 800; font-size: 20px; color: #FFD700; pointer-events: none; z-index: 100;
             text-shadow: 0 2px 5px rgba(0,0,0,0.2); animation: floatUp 0.8s ease-out forwards;
+            white-space: pre; text-align: center; line-height: 1.2;
         }
-        @keyframes floatUp { to { transform: translateY(-50px); opacity: 0; } }
+        @keyframes floatUp { to { transform: translateY(-70px); opacity: 0; } }
         
         .stat-bars { width: 100%; margin-top: 20px; display: flex; gap: 8px; justify-content: center; z-index: 5; position: relative; }
         .stat-col { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
         .stat-icon { font-size: 14px; }
-        .stat-num { font-size: 9px; font-weight: 800; opacity: 0.6; font-family: 'SF Mono', monospace; margin-top: 2px; }
+        .stat-num { font-size: 10px; font-weight: 800; opacity: 0.6; font-family: 'SF Mono', monospace; margin-top: 2px; }
         
-        /* Fixed Progress Bar Visuals */
         .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; position: relative; }
         .dark-mode .progress-bar { background: rgba(255,255,255,0.15); }
         .progress-fill { height: 100%; width: 0%; transition: width 0.5s ease-out; display: block; }
+        .progress-fill.danger { background: #ff3b30 !important; animation: pulse 0.5s infinite alternate; }
 
-        .game-info { display: flex; justify-content: space-between; width: 100%; margin-bottom: 5px; font-size: 11px; font-weight: 700; color: var(--text-sub-light); }
+        .game-info { display: flex; justify-content: space-between; width: 100%; margin-bottom: 5px; font-size: 12px; font-weight: 800; color: var(--text-sub-light); }
         .streak-fire { color: #FF9500; }
 
         .pet-thought {
             background: rgba(255,255,255,0.8); padding: 10px 15px; border-radius: 15px;
-            position: absolute; top: 10px; font-size: 12px; font-weight: 700; color: #000;
+            position: absolute; top: 10px; font-size: 13px; font-weight: 800; color: #000;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); opacity: 0; transform: translateY(10px);
             transition: all 0.3s; pointer-events: none; white-space: nowrap; z-index: 10;
         }
@@ -340,7 +355,6 @@
             display: none; align-items: center; justify-content: center; padding: 20px;
         }
         .shop-modal.active { display: flex; }
-        /* SOLID BACKGROUND FOR SHOP IN DARK MODE */
         .dark-mode .shop-modal .glass-panel { background: #1c1c1e; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 10px 50px rgba(0,0,0,0.5); }
         
         .shop-tabs { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
@@ -358,14 +372,6 @@
         .shop-price { font-size: 11px; font-weight: 800; color: var(--holiday-color); }
         .shop-desc { font-size: 9px; opacity: 0.7; line-height: 1.1; margin-bottom: 4px; }
 
-        /* --- DEATH --- */
-        .dead-filter { filter: grayscale(100%) contrast(1.2); }
-        .death-overlay {
-            position: absolute; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.7); z-index: 50; display: none;
-            flex-direction: column; align-items: center; justify-content: center;
-            border-radius: 24px; color: #fff;
-        }
         .sleep-overlay {
             position: absolute; top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,10,0.6); z-index: 40; pointer-events: none;
@@ -386,7 +392,6 @@
             width: 100%; max-width: 350px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex; flex-direction: column; align-items: center;
         }
-        
         .wheel-container {
             width: 200px; height: 200px; border-radius: 50%; border: 8px solid #d4af37;
             position: relative; overflow: hidden; margin: 20px 0;
@@ -394,23 +399,7 @@
         }
         .wheel {
             width: 100%; height: 100%; border-radius: 50%;
-            background: conic-gradient(
-                #2ecc71 0deg 24deg,   /* 0 Green */
-                #e74c3c 24deg 48deg,  /* Red */
-                #333 48deg 72deg,     /* Black */
-                #e74c3c 72deg 96deg,  /* Red */
-                #333 96deg 120deg,    /* Black */
-                #e74c3c 120deg 144deg, /* Red */
-                #333 144deg 168deg,   /* Black */
-                #e74c3c 168deg 192deg, /* Red */
-                #333 192deg 216deg,   /* Black */
-                #e74c3c 216deg 240deg, /* Red */
-                #333 240deg 264deg,   /* Black */
-                #e74c3c 264deg 288deg, /* Red */
-                #333 288deg 312deg,   /* Black */
-                #e74c3c 312deg 336deg, /* Red */
-                #333 336deg 360deg    /* Black */
-            );
+            background: conic-gradient(#2ecc71 0deg 24deg, #e74c3c 24deg 48deg, #333 48deg 72deg, #e74c3c 72deg 96deg, #333 96deg 120deg, #e74c3c 120deg 144deg, #333 144deg 168deg, #e74c3c 168deg 192deg, #333 192deg 216deg, #e74c3c 216deg 240deg, #333 240deg 264deg, #e74c3c 264deg 288deg, #333 288deg 312deg, #e74c3c 312deg 336deg, #333 336deg 360deg);
             transition: transform 3s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
         .wheel-arrow {
@@ -418,28 +407,68 @@
             width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent;
             border-top: 20px solid #fff; z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
         }
-
         .roulette-opts { display: flex; gap: 10px; justify-content: center; margin-top: 20px; width: 100%; }
         .r-btn { border: none; padding: 15px; border-radius: 10px; color: #fff; font-weight: 700; flex: 1; cursor: pointer; transition: transform 0.2s; }
         .r-btn:active { transform: scale(0.95); }
         .r-red { background: #d91e18; }
         .r-black { background: #111; border: 1px solid #444; }
         .r-green { background: #2ecc71; }
-        .casino-input { 
-            padding: 10px; border-radius: 12px; border: none; width: 150px; text-align: center;
-            font-size: 18px; font-weight: 700; margin-bottom: 20px;
-        }
+        .casino-input { padding: 10px; border-radius: 12px; border: none; width: 150px; text-align: center; font-size: 18px; font-weight: 700; margin-bottom: 20px; }
 
         .weather-badge {
             position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.7);
             padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: 700; z-index: 20;
             display: flex; align-items: center; gap: 5px;
         }
-        .rent-warn { color: #ff3b30; animation: pulse 1s infinite; }
         
-        .real-clock {
-            font-size: 14px; font-weight: 700; color: var(--text-sub-light); margin-bottom: 5px; opacity: 0.8;
+        .real-clock { font-size: 14px; font-weight: 800; color: var(--text-sub-light); margin-bottom: 5px; opacity: 0.8; }
+
+        /* --- TRADING GAME (REPLACES BASKETBALL) --- */
+        #view-trading {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #121212; z-index: 3000; display: none;
+            flex-direction: column; align-items: center; padding-top: 30px; color: #fff;
         }
+        #view-trading.active { display: flex; }
+        .trading-card {
+            background: #1e1e1e; width: 90%; max-width: 350px; padding: 20px;
+            border-radius: 20px; border: 1px solid #333; display: flex; flex-direction: column; gap: 15px;
+            overflow-y: auto; max-height: 85vh; /* Scroll Fix */
+        }
+        .chart-container { width: 100%; height: 150px; background: #000; border-radius: 10px; position: relative; overflow: hidden; flex-shrink: 0; }
+        .trade-stat { display: flex; justify-content: space-between; font-size: 14px; color: #aaa; font-weight: 700; }
+        .trade-val { color: #fff; font-size: 18px; font-family: 'SF Mono', monospace; }
+        .trade-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .t-btn { flex: 1; padding: 15px; border-radius: 12px; font-weight: 800; border: none; font-size: 14px; cursor: pointer; color: #fff; transition: transform 0.1s; }
+        .t-btn:active { transform: scale(0.95); }
+        .t-buy { background: #30d158; }
+        .t-sell { background: #ff453a; }
+        .t-depo { background: #0a84ff; font-size: 12px; padding: 10px; }
+        .t-with { background: #ff9500; font-size: 12px; padding: 10px; }
+        
+        .close-trading {
+             position: absolute; top: 20px; right: 20px; background: #333; color: #fff; 
+             width: 40px; height: 40px; border-radius: 50%; border: none; font-weight: 900;
+             display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;
+        }
+        
+        .help-btn {
+            position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.2); color: #fff;
+            width: 40px; height: 40px; border-radius: 50%; border: none; font-weight: 900;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; z-index: 10;
+        }
+        
+        .trade-help-box {
+            background: #333; padding: 15px; border-radius: 12px; font-size: 12px; color: #ccc;
+            display: none; border: 1px solid #555; position: absolute; top: 70px; left: 20px; right: 20px; z-index: 20;
+        }
+        .trade-help-box.visible { display: block; }
+        .trend-icon { font-size: 20px; margin-left: 5px; }
+        
+        .bank-section { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-top: 10px; }
+        .bank-row { display: flex; gap: 5px; margin-bottom: 10px; }
+        .bank-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; font-weight: 700; text-align: center; }
+        .max-btn { background: #333; color: #fff; border: 1px solid #555; padding: 0 10px; border-radius: 8px; font-size: 10px; font-weight: 800; cursor: pointer; }
 
     </style>
 </head>
@@ -527,19 +556,17 @@
                     <div class="pet-thought" id="pet-thought">Привет!</div>
                     <div class="buffs-row" id="buffs-row"></div>
                     
-                    <div class="death-overlay" id="death-overlay">
-                        <div style="font-size:60px">👻</div>
-                        <div style="font-weight:800; margin:10px 0;">Любимка покинул нас...</div>
-                        <div style="font-size:12px; margin-bottom:20px; opacity:0.8">Ты не заходила больше 7 дней</div>
-                        <button class="action-btn" style="background:#fff; color:#000;" onclick="resurrectPet()">Воскресить (Сброс стрика)</button>
+                    <div class="sleep-overlay" id="sleep-overlay">
+                        <div>
+                           <div>Тсс! Питомец спит 😴</div>
+                           <div style="font-size:12px; opacity:0.7; margin-top:5px;">Энергия восстанавливается...</div>
+                        </div>
                     </div>
-
-                    <div class="sleep-overlay" id="sleep-overlay">Тсс! Питомец спит 😴</div>
 
                     <div class="pet-blob" id="pet-blob" onclick="petClick(event)">
                         <div class="pet-zzz">Zzz...</div>
-                        <!-- Accessories will be injected here with specific classes -->
-                        <div class="pet-acc" id="pet-acc-root"></div>
+                        <!-- Accessories -->
+                        <div id="pet-acc-root"></div>
                         <div class="pet-face" id="pet-face">😺</div>
                     </div>
 
@@ -568,6 +595,7 @@
                 </div>
                 
                 <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button class="action-btn" style="background:#28cd41; color:#fff; flex:1; padding:12px;" onclick="openTrading()">📈 Трейдинг</button>
                     <button class="action-btn" style="background:#5ac8fa; color:#fff; flex:1; padding:12px;" onclick="washPet()">🛁 Умыть</button>
                     <button class="action-btn" style="background:#5856d6; color:#fff; flex:1; padding:12px;" id="btn-sleep" onclick="toggleSleep()">😴 Спать</button>
                 </div>
@@ -577,6 +605,60 @@
                 <div style="display:flex; gap:10px; margin-top:10px;">
                     <button class="action-btn" style="background:#32ade6; color:#fff; flex:1;" onclick="openCasino()">🎰 Казино</button>
                     <button class="action-btn" style="background:var(--accent); color:#fff; flex:1;" onclick="openShop()">🛍️ Магазин</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trading View (Improved) -->
+    <div id="view-trading">
+        <button class="close-trading" onclick="closeTrading()">X</button>
+        <button class="help-btn" onclick="toggleTradeHelp()">?</button>
+        
+        <div class="trade-help-box" id="trade-help">
+            <div style="font-weight:700; color:#fff; margin-bottom:5px;">Правила</div>
+            1. Цена меняется каждую секунду.<br>
+            2. Красный = Дешево (Покупай).<br>
+            3. Зеленый = Дорого (Продавай).<br>
+            4. Банк дает % раз в сутки.
+        </div>
+
+        <div class="month-title" style="margin-bottom:10px;">📈 Биржа Любви</div>
+        
+        <div class="trading-card">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+                 <div style="font-size:12px; font-weight:700; color:#aaa;">Цена BibaCoin <span id="trend-arrow" class="trend-icon"></span></div>
+                 <div class="trade-val" id="stock-price" style="color:#30d158">100.00</div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="trade-chart" width="310" height="150"></canvas>
+            </div>
+
+            <div class="trade-stat">
+                <span>Портфель:</span>
+                <span style="color:#fff"><span id="stock-owned">0</span> BC</span>
+            </div>
+            <div class="trade-stat">
+                <span>Монеты:</span>
+                <span style="color:#FFD700"><span id="trade-cash">0</span> 💰</span>
+            </div>
+
+            <div class="trade-btns">
+                <button class="t-btn t-buy" onclick="tradeBuy()">Купить 1</button>
+                <button class="t-btn t-sell" onclick="tradeSell()">Продать 1</button>
+            </div>
+            
+            <div class="bank-section">
+                <div style="font-size:12px; font-weight:800; color:#aaa; margin-bottom:5px;">🏦 Банк (Ставка сегодня: <span id="bank-rate-disp" style="color:#0a84ff">5%</span>)</div>
+                <div style="font-size:10px; color:#666; margin-bottom:10px;">В банке: <span id="bank-balance" style="color:#fff">0</span> 💰</div>
+                <div class="bank-row">
+                    <input type="number" id="bank-amount" class="bank-input" placeholder="Сумма">
+                    <button class="max-btn" onclick="setMaxBank()">MAX</button>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="t-btn t-depo" onclick="bankDeposit()">Положить</button>
+                    <button class="t-btn t-with" onclick="bankWithdraw()">Снять</button>
                 </div>
             </div>
         </div>
@@ -641,7 +723,7 @@
         const END = new Date(2026, 4, 12);
         const DATA_KEY = 'love_cal_v3_final_r1';
         const SETTINGS_KEY = 'love_cal_settings_v3_r1';
-        const PET_KEY = 'love_cal_pet_v3_final_r1';
+        const PET_KEY = 'love_cal_pet_v3_final_r2'; // Version bump for reset/balance
 
         const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
         const HOLIDAYS = { '1-14': '💘', '1-23': '⭐', '2-8': '🌷', '4-1': '🎈', '4-9': '🎖️' };
@@ -779,142 +861,74 @@
                 wear: null, house: null, inventory: [],
                 exp: 0, maxExp: 100, level: 1,
                 activeBuffs: [], gadgets: { feeder: 0, sleeper: 0, heater: 0, ac: 0 },
-                rentPaidMonth: -1, isDead: false, isSleeping: false
+                rentPaidMonth: -1, isSleeping: false,
+                stocks: 0, stockBank: 0, bankRate: 5,
+                outfit: { head:null, eyes:null, neck:null, body:null },
+                lastDecay: Date.now()
             }
         };
-        // Migration to new scaling
-        if(!state.pet.clickLevel) state.pet.clickLevel = 1;
-        if(state.pet.rentPaidMonth === undefined) state.pet.rentPaidMonth = new Date().getMonth();
+        // Migration
+        if(state.pet.outfit === undefined) { state.pet.outfit = { head:null, eyes:null, neck:null, body:null }; if(state.pet.wear && state.pet.wear.pos) state.pet.outfit[state.pet.wear.pos] = state.pet.wear; state.pet.wear = null; }
+        if(state.pet.bankRate === undefined) state.pet.bankRate = 5;
+        if(state.pet.lastDecay === undefined) state.pet.lastDecay = Date.now();
 
-        // --- MATH FOR INFINITE SCALING (Prices x1.5) ---
+        // BALANCED FORMULAS V17 (Long term engagement)
         const getClickPower = () => Math.floor(1 * Math.pow(1.2, state.pet.clickLevel));
         const getAutoIncome = () => state.pet.autoLevel === 0 ? 0 : Math.floor(1 * Math.pow(1.15, state.pet.autoLevel));
-        const getClickUpgradeCost = () => Math.floor(100 * Math.pow(1.5, state.pet.clickLevel));
-        const getAutoUpgradeCost = () => Math.floor(200 * Math.pow(1.5, state.pet.autoLevel));
+        
+        // EXPONENTIAL COST GROWTH
+        const getClickUpgradeCost = () => Math.floor(100 * Math.pow(1.6, state.pet.clickLevel));
+        const getAutoUpgradeCost = () => Math.floor(200 * Math.pow(1.6, state.pet.autoLevel));
 
-        // --- EXTENSIVE SHOP DATA (Accessories with positions) ---
+        // --- SHOP DATA ---
         const SHOP = {
             food: [
                 {id:'f1',name:'Конфетка',ico:'🍬',cost:5,effect:'h+5'},
-                {id:'f2',name:'Яблоко',ico:'🍎',cost:10,effect:'h+10'},
-                {id:'f3',name:'Банан',ico:'🍌',cost:12,effect:'h+12'},
-                {id:'f4',name:'Вишня',ico:'🍒',cost:15,effect:'h+5 l+5'},
-                {id:'f5',name:'Клубника',ico:'🍓',cost:20,effect:'h+10 l+5'},
-                {id:'f6',name:'Круассан',ico:'🥐',cost:25,effect:'h+20'},
-                {id:'f7',name:'Хлеб',ico:'🍞',cost:15,effect:'h+15'},
-                {id:'f8',name:'Яичница',ico:'🍳',cost:30,effect:'h+25'},
-                {id:'f9',name:'Блинчики',ico:'🥞',cost:35,effect:'h+30'},
-                {id:'f10',name:'Вафли',ico:'🧇',cost:35,effect:'h+30'},
-                {id:'f11',name:'Сыр',ico:'🧀',cost:40,effect:'h+35'},
-                {id:'f12',name:'Мясо',ico:'🍖',cost:50,effect:'h+45'},
-                {id:'f13',name:'Курица',ico:'🍗',cost:45,effect:'h+40'},
-                {id:'f14',name:'Бургер',ico:'🍔',cost:60,effect:'h+50'},
-                {id:'f15',name:'Картошка',ico:'🍟',cost:30,effect:'h+25'},
-                {id:'f16',name:'Пицца',ico:'🍕',cost:70,effect:'h+60'},
-                {id:'f17',name:'Хотдог',ico:'🌭',cost:40,effect:'h+35'},
-                {id:'f18',name:'Сэндвич',ico:'🥪',cost:35,effect:'h+30'},
-                {id:'f19',name:'Тако',ico:'🌮',cost:45,effect:'h+40'},
-                {id:'f20',name:'Буррито',ico:'🌯',cost:50,effect:'h+45'},
-                {id:'f21',name:'Суши',ico:'🍣',cost:100,effect:'h+50 l+10'},
-                {id:'f22',name:'Креветка',ico:'🍤',cost:80,effect:'h+40 l+5'},
-                {id:'f23',name:'Рамен',ico:'🍜',cost:90,effect:'h+55 e+10'},
-                {id:'f24',name:'Спагетти',ico:'🍝',cost:85,effect:'h+50'},
-                {id:'f25',name:'Пончик',ico:'🍩',cost:25,effect:'h+20 e+5'},
-                {id:'f26',name:'Печенье',ico:'🍪',cost:20,effect:'h+15'},
-                {id:'f27',name:'Торт',ico:'🎂',cost:150,effect:'h+80 l+20'},
-                {id:'f28',name:'Мороженое',ico:'🍦',cost:30,effect:'h+20 l+5'},
-                {id:'f29',name:'Шоколад',ico:'🍫',cost:30,effect:'l+15'},
-                {id:'f30',name:'Курага',ico:'🍑',cost:20,effect:'h+10'},
-                {id:'f31',name:'Кофе',ico:'☕',cost:50,effect:'e+40'},
-                {id:'f32',name:'Чай',ico:'🍵',cost:30,effect:'e+20'},
-                {id:'f33',name:'Стейк',ico:'🥩',cost:200,effect:'h+90 e+10'},
-                {id:'f34',name:'Лобстер',ico:'🦞',cost:500,effect:'h+100 l+50'},
-                {id:'f35',name:'Золотой Стейк',ico:'📀',cost:5000,effect:'h+100 e+100 l+100'},
-                {id:'f36',name:'Оливки',ico:'🫒',cost:60,effect:'h+10'},
-                {id:'f37',name:'Ананас',ico:'🍍',cost:70,effect:'h+30'},
-                {id:'f38',name:'Кокос',ico:'🥥',cost:70,effect:'h+30 e+5'}
+                {id:'f2',name:'Яблоко',ico:'🍎',cost:15,effect:'h+10'},
+                {id:'f3',name:'Банан',ico:'🍌',cost:20,effect:'h+12'},
+                {id:'f4',name:'Круассан',ico:'🥐',cost:50,effect:'h+20'},
+                {id:'f5',name:'Яичница',ico:'🍳',cost:100,effect:'h+30'},
+                {id:'f6',name:'Бургер',ico:'🍔',cost:250,effect:'h+50'},
+                {id:'f7',name:'Пицца',ico:'🍕',cost:500,effect:'h+70'},
+                {id:'f8',name:'Суши',ico:'🍣',cost:1000,effect:'h+50 l+20'},
+                {id:'f9',name:'Стейк',ico:'🥩',cost:2500,effect:'h+90 e+20'},
+                {id:'f10',name:'Лобстер',ico:'🦞',cost:5000,effect:'h+100 l+50'},
+                {id:'f11',name:'Золотой Стейк',ico:'📀',cost:50000,effect:'h+100 e+100 l+100'},
+                {id:'f12',name:'Кофе',ico:'☕',cost:150,effect:'e+40'},
+                {id:'f13',name:'Энергетик',ico:'🔋',cost:300,effect:'e+60'}
             ],
             wear: [
-                {id:'w1',name:'Бантик',ico:'🎀',cost:200,pos:'head'},
-                {id:'w2',name:'Очки',ico:'👓',cost:300,pos:'eyes'},
-                {id:'w3',name:'Темные очки',ico:'🕶️',cost:350,pos:'eyes'},
-                {id:'w4',name:'Шарф',ico:'🧣',cost:250,pos:'neck'},
-                {id:'w5',name:'Перчатки',ico:'🧤',cost:200,pos:'body'},
-                {id:'w6',name:'Пальто',ico:'🧥',cost:800,pos:'body'},
-                {id:'w7',name:'Носки',ico:'🧦',cost:100,pos:'body'},
-                {id:'w8',name:'Платье',ico:'👗',cost:1000,pos:'body'},
-                {id:'w9',name:'Кимоно',ico:'👘',cost:1500,pos:'body'},
-                {id:'w10',name:'Сари',ico:'🥻',cost:1500,pos:'body'},
-                {id:'w11',name:'Купальник',ico:'🥱',cost:600,pos:'body'},
-                {id:'w12',name:'Шорты',ico:'🩳',cost:400,pos:'body'},
-                {id:'w13',name:'Футболка',ico:'👕',cost:300,pos:'body'},
-                {id:'w14',name:'Джинсы',ico:'👖',cost:500,pos:'body'},
-                {id:'w15',name:'Галстук',ico:'👔',cost:400,pos:'neck'},
-                {id:'w16',name:'Корона',ico:'👑',cost:2000,pos:'head'},
-                {id:'w17',name:'Шляпа',ico:'👒',cost:450,pos:'head'},
-                {id:'w18',name:'Цилиндр',ico:'🎩',cost:800,pos:'head'},
-                {id:'w19',name:'Кепка',ico:'🧢',cost:350,pos:'head'},
-                {id:'w20',name:'Кроссовки',ico:'👟',cost:600,pos:'body'},
-                {id:'w21',name:'Туфли',ico:'👠',cost:900,pos:'body'},
-                {id:'w22',name:'Сапоги',ico:'👢',cost:800,pos:'body'},
-                {id:'w23',name:'Рюкзак',ico:'🎒',cost:500,pos:'body'},
-                {id:'w24',name:'Сумочка',ico:'👜',cost:1200,pos:'body'},
-                {id:'w25',name:'Кольцо',ico:'💍',cost:5000,pos:'body'},
-                {id:'w26',name:'Помада',ico:'💄',cost:200,pos:'head'},
-                {id:'w27',name:'Маска',ico:'🎭',cost:300,pos:'eyes'},
-                {id:'w28',name:'Наушники',ico:'🎧',cost:700,pos:'head'},
-                {id:'w29',name:'Крылья',ico:'🧚',cost:3000,pos:'body'},
-                {id:'w30',name:'Плащ',ico:'🧛',cost:2000,pos:'body'},
-                {id:'w31',name:'Берет',ico:'🎨',cost:350,pos:'head'},
-                {id:'w32',name:'Худи',ico:'🧥',cost:600,pos:'body'},
-                {id:'w33',name:'Пижама',ico:'🛌',cost:500,pos:'body'}
+                {id:'w1',name:'Бантик',ico:'🎀',cost:500,pos:'head'},
+                {id:'w2',name:'Очки',ico:'👓',cost:1000,pos:'eyes'},
+                {id:'w3',name:'Шарф',ico:'🧣',cost:1500,pos:'neck'},
+                {id:'w4',name:'Футболка',ico:'👕',cost:2000,pos:'body'},
+                {id:'w5',name:'Кепка',ico:'🧢',cost:2500,pos:'head'},
+                {id:'w6',name:'Платье',ico:'👗',cost:10000,pos:'body'},
+                {id:'w7',name:'Корона',ico:'👑',cost:50000,pos:'head'},
+                {id:'w8',name:'Кольцо',ico:'💍',cost:100000,pos:'body'},
+                {id:'w9',name:'Крылья',ico:'🧚',cost:250000,pos:'body'},
+                {id:'w10',name:'Плащ',ico:'🧛',cost:150000,pos:'body'}
             ],
             house: [
                 {id:'h1',name:'Коробка',ico:'📦',cost:0,rent:0},
-                {id:'h2',name:'Коврик',ico:'🧘',cost:500,rent:0},
-                {id:'h3',name:'Палатка',ico:'⛺',cost:2500,rent:0},
-                {id:'h4',name:'Будка',ico:'🏠',cost:1500,rent:0},
-                {id:'h5',name:'Домик',ico:'🏡',cost:5000,rent:0},
-                {id:'h6',name:'Руины',ico:'🏛️',cost:1000,rent:0},
-                {id:'h7',name:'Замок',ico:'🏰',cost:50000,rent:0},
-                {id:'h8',name:'Остров',ico:'🏝️',cost:100000,rent:0},
-                {id:'h9',name:'Пустыня',ico:'🏜️',cost:10000,rent:0},
-                {id:'h10',name:'Горы',ico:'🏔️',cost:20000,rent:0},
-                {id:'h11',name:'Вулкан',ico:'🌋',cost:30000,rent:0},
-                {id:'h12',name:'Стадион',ico:'🏟️',cost:40000,rent:0},
-                {id:'h13',name:'Хостел',ico:'🛏️',cost:100,rent:50},
-                {id:'h14',name:'Комната',ico:'🚪',cost:300,rent:100},
-                {id:'h15',name:'Студия',ico:'🖼️',cost:400,rent:200},
-                {id:'h16',name:'Квартира',ico:'🏢',cost:500,rent:300},
-                {id:'h17',name:'Дуплекс',ico:'🏘️',cost:800,rent:500},
-                {id:'h18',name:'Лофт',ico:'🌇',cost:1000,rent:800},
-                {id:'h19',name:'Офис',ico:'💼',cost:1200,rent:1000},
-                {id:'h20',name:'Пентхаус',ico:'🌃',cost:2000,rent:1500},
-                {id:'h21',name:'Вилла',ico:'⛲',cost:3000,rent:2000},
-                {id:'h22',name:'Отель',ico:'🏨',cost:4000,rent:2500},
-                {id:'h23',name:'Дворец',ico:'🕌',cost:5000,rent:3000},
-                {id:'h24',name:'Башня',ico:'🗼',cost:6000,rent:3500},
-                {id:'h25',name:'Ракета',ico:'🚀',cost:10000,rent:5000},
-                {id:'h26',name:'Луна',ico:'🌑',cost:50000,rent:10000},
-                {id:'h27',name:'Марс',ico:'🪐',cost:100000,rent:20000},
-                {id:'h28',name:'Яхта',ico:'🛥️',cost:20000,rent:4000},
-                {id:'h29',name:'Бункер',ico:'🛡️',cost:15000,rent:3000},
-                {id:'h30',name:'Облако',ico:'☁️',cost:7000,rent:1200}
+                {id:'h2',name:'Коврик',ico:'🧘',cost:1000,rent:0},
+                {id:'h3',name:'Палатка',ico:'⛺',cost:5000,rent:0},
+                {id:'h4',name:'Квартира',ico:'🏢',cost:25000,rent:500},
+                {id:'h5',name:'Дом',ico:'🏡',cost:100000,rent:0},
+                {id:'h6',name:'Вилла',ico:'⛲',cost:500000,rent:5000},
+                {id:'h7',name:'Замок',ico:'🏰',cost:2500000,rent:10000},
+                {id:'h8',name:'Остров',ico:'🏝️',cost:10000000,rent:0},
+                {id:'h9',name:'Марс',ico:'🪐',cost:50000000,rent:0}
             ],
             gadget: [
-                {id:'feeder',name:'Кормушка',ico:'🥣',cost:2000,dur:7,desc:'Еда 7дн'},
-                {id:'sleeper',name:'Люлька',ico:'🛌',cost:2000,dur:7,desc:'Сон 7дн'},
-                {id:'heater',name:'Обогреватель',ico:'🔥',cost:1500,dur:3,desc:'Тепло 3дн'},
-                {id:'ac',name:'Кондиционер',ico:'❄️',cost:1500,dur:3,desc:'Холод 3дн'},
-                {id:'fan',name:'Вентилятор',ico:'🌀',cost:500,dur:1,desc:'Ветер 1дн'},
-                {id:'robot',name:'Робот',ico:'🤖',cost:5000,dur:10,desc:'Уход 10дн'}
+                {id:'feeder',name:'Кормушка',ico:'🥣',cost:5000,dur:7,desc:'Еда 7дн'},
+                {id:'sleeper',name:'Люлька',ico:'🛌',cost:5000,dur:7,desc:'Сон 7дн'},
+                {id:'heater',name:'Обогреватель',ico:'🔥',cost:3000,dur:3,desc:'Тепло 3дн'},
+                {id:'ac',name:'Кондиционер',ico:'❄️',cost:3000,dur:3,desc:'Холод 3дн'}
             ],
             buff: [
-                {id:'b1',name:'Малое зелье',ico:'🧪',cost:50,val:1.2,dur:60,desc:'x1.2 (1мин)'},
-                {id:'b2',name:'Среднее зелье',ico:'⚗️',cost:150,val:1.5,dur:120,desc:'x1.5 (2мин)'},
-                {id:'b3',name:'Большое зелье',ico:'🏺',cost:300,val:2.0,dur:300,desc:'x2.0 (5мин)'},
-                {id:'b4',name:'Эликсир',ico:'🍷',cost:1000,val:5.0,dur:60,desc:'x5.0 (1мин)'},
-                {id:'b5',name:'Любовное зелье',ico:'💗',cost:5000,val:10.0,dur:60,desc:'x10 (1мин)'}
+                {id:'b1',name:'Зелье Скорости',ico:'🧪',cost:500,val:2.0,dur:60,desc:'x2 (1мин)'},
+                {id:'b2',name:'Эликсир Любви',ico:'💗',cost:5000,val:5.0,dur:300,desc:'x5 (5мин)'}
             ]
         };
 
@@ -922,7 +936,12 @@
             "Люблю тебя!", "Ты моя вселенная", "Хочу на ручки", "Мур-мур...", 
             "Скучаю по тебе", "Ты самая красивая", "Где еда?", "Хочу гулять", 
             "Ты мое счастье", "Жду тебя!", "Ты вкусно пахнешь", "Обними меня",
-            "Оля топ!", "Люблю больше пиццы", "Ты - космос", "Скоро увидимся!"
+            "Оля топ!", "Люблю больше пиццы", "Ты - космос", "Скоро увидимся!",
+            "Я счастлив с тобой", "Улыбнись!", "Ты мой котик", "Мы команда!"
+        ];
+
+        const SAD_THOUGHTS = [
+            "Я голодный...", "Покорми меня...", "Мне грустно", "Животик урчит", "Ты меня забыла?", "Холодно...", "Хочу кушать"
         ];
         
         const DOM = {
@@ -937,7 +956,21 @@
             const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY));
             if(saved) state.settings = { ...state.settings, ...saved };
             applySettings(); checkDaily(); checkCircadianRhythm(true); checkRentStatus(); 
-            // FIXED: Ensure updatePetUI runs immediately after load to sync bars
+            // Calculate Offline Decay
+            const now = Date.now();
+            if(state.pet.lastDecay) {
+                const diff = now - state.pet.lastDecay;
+                const hours = diff / (1000 * 3600);
+                if(hours > 1) {
+                    const drop = Math.min(50, Math.floor(hours * 3)); // 3 per hour offline
+                    if(!state.pet.isSleeping) state.pet.energy = Math.max(0, state.pet.energy - drop);
+                    state.pet.hunger = Math.max(0, state.pet.hunger - drop);
+                    state.pet.love = Math.max(0, state.pet.love - drop);
+                    state.pet.hygiene = Math.max(0, state.pet.hygiene - Math.floor(drop/2));
+                    showToast(`Я скучал! (Потребности снизились)`);
+                }
+            }
+            state.pet.lastDecay = now;
             updatePetUI();
             
             setInterval(() => {
@@ -960,9 +993,7 @@
             renderCal(); calcGraph(); window.addEventListener('resize', calcGraph);
             requestAnimationFrame(flightLoop); setInterval(tick, 1000); tick(); runParticles();
             
-            // --- LOOPS ---
-            setInterval(gameLoop, 1000); // Income and Events (1s)
-            setInterval(decayLoop, 180000); // Decay Stats (3 mins = 180s) OPTIMAL BALANCE
+            setInterval(gameLoop, 1000); // 1s tick
             setInterval(petBehavior, 10000);
             setInterval(() => checkCircadianRhythm(false), 60000);
         }
@@ -972,7 +1003,6 @@
             document.querySelectorAll('.bg-mesh').forEach(b => b.classList.remove('active'));
             document.getElementById(`bg-${s.mode}`).classList.add('active');
             
-            // Highlight Active Theme Button
             document.querySelectorAll('.dock-btn').forEach(b => b.style.background = 'transparent');
             if(s.mode === 'snow') document.getElementById('btn-snow').style.background = 'rgba(255,255,255,0.5)';
             if(s.mode === 'spring') document.getElementById('btn-spring').style.background = 'rgba(255,255,255,0.5)';
@@ -985,26 +1015,34 @@
         function savePet() { localStorage.setItem(PET_KEY, JSON.stringify(state.pet)); updatePetUI(); }
 
         function checkDaily() {
-            if(state.pet.isDead) return;
             const today = new Date().toDateString();
             if(state.pet.lastLogin !== today) {
-                // Check death if absent for > 7 days
-                const diff = (Date.now() - new Date(state.pet.lastLoginTime || Date.now()).getTime()) / (1000 * 3600 * 24);
-                if(diff > 7) {
-                     state.pet.isDead = true; savePet(); updatePetUI(); return;
+                // Generate Daily Bank Rate (1% - 15%)
+                state.pet.bankRate = Math.floor(Math.random() * 15) + 1;
+
+                // Bank Interest
+                if(state.pet.stockBank > 0) {
+                     const interest = Math.floor(state.pet.stockBank * (state.pet.bankRate / 100));
+                     state.pet.stockBank += interest;
+                     showToast(`Банк (${state.pet.bankRate}%): +${interest} монет`);
                 }
-                state.pet.streak++; state.pet.lastLogin = today; state.pet.lastLoginTime = Date.now();
-                state.pet.coins += state.pet.streak * 50;
-                savePet(); showToast(`Новый день! +${state.pet.streak*50} 💰`);
+
+                const diff = (Date.now() - new Date(state.pet.lastLoginTime || Date.now()).getTime()) / (1000 * 3600 * 24);
+                if(diff > 1) { // Missed day
+                    state.pet.streak = 0; // Reset streak
+                } else {
+                    state.pet.streak++;
+                }
+                state.pet.lastLogin = today; state.pet.lastLoginTime = Date.now();
+                state.pet.coins += 50 + (state.pet.streak * 10);
+                savePet(); showToast(`Новый день! +${50 + (state.pet.streak * 10)} 💰`);
             }
         }
 
         function checkCircadianRhythm(isInit) {
-            if(state.pet.isDead) return;
             const h = new Date().getHours();
             const now = Date.now();
             const hasSleeper = state.pet.gadgets.sleeper > now;
-
             if(h >= 23 || h < 7) {
                 if(hasSleeper && !state.pet.isSleeping) state.pet.isSleeping = true;
             } else {
@@ -1019,10 +1057,6 @@
             if(state.pet.rentPaidMonth !== currentMonth) {
                 document.getElementById('btn-rent').style.display = 'block';
                 document.getElementById('btn-rent').innerText = `🏠 Оплатить: ${state.pet.house.rent}`;
-                if(new Date().getDate() > 5) { // Late payment > 5th day
-                    state.pet.house = SHOP.house[0]; state.pet.rentPaidMonth = currentMonth;
-                    showToast("Выселили за неуплату! 📦"); savePet(); document.getElementById('btn-rent').style.display = 'none';
-                }
             } else document.getElementById('btn-rent').style.display = 'none';
         }
 
@@ -1033,56 +1067,175 @@
             } else showToast("Нет денег!");
         }
 
-        window.resurrectPet = () => {
-            state.pet.isDead=false; state.pet.hunger=50; state.pet.love=50; state.pet.energy=50; state.pet.streak=0;
-            savePet(); updatePetUI();
-        }
         window.toggleSleep = () => { state.pet.isSleeping = !state.pet.isSleeping; savePet(); }
-        window.washPet = () => { state.pet.hygiene=100; addExp(5); savePet(); showToast("Чисто!"); }
+        window.washPet = () => { state.pet.hygiene=100; state.pet.energy = Math.max(0, state.pet.energy - 5); addExp(5); savePet(); showToast("Чисто!"); }
+        
+        // --- TRADING GAME ---
+        let tradeInterval;
+        let stockPrice = 100.00;
+        let priceHistory = [];
+        const tCanvas = document.getElementById('trade-chart');
+        const tCtx = tCanvas.getContext('2d');
+
+        window.openTrading = () => {
+            document.getElementById('view-trading').classList.add('active');
+            // Init price history
+            priceHistory = [];
+            for(let i=0; i<30; i++) priceHistory.push(100);
+            stockPrice = 100;
+            updateTradeUI();
+            tradeInterval = setInterval(tradeTick, 1000);
+        };
+        window.closeTrading = () => {
+            document.getElementById('view-trading').classList.remove('active');
+            clearInterval(tradeInterval);
+        };
+        
+        window.toggleTradeHelp = () => {
+            document.getElementById('trade-help').classList.toggle('visible');
+        }
+
+        function tradeTick() {
+            // Random Walk
+            const change = (Math.random() - 0.5) * 5; 
+            stockPrice = Math.max(10, stockPrice + change);
+            priceHistory.push(stockPrice);
+            if(priceHistory.length > 30) priceHistory.shift();
+            drawChart();
+            document.getElementById('stock-price').innerText = stockPrice.toFixed(2);
+            const isUp = change >= 0;
+            document.getElementById('stock-price').style.color = isUp ? '#30d158' : '#ff453a';
+            document.getElementById('trend-arrow').innerText = isUp ? '↗' : '↘';
+            document.getElementById('trend-arrow').style.color = isUp ? '#30d158' : '#ff453a';
+        }
+
+        function drawChart() {
+            tCtx.clearRect(0,0,310,150);
+            
+            // Gradient Fill
+            const isProfit = priceHistory[priceHistory.length-1] >= priceHistory[0];
+            const color = isProfit ? '#30d158' : '#ff453a';
+            
+            const gradient = tCtx.createLinearGradient(0, 0, 0, 150);
+            gradient.addColorStop(0, isProfit ? 'rgba(48, 209, 88, 0.2)' : 'rgba(255, 69, 58, 0.2)');
+            gradient.addColorStop(1, 'rgba(0,0,0,0)');
+
+            tCtx.beginPath();
+            const step = 310 / 29;
+            const max = Math.max(...priceHistory) + 10;
+            const min = Math.min(...priceHistory) - 10;
+            
+            priceHistory.forEach((p, i) => {
+                const y = 150 - ((p - min) / (max - min) * 130) - 10;
+                if(i===0) tCtx.moveTo(0, y);
+                else tCtx.lineTo(i*step, y);
+            });
+            
+            tCtx.strokeStyle = color;
+            tCtx.lineWidth = 2;
+            tCtx.stroke();
+            
+            // Fill
+            tCtx.lineTo(310, 150);
+            tCtx.lineTo(0, 150);
+            tCtx.fillStyle = gradient;
+            tCtx.fill();
+        }
+
+        window.tradeBuy = () => {
+            const cost = stockPrice;
+            if(state.pet.coins >= cost) {
+                state.pet.coins -= cost;
+                state.pet.stocks++;
+                updateTradeUI();
+                savePet();
+            } else showToast("Нет монет!");
+        }
+
+        window.tradeSell = () => {
+            if(state.pet.stocks > 0) {
+                state.pet.coins += stockPrice;
+                state.pet.stocks--;
+                updateTradeUI();
+                savePet();
+            } else showToast("Нет акций!");
+        }
+
+        window.setMaxBank = () => {
+            document.getElementById('bank-amount').value = Math.floor(state.pet.coins);
+        }
+
+        window.bankDeposit = () => {
+            const el = document.getElementById('bank-amount');
+            const val = parseInt(el.value);
+            if(!val || val <= 0) { showToast("Введите сумму"); return; }
+            
+            if(state.pet.coins >= val) {
+                state.pet.coins -= val;
+                state.pet.stockBank += val;
+                showToast(`Вклад: ${val} (Ставка ${state.pet.bankRate}%)`);
+                el.value = '';
+                updateTradeUI();
+                savePet();
+            } else showToast("Мало монет!");
+        }
+
+        window.bankWithdraw = () => {
+            const el = document.getElementById('bank-amount');
+            const val = parseInt(el.value);
+            // If empty, withdraw all
+            if(!val) {
+                if(state.pet.stockBank > 0) {
+                    state.pet.coins += state.pet.stockBank;
+                    state.pet.stockBank = 0;
+                    showToast("Снято всё!");
+                    updateTradeUI();
+                    savePet();
+                } else showToast("Банк пуст!");
+                return;
+            }
+
+            if(val > 0 && state.pet.stockBank >= val) {
+                state.pet.stockBank -= val;
+                state.pet.coins += val;
+                showToast(`Снято: ${val}`);
+                el.value = '';
+                updateTradeUI();
+                savePet();
+            } else showToast("Мало средств в банке!");
+        }
+
+        function updateTradeUI() {
+            document.getElementById('stock-owned').innerText = state.pet.stocks;
+            document.getElementById('trade-cash').innerText = Math.floor(state.pet.coins);
+            
+            document.getElementById('bank-rate-disp').innerText = state.pet.bankRate + '%';
+            document.getElementById('bank-balance').innerText = Math.floor(state.pet.stockBank);
+            
+            updatePetUI(); 
+        }
 
         // --- RELAXED LOOPS ---
-        
-        // Income & Events (1s)
         function gameLoop() {
-            if(state.pet.isDead) return;
             const now = Date.now();
-            
-            // Auto Income (Fixed logic)
             const income = getAutoIncome();
-            if(income > 0) {
+            
+            // Logic: Passive income only if healthy (Hunger > 0)
+            if(income > 0 && state.pet.hunger > 0 && state.pet.love > 0) {
                 let mult = 1;
                 state.pet.activeBuffs = state.pet.activeBuffs.filter(b=>b.end>now);
                 state.pet.activeBuffs.forEach(b=>mult*=b.val);
-                // If sleeping, reduce income by 50%
                 const finalInc = state.pet.isSleeping ? (income * mult * 0.5) : (income * mult);
                 state.pet.coins += finalInc;
             }
 
-            // Random Mini Events (LOWER chance: 0.8% per sec instead of 2%)
-            if(Math.random() < 0.008) triggerRandomEvent();
-
+            // Sleep Regen
+            if(state.pet.isSleeping) {
+                state.pet.energy = Math.min(100, state.pet.energy + 0.5); // Slow regen
+            }
+            
+            if(Math.random() < 0.0025) triggerRandomEvent();
             savePet();
-        }
-
-        // Decay (3 mins)
-        function decayLoop() {
-             if(state.pet.isDead || state.pet.isSleeping) return;
-             const m = new Date().getMonth();
-             const isWinter = (m===11||m===0||m===1);
-             const isSummer = (m>=5&&m<=7);
-             const now = Date.now();
-
-             let eDecay = 1, hDecay = 1;
-             // Mild weather penalty
-             if(isWinter && state.pet.gadgets.heater < now && (!state.pet.wear || state.pet.wear.cost < 250)) eDecay++;
-             if(isSummer && state.pet.gadgets.ac < now) hDecay++;
-
-             state.pet.energy = Math.max(0, state.pet.energy - eDecay);
-             state.pet.hygiene = Math.max(0, state.pet.hygiene - hDecay);
-             state.pet.hunger = Math.max(0, state.pet.hunger - 1);
-             state.pet.love = Math.max(0, state.pet.love - 0.5);
-             
-             savePet();
         }
 
         function triggerRandomEvent() {
@@ -1109,8 +1262,14 @@
             }
         }
         function petBehavior() {
-            if(state.pet.isDead || state.pet.isSleeping) return;
-            if(Math.random()>0.7) showThought();
+            if(state.pet.isSleeping) return;
+            // Sad Thoughts Logic
+            if(state.pet.hunger < 30 || state.pet.love < 30) {
+                 const t = SAD_THOUGHTS[Math.floor(Math.random()*SAD_THOUGHTS.length)];
+                 showThought(t);
+            } else if(Math.random()>0.7) {
+                showThought();
+            }
         }
 
         function updatePetUI() {
@@ -1119,29 +1278,25 @@
             document.getElementById('stat-balance').innerText = Math.floor(state.pet.coins);
             document.getElementById('casino-balance').innerText = Math.floor(state.pet.coins);
             
-            // Show stats
             document.getElementById('stat-click').innerText = getClickPower();
             document.getElementById('stat-auto').innerText = getAutoIncome();
 
-            document.getElementById('bar-hunger').style.width = state.pet.hunger+'%';
-            document.getElementById('bar-love').style.width = state.pet.love+'%';
-            document.getElementById('bar-energy').style.width = state.pet.energy+'%';
-            document.getElementById('bar-hygiene').style.width = state.pet.hygiene+'%';
-            
-            document.getElementById('txt-hunger').innerText = `${Math.floor(state.pet.hunger)}/100`;
-            document.getElementById('txt-love').innerText = `${Math.floor(state.pet.love)}/100`;
-            document.getElementById('txt-energy').innerText = `${Math.floor(state.pet.energy)}/100`;
-            document.getElementById('txt-hygiene').innerText = `${Math.floor(state.pet.hygiene)}/100`;
+            const pBars = ['hunger','love','energy','hygiene'];
+            pBars.forEach(k => {
+                const el = document.getElementById(`bar-${k}`);
+                const val = state.pet[k];
+                el.style.width = val+'%';
+                if(val < 30) el.classList.add('danger'); else el.classList.remove('danger');
+                document.getElementById(`txt-${k}`).innerText = `${Math.floor(val)}/100`;
+            });
 
             document.getElementById('lvl-text').innerText = `Ур. ${state.pet.level}`;
             document.getElementById('exp-fill').style.width = (state.pet.exp/state.pet.maxExp*100)+'%';
             
-            // Rent Status Text
             const rentEl = document.getElementById('rent-info');
             if(state.pet.house && state.pet.house.rent > 0) {
                 rentEl.style.display = 'block';
                 const months = ['Января','Февраля','Марта','Апреля','Мая','Июня','Июля','Августа','Сентября','Октября','Ноября','Декабря'];
-                // Rent is paid for current month. So it's valid until end of current month.
                 rentEl.innerText = `Аренда оплачена до конца: ${months[state.pet.rentPaidMonth]}`;
             } else {
                 rentEl.style.display = 'none';
@@ -1156,29 +1311,60 @@
             const blob = document.getElementById('pet-blob');
             const face = document.getElementById('pet-face');
             const accRoot = document.getElementById('pet-acc-root');
-            accRoot.innerHTML = ''; // Clear accessories
+            accRoot.innerHTML = ''; 
             
-            document.getElementById('death-overlay').style.display = state.pet.isDead ? 'flex' : 'none';
             document.getElementById('sleep-overlay').classList.toggle('active', state.pet.isSleeping);
             blob.classList.toggle('sleeping', state.pet.isSleeping);
             
-            if(state.pet.isDead) face.innerText = '💀';
-            else if(state.pet.isSleeping) { face.innerText = '😴'; document.getElementById('btn-sleep').innerText="☀️"; }
-            else { document.getElementById('btn-sleep').innerText="😴"; face.innerText = state.pet.hygiene<30 ? '🤢' : (state.pet.love>90?'😻':'😺'); }
+            // Sad Face Logic
+            const isSad = (state.pet.hunger < 30 || state.pet.love < 30 || state.pet.hygiene < 30);
+            blob.classList.toggle('sad', isSad);
+
+            if(state.pet.isSleeping) { 
+                face.innerText = '😴'; document.getElementById('btn-sleep').innerText="☀️"; 
+            } else if(isSad) {
+                face.innerText = '🥺'; // Crying/Begging face
+                document.getElementById('btn-sleep').innerText="😴";
+            } else { 
+                document.getElementById('btn-sleep').innerText="😴"; 
+                face.innerText = (state.pet.love>90?'😻':'😺'); 
+            }
             
-            // Add accessories logic
-            if(state.pet.wear && !state.pet.isDead && !state.pet.isSleeping) {
-                const ac = document.createElement('div');
-                ac.className = `pet-acc acc-${state.pet.wear.pos || 'body'}`;
-                ac.innerText = state.pet.wear.ico;
-                accRoot.appendChild(ac);
+            // Render OUTFIT (Multi-slot)
+            if(!state.pet.isSleeping) {
+                // Order doesn't strictly matter for absolute div, but we iterate
+                Object.values(state.pet.outfit).forEach(item => {
+                    if(item) {
+                        const ac = document.createElement('div');
+                        // No extra classes, just item specific one
+                        ac.className = `acc-item acc-${item.pos || 'body'}`;
+                        ac.innerText = item.ico;
+                        accRoot.appendChild(ac);
+                    }
+                });
             }
 
             document.getElementById('house-bg').innerText = (state.pet.house && state.pet.house.id!=='box') ? state.pet.house.ico : '📦';
         }
+
+        // --- BALANCED CLICK ---
         window.petClick = (e) => {
-            if(state.pet.isDead || state.pet.isSleeping) return;
+            if(state.pet.isSleeping) return;
+            
+            // Check resources
+            if(state.pet.energy <= 0 || state.pet.hunger <= 0) {
+                showToast("Питомец устал или голоден!");
+                return;
+            }
+
             const power = getClickPower();
+            
+            // Stats cost per click (Balanced)
+            state.pet.energy = Math.max(0, state.pet.energy - 0.5);
+            state.pet.hunger = Math.max(0, state.pet.hunger - 0.3);
+            state.pet.hygiene = Math.max(0, state.pet.hygiene - 0.2);
+            state.pet.love = Math.min(100, state.pet.love + 0.1);
+
             const float = document.createElement('div'); float.className='click-float';
             float.innerText = `+${power}`;
             float.style.left=(e.clientX-10)+'px'; float.style.top=(e.clientY-40)+'px';
@@ -1191,7 +1377,7 @@
         }
 
         // CASINO - REAL WHEEL LOGIC
-        window.openCasino = () => { if(!state.pet.isDead) document.getElementById('view-casino').classList.add('active'); };
+        window.openCasino = () => { document.getElementById('view-casino').classList.add('active'); };
         
         window.spinRoulette = (choice) => {
             const betInput = document.getElementById('casino-bet');
@@ -1201,42 +1387,18 @@
             if(!bet || bet <= 0) { showToast("Введите ставку! ⚠️"); return; }
             if(state.pet.coins < bet) { showToast("Нет монет! 💸"); return; }
 
-            // Deduct
             state.pet.coins -= bet;
             savePet();
             updatePetUI();
             
-            // Reset for animation
             wheel.style.transition = 'none';
             wheel.style.transform = 'rotate(0deg)';
-            
-            // Force reflow
             wheel.offsetHeight;
 
-            // Logic: 
-            // We have 15 segments (approx 24 degrees each). 
-            // 0 (Green) is at 0-24deg (approx).
-            // To land on a specific number, we rotate: (360 * 5 rotations) + targetAngle
-            
-            // Generate result (0-14)
             const result = Math.floor(Math.random() * 15); 
-            // Result mapping based on our gradient:
-            // 0 = Green, Odd = Red, Even = Black (Simplified from gradient logic)
-            // But let's stick to gradient definition:
-            // 0deg starts Green.
-            // 24deg starts Red.
-            // 48deg starts Black.
-            // ... alternating.
-            
-            // Target angle (center of segment)
             const segSize = 360 / 15;
             const targetAngle = (result * segSize) + (segSize / 2);
-            
-            // We need to rotate NEGATIVE to visually move clockwise to the number at top
-            // Actually, arrow is at top. If we rotate 24deg clockwise, the segment at 336deg is at top.
-            // Let's just rotate + (360*5) + (360 - targetAngle).
-            
-            const spin = 1800 + (360 - targetAngle); // 5 spins
+            const spin = 1800 + (360 - targetAngle); 
             
             wheel.style.transition = 'transform 3s cubic-bezier(0.1, 0.9, 0.2, 1)';
             wheel.style.transform = `rotate(${spin}deg)`;
@@ -1244,14 +1406,8 @@
             setTimeout(() => {
                 let color = 'green';
                 if(result === 0) color = 'green';
-                else if(result % 2 !== 0) color = 'red'; // Based on gradient index 1,3,5..
-                else color = 'black'; // Based on gradient index 2,4,6..
-                
-                // Correction for the gradient definition in CSS:
-                // 0 (0-24) Green
-                // 1 (24-48) Red
-                // 2 (48-72) Black
-                // etc.
+                else if(result % 2 !== 0) color = 'red'; 
+                else color = 'black'; 
                 
                 if(choice === color) {
                     let win = 0;
@@ -1270,7 +1426,7 @@
 
         // SHOP
         let curTab = 'food';
-        window.openShop = () => { if(!state.pet.isDead) { document.getElementById('shop-modal').classList.add('active'); switchShop('food'); } };
+        window.openShop = () => { document.getElementById('shop-modal').classList.add('active'); switchShop('food'); };
         window.closeShop = () => document.getElementById('shop-modal').classList.remove('active');
         window.switchShop = (t) => {
             curTab = t; document.querySelectorAll('.shop-tab').forEach(el => el.classList.remove('active'));
@@ -1279,7 +1435,6 @@
             
             let items = [];
             if(t === 'upgrade') {
-                 // INFINITE SCALING GENERATION
                  items.push({
                      id:'click_up', 
                      name:`Клик Ур.${state.pet.clickLevel}`, 
@@ -1303,18 +1458,18 @@
             items.forEach(i => {
                 const el = document.createElement('div');
                 const owned = state.pet.inventory.includes(i.id) || state.pet.inventory.includes('house_'+i.id);
-                const equipped = (state.pet.wear && state.pet.wear.id === i.id) || (state.pet.house && state.pet.house.id === i.id);
+                // Check if equipped in slot
+                let equipped = false;
+                if(t === 'wear') equipped = state.pet.outfit[i.pos] && state.pet.outfit[i.pos].id === i.id;
+                else if(t === 'house') equipped = state.pet.house && state.pet.house.id === i.id;
+
                 el.className = `shop-item ${owned && t!=='food' && t!=='buff' ? 'owned' : ''} ${equipped ? 'selected' : ''}`;
                 
                 let txt = i.cost + ' 💰';
                 if(t === 'wear') txt = equipped ? 'Снять' : (owned ? 'Надеть' : txt);
                 if(t === 'house') txt = equipped ? 'Живу' : (owned && i.rent===0 ? 'Переехать' : (i.rent>0 ? `Аренда ${i.cost}` : txt));
                 if(t === 'gadget' && state.pet.gadgets[i.id] > Date.now()) txt = "Активно";
-                
-                // Improved Upgrade Text
-                if(t === 'upgrade') {
-                     txt = `Улучшить: ${i.cost} 💰`;
-                }
+                if(t === 'upgrade') txt = `Улучшить: ${i.cost} 💰`;
 
                 el.innerHTML = `<div style="font-size:30px">${i.ico}</div><div style="font-size:12px;font-weight:700">${i.name}</div><div class="shop-desc">${i.desc || ''}</div><div class="shop-price">${txt}</div>`;
                 el.onclick = () => buyItem(i, t);
@@ -1323,8 +1478,32 @@
         };
 
         function buyItem(i, t) {
-            if(t==='wear' && state.pet.wear && state.pet.wear.id===i.id) { state.pet.wear=null; savePet(); switchShop(t); return; } // Unequip
-            if(t==='house' && state.pet.house && state.pet.house.id===i.id) return; // Already here
+            // MULTI SLOT LOGIC FOR WEAR
+            if(t==='wear') {
+                const slot = i.pos || 'body';
+                // Toggle Off
+                if(state.pet.outfit[slot] && state.pet.outfit[slot].id === i.id) {
+                    state.pet.outfit[slot] = null;
+                    savePet(); switchShop(t); updatePetUI();
+                    return;
+                }
+                // Check Cost
+                if(state.pet.coins < i.cost && !state.pet.inventory.includes(i.id)) { showToast("Мало монет!"); return; }
+                
+                // Buy if needed
+                if(!state.pet.inventory.includes(i.id)) { 
+                    state.pet.coins -= i.cost; 
+                    state.pet.inventory.push(i.id); 
+                }
+                
+                // Equip
+                state.pet.outfit[slot] = i;
+                showToast("Стиль!");
+                savePet(); switchShop(t); updatePetUI();
+                return;
+            }
+
+            if(t==='house' && state.pet.house && state.pet.house.id===i.id) return; 
 
             if(state.pet.coins < i.cost && !state.pet.inventory.includes(i.id) && !state.pet.inventory.includes('house_'+i.id)) { showToast("Мало монет!"); return; }
 
@@ -1338,14 +1517,11 @@
                 });
                 showToast("Вкусно!"); addExp(5);
                 state.pet.coins -= i.cost;
-            } else if (t==='wear') {
-                if(!state.pet.inventory.includes(i.id)) { state.pet.coins-=i.cost; state.pet.inventory.push(i.id); }
-                state.pet.wear = i; showToast("Стиль!");
             } else if (t==='house') {
                 const hid = 'house_'+i.id;
-                if(i.rent > 0) { // Rent
+                if(i.rent > 0) { 
                      state.pet.coins -= i.cost; state.pet.house = i; state.pet.rentPaidMonth = new Date().getMonth(); showToast("С новосельем!");
-                } else { // Buy
+                } else { 
                     if(!state.pet.inventory.includes(hid)) { state.pet.coins-=i.cost; state.pet.inventory.push(hid); }
                     state.pet.house = i; showToast("Дом милый дом!");
                 }
@@ -1366,7 +1542,6 @@
             savePet(); switchShop(t); updatePetUI();
         }
 
-        // Common UI
         window.setView = (v) => {
             document.querySelectorAll('.view-section').forEach(el=>el.classList.remove('active-view'));
             document.getElementById(`view-${v}`).classList.add('active-view');
