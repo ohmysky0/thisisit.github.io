@@ -275,6 +275,7 @@
         }
         .pet-blob.sleeping { animation: breathe 6s infinite ease-in-out; opacity: 0.9; }
         .pet-blob.sad { filter: grayscale(0.5) contrast(0.9); animation: sadShake 3s infinite; }
+        .pet-blob.sick { filter: hue-rotate(90deg) contrast(0.8); animation: sadShake 4s infinite; }
         .pet-blob.walking { animation: walk 4s infinite linear; }
         .pet-blob:active { transform: scale(0.9) translateY(5px); }
         .dark-mode .pet-blob { background: #f0f0f5; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
@@ -711,7 +712,7 @@
                 <div class="shop-tab" onclick="switchShop('wear')">👗 Одежда</div>
                 <div class="shop-tab" onclick="switchShop('house')">🏠 Жилье</div>
                 <div class="shop-tab" onclick="switchShop('gadget')">🤖 Гаджеты</div>
-                <div class="shop-tab" onclick="switchShop('buff')">🧪 Зелья</div>
+                <div class="shop-tab" onclick="switchShop('buff')">💊 Аптека</div>
                 <div class="shop-tab" onclick="switchShop('upgrade')">⚡ Навыки</div>
             </div>
             <div class="shop-grid" id="shop-list"></div>
@@ -725,7 +726,7 @@
         const END = new Date(2026, 4, 8); // May 8th
         const DATA_KEY = 'love_cal_v3_final_r1';
         const SETTINGS_KEY = 'love_cal_settings_v3_r1';
-        const PET_KEY = 'love_cal_pet_v19_final'; // Hard reset for economy balance
+        const PET_KEY = 'love_cal_pet_v21_balanced'; // New Key for migration to easier economy
 
         const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
         const HOLIDAYS = { '1-14': '💘', '1-23': '⭐', '2-8': '🌷', '4-1': '🎈', '4-9': '🎖️' };
@@ -794,10 +795,20 @@
             {t: "Я приехал. Я здесь. Я люблю тебя.", s: "ФИНАЛ"}
         ];
 
+        // MIGRATION LOGIC to keep progress but ease economy
         let state = {
             opened: JSON.parse(localStorage.getItem(DATA_KEY)) || {},
             settings: { mode: 'snow', garland: false, dark: false },
-            pet: JSON.parse(localStorage.getItem(PET_KEY)) || {
+            pet: null
+        };
+        
+        const savedPet = JSON.parse(localStorage.getItem(PET_KEY)) || JSON.parse(localStorage.getItem('love_cal_pet_v19_final'));
+        
+        if (savedPet) {
+            state.pet = savedPet;
+            if(state.pet.isSick === undefined) state.pet.isSick = false;
+        } else {
+            state.pet = {
                 coins: 0, 
                 clickLevel: 1, 
                 autoLevel: 0,
@@ -806,58 +817,58 @@
                 wear: null, house: {id:'box', rent:0, ico:'📦', mult:1}, inventory: [],
                 exp: 0, maxExp: 100, level: 1,
                 activeBuffs: [], gadgets: { feeder: 0, sleeper: 0, heater: 0, ac: 0 },
-                rentPaidMonth: -1, isSleeping: false,
+                rentPaidMonth: -1, isSleeping: false, isSick: false,
                 stocks: 0, stockBank: 0, bankRate: 5,
                 outfit: { head:null, eyes:null, neck:null, body:null, back:null },
                 lastDecay: Date.now()
-            }
-        };
-        // Migration fix
+            };
+        }
+
         if(state.pet.outfit === undefined) state.pet.outfit = { head:null, eyes:null, neck:null, body:null, back:null };
         if(!state.pet.house.mult) state.pet.house.mult = 1;
 
-        // === ECONOMY FORMULAS ===
-        const getInflationMultiplier = () => 1 + ((state.pet.level - 1) * 0.07); // 7% price increase per level
+        // === ECONOMY FORMULAS (EASY MODE V21) ===
+        // Inflation drastically reduced from 7% to 2.5% per level
+        const getInflationMultiplier = () => 1 + ((state.pet.level - 1) * 0.025); 
         
-        // Click Power: Base + Happiness Bonus (Love/20)
         const getClickPower = () => {
             const base = Math.floor(1 * Math.pow(1.2, state.pet.clickLevel));
-            const happinessBonus = 1 + (state.pet.love / 200); // Up to 1.5x at max love
+            const happinessBonus = 1 + (state.pet.love / 200);
             return Math.floor(base * happinessBonus);
         }
         
-        // Auto Income: Base * House Multiplier * Buffs
         const getAutoIncome = () => {
              if(state.pet.autoLevel === 0) return 0;
+             if(state.pet.isSick) return 0; // Sick pets don't work
              const base = Math.floor(1 * Math.pow(1.15, state.pet.autoLevel));
              const houseMult = state.pet.house.mult || 1;
-             return Math.floor(base * houseMult * 10) / 10; // Keep 1 decimal
+             return Math.floor(base * houseMult * 10) / 10; 
         }
 
         const getClickUpgradeCost = () => Math.floor(100 * Math.pow(1.6, state.pet.clickLevel));
         const getAutoUpgradeCost = () => Math.floor(200 * Math.pow(1.6, state.pet.autoLevel));
 
-        // --- SHOP DATA (MEGA EXPANSION) ---
+        // --- SHOP DATA ---
         const SHOP = {
             food: [
-                {id:'f1',name:'Сухарик',ico:'🍞',cost:10,effect:'h+2'},
-                {id:'f2',name:'Конфетка',ico:'🍬',cost:20,effect:'h+5'},
-                {id:'f3',name:'Яблоко',ico:'🍎',cost:40,effect:'h+10'},
-                {id:'f4',name:'Банан',ico:'🍌',cost:50,effect:'h+12'},
-                {id:'f5',name:'Пончик',ico:'🍩',cost:100,effect:'h+15 l+2'},
-                {id:'f6',name:'Круассан',ico:'🥐',cost:150,effect:'h+20'},
-                {id:'f7',name:'Кофе',ico:'☕',cost:200,effect:'e+30'},
-                {id:'f8',name:'Мороженое',ico:'🍦',cost:300,effect:'h+15 l+10'},
-                {id:'f9',name:'Яичница',ico:'🍳',cost:500,effect:'h+35'},
-                {id:'f10',name:'Бургер',ico:'🍔',cost:800,effect:'h+50'},
-                {id:'f11',name:'Пицца',ico:'🍕',cost:1200,effect:'h+60 l+5'},
-                {id:'f12',name:'Суши',ico:'🍣',cost:2500,effect:'h+50 l+25'},
-                {id:'f13',name:'Рамен',ico:'🍜',cost:3000,effect:'h+70 e+10'},
-                {id:'f14',name:'Стейк',ico:'🥩',cost:5000,effect:'h+90 e+20'},
-                {id:'f15',name:'Лобстер',ico:'🦞',cost:10000,effect:'h+100 l+50'},
-                {id:'f16',name:'Устрицы',ico:'🦪',cost:15000,effect:'h+50 l+80'},
-                {id:'f17',name:'Черная Икра',ico:'🌑',cost:30000,effect:'h+80 l+100'},
-                {id:'f18',name:'Трюфель',ico:'🍄',cost:50000,effect:'h+100 e+50 l+50'},
+                {id:'f1',name:'Сухарик',ico:'🍞',cost:10,effect:'h+10'}, // Buffed basic food
+                {id:'f2',name:'Конфетка',ico:'🍬',cost:20,effect:'h+15'},
+                {id:'f3',name:'Яблоко',ico:'🍎',cost:40,effect:'h+25'},
+                {id:'f4',name:'Банан',ico:'🍌',cost:50,effect:'h+30'},
+                {id:'f5',name:'Пончик',ico:'🍩',cost:100,effect:'h+40 l+5'},
+                {id:'f6',name:'Круассан',ico:'🥐',cost:150,effect:'h+50'},
+                {id:'f7',name:'Кофе',ico:'☕',cost:200,effect:'e+40'},
+                {id:'f8',name:'Мороженое',ico:'🍦',cost:300,effect:'h+30 l+20'},
+                {id:'f9',name:'Яичница',ico:'🍳',cost:500,effect:'h+70'},
+                {id:'f10',name:'Бургер',ico:'🍔',cost:800,effect:'h+100'},
+                {id:'f11',name:'Пицца',ico:'🍕',cost:1200,effect:'h+100 l+10'},
+                {id:'f12',name:'Суши',ico:'🍣',cost:2500,effect:'h+80 l+40'},
+                {id:'f13',name:'Рамен',ico:'🍜',cost:3000,effect:'h+100 e+20'},
+                {id:'f14',name:'Стейк',ico:'🥩',cost:5000,effect:'h+100 e+50'},
+                {id:'f15',name:'Лобстер',ico:'🦞',cost:10000,effect:'h+100 l+80'},
+                {id:'f16',name:'Устрицы',ico:'🦪',cost:15000,effect:'h+100 l+100'},
+                {id:'f17',name:'Черная Икра',ico:'🌑',cost:30000,effect:'h+100 l+100'},
+                {id:'f18',name:'Трюфель',ico:'🍄',cost:50000,effect:'h+100 e+100 l+100'},
                 {id:'f19',name:'Золотой Стейк',ico:'📀',cost:100000,effect:'h+100 e+100 l+100'},
                 {id:'f20',name:'Ужин с Маском',ico:'🚀',cost:500000,effect:'h+100 e+100 l+100 exp+500'}
             ],
@@ -910,8 +921,11 @@
                 {id:'ac',name:'Кондиционер',ico:'❄️',cost:30000,dur:3,desc:'Холод 3дн'}
             ],
             buff: [
+                {id:'m_para', name:'Парацетамол', ico:'💊', cost:50, type:'cure', desc:'Лечит болезнь'},
+                {id:'m_syrup', name:'Сироп', ico:'🧪', cost:100, type:'cure', desc:'От кашля'},
+                {id:'m_vita', name:'Витаминки', ico:'🍊', cost:200, type:'prevent', dur:300, desc:'Иммунитет (5мин)'},
                 {id:'p_energy',name:'Энергетик XL',ico:'⚡',cost:1000,type:'instant',effect:'e+100',desc:'Макс Энергия'},
-                {id:'p_heal',name:'Аптечка',ico:'💊',cost:2000,type:'instant',effect:'h+100 l+50',desc:'Здоровье'},
+                {id:'p_heal',name:'Аптечка',ico:'💉',cost:2000,type:'instant',effect:'h+100 l+50',desc:'Здоровье'},
                 {id:'p_love',name:'Духи',ico:'🧴',cost:5000,type:'instant',effect:'l+100',desc:'Макс Любовь'},
                 {id:'b_speed',name:'Зелье Скорости',ico:'🧪',cost:10000,type:'buff',val:2.0,dur:120,desc:'x2 Доход (2мин)'},
                 {id:'b_magnet',name:'Магнит Монет',ico:'🧲',cost:50000,type:'buff',val:5.0,dur:300,desc:'x5 Доход (5мин)'},
@@ -924,7 +938,10 @@
             "Скучаю по тебе", "Ты самая красивая", "Где еда?", "Хочу гулять", 
             "Ты мое счастье", "Жду тебя!", "Ты вкусно пахнешь", "Обними меня",
             "Оля топ!", "Люблю больше пиццы", "Ты - космос", "Скоро увидимся!",
-            "Я счастлив с тобой", "Улыбнись!", "Ты мой котик", "Мы команда!"
+            "Я счастлив с тобой", "Улыбнись!", "Ты мой котик", "Мы команда!",
+            "Оля, ты лучшая!", "Хочу обнимашки", "Ты - мое солнце", "Биба + Буба",
+            "Вместе навсегда", "Ты такая милая", "Моя принцесса", "Любовь!",
+            "С тобой тепло", "Мое сердечко твое"
         ];
 
         const SAD_THOUGHTS = [
@@ -949,12 +966,12 @@
                 const diff = now - state.pet.lastDecay;
                 const hours = diff / (1000 * 3600);
                 if(hours > 1) {
-                    const drop = Math.min(50, Math.floor(hours * 3)); // 3 per hour offline
+                    const drop = Math.min(30, Math.floor(hours * 2)); // Reduced decay: 2 per hour, max 30
                     if(!state.pet.isSleeping) state.pet.energy = Math.max(0, state.pet.energy - drop);
                     state.pet.hunger = Math.max(0, state.pet.hunger - drop);
                     state.pet.love = Math.max(0, state.pet.love - drop);
                     state.pet.hygiene = Math.max(0, state.pet.hygiene - Math.floor(drop/2));
-                    showToast(`Я скучал! (Потребности снизились)`);
+                    showToast(`Я скучал! (Потребности немного снизились)`);
                 }
             }
             state.pet.lastDecay = now;
@@ -1221,6 +1238,17 @@
                 state.pet.energy = Math.min(100, state.pet.energy + 0.5); // Slow regen
             }
             
+            // Sickness Mechanic (Very Rare)
+            // Chance: 0.05% per second (roughly once every 33 minutes of ACTIVE play)
+            if(!state.pet.isSick && Math.random() < 0.0005) {
+                // Check for immunity buff
+                const isImmune = state.pet.activeBuffs.some(b => b.id === 'm_vita');
+                if(!isImmune) {
+                    state.pet.isSick = true;
+                    showToast("Ой! Питомец заболел 🤒 Нужна аптека!");
+                }
+            }
+
             if(Math.random() < 0.0025) triggerRandomEvent();
             savePet();
         }
@@ -1244,14 +1272,21 @@
         function addExp(a) {
             state.pet.exp+=a; 
             if(state.pet.exp>=state.pet.maxExp) { 
-                state.pet.level++; state.pet.exp=0; state.pet.maxExp=Math.floor(state.pet.maxExp*1.5); 
-                state.pet.energy=100; state.pet.coins+=100*state.pet.level; showToast("Уровень UP! 🎉"); 
+                state.pet.level++; state.pet.exp=0; 
+                // Increased difficulty curve for levels to slow down inflation
+                state.pet.maxExp=Math.floor(state.pet.maxExp * 1.8); 
+                state.pet.energy=100; 
+                // Increased reward
+                state.pet.coins+=200*state.pet.level; 
+                showToast("Уровень UP! 🎉"); 
             }
         }
         function petBehavior() {
             if(state.pet.isSleeping) return;
             // Sad Thoughts Logic
-            if(state.pet.hunger < 30 || state.pet.love < 30) {
+            if(state.pet.isSick) {
+                showThought("Кхе-кхе... 🤒");
+            } else if(state.pet.hunger < 30 || state.pet.love < 30) {
                  const t = SAD_THOUGHTS[Math.floor(Math.random()*SAD_THOUGHTS.length)];
                  showThought(t);
             } else if(Math.random()>0.7) {
@@ -1302,13 +1337,17 @@
             
             document.getElementById('sleep-overlay').classList.toggle('active', state.pet.isSleeping);
             blob.classList.toggle('sleeping', state.pet.isSleeping);
+            blob.classList.toggle('sick', state.pet.isSick);
             
             // Sad Face Logic
             const isSad = (state.pet.hunger < 30 || state.pet.love < 30 || state.pet.hygiene < 30);
-            blob.classList.toggle('sad', isSad);
+            blob.classList.toggle('sad', isSad && !state.pet.isSick);
 
             if(state.pet.isSleeping) { 
                 face.innerText = '😴'; document.getElementById('btn-sleep').innerText="☀️"; 
+            } else if(state.pet.isSick) {
+                face.innerText = '🤒';
+                document.getElementById('btn-sleep').innerText="😴";
             } else if(isSad) {
                 face.innerText = '🥺'; // Crying/Begging face
                 document.getElementById('btn-sleep').innerText="😴";
@@ -1333,11 +1372,12 @@
             document.getElementById('house-bg').innerText = (state.pet.house && state.pet.house.id!=='box') ? state.pet.house.ico : '📦';
         }
 
-        // --- BALANCED CLICK ---
+        // --- BALANCED CLICK (EASY MODE V21) ---
         window.petClick = (e) => {
             if(state.pet.isSleeping) return;
+            if(state.pet.isSick) { showToast("Питомец болеет! Нужна аптека 💊"); return; }
             
-            // Check resources
+            // Check resources (Much lower thresholds)
             if(state.pet.energy <= 0 || state.pet.hunger <= 0) {
                 showToast("Питомец устал или голоден!");
                 return;
@@ -1345,17 +1385,20 @@
 
             const power = getClickPower();
             
-            // Stats cost per click (Balanced)
-            state.pet.energy = Math.max(0, state.pet.energy - 0.5);
-            state.pet.hunger = Math.max(0, state.pet.hunger - 0.3);
-            state.pet.hygiene = Math.max(0, state.pet.hygiene - 0.2);
+            // Stats cost per click (DRASTICALLY REDUCED)
+            state.pet.energy = Math.max(0, state.pet.energy - 0.1); // Was 0.5
+            state.pet.hunger = Math.max(0, state.pet.hunger - 0.05); // Was 0.3
+            state.pet.hygiene = Math.max(0, state.pet.hygiene - 0.05); // Was 0.2
             state.pet.love = Math.min(100, state.pet.love + 0.1);
 
             const float = document.createElement('div'); float.className='click-float';
             float.innerText = `+${power}`;
             float.style.left=(e.clientX-10)+'px'; float.style.top=(e.clientY-40)+'px';
             document.body.appendChild(float); setTimeout(()=>float.remove(),800);
-            state.pet.coins += power; addExp(1); savePet();
+            
+            state.pet.coins += power; 
+            addExp(0.5); // Slower EXP gain on clicks
+            savePet();
         }
         function showThought(t) { 
             const el = document.getElementById('pet-thought'); el.innerText=t||THOUGHTS[Math.floor(Math.random()*THOUGHTS.length)];
@@ -1450,7 +1493,7 @@
                 const el = document.createElement('div');
                 const owned = state.pet.inventory.includes(i.id) || state.pet.inventory.includes('house_'+i.id);
                 
-                // INFLATION LOGIC: Price increases by 7% per level for consumables
+                // INFLATION LOGIC: Price increases by 2.5% per level for consumables
                 let finalCost = i.cost;
                 if(t === 'food' || t === 'buff') {
                     finalCost = Math.floor(i.cost * infMult);
@@ -1525,7 +1568,7 @@
                     if(p.includes('l+')) state.pet.love = Math.min(100, state.pet.love+v);
                     if(p.includes('exp+')) addExp(v);
                 });
-                showToast("Вкусно!"); addExp(5);
+                showToast("Вкусно!"); addExp(2); // Reduced XP from food
                 state.pet.coins -= c;
             } else if (t==='house') {
                 const hid = 'house_'+i.id;
@@ -1546,7 +1589,13 @@
                 showToast("Улучшено! 💪");
             } else if (t==='buff') {
                  state.pet.coins-=c;
-                 if(i.type === 'instant') {
+                 if(i.type === 'cure') {
+                     state.pet.isSick = false;
+                     showToast("Выздоровел! ❤️");
+                 } else if (i.type === 'prevent') {
+                     state.pet.activeBuffs.push({id:i.id, val:0, end:Date.now()+(i.dur*1000), ico:i.ico});
+                     showToast("Защита от болезней!");
+                 } else if(i.type === 'instant') {
                      const parts = i.effect.split(' ');
                      parts.forEach(p => {
                         const v = parseInt(p.split('+')[1]);
